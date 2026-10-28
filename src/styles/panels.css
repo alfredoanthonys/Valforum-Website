@@ -31,7 +31,13 @@
   position: sticky;
   top: 0;
   display: flex;
+  /*
+   * The visible height right now: on phones it grows when Safari's toolbars
+   * collapse, so a stuck panel always fills the screen with no sliver of the
+   * next section showing. stack.js re-measures on resize. svh is the fallback.
+   */
   height: 100svh;
+  height: 100dvh;
   container: panel / size;
   padding: calc(var(--nav-h) + 12px) var(--hero-gutter) 12px;
   background: var(--bg);

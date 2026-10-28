@@ -6,6 +6,7 @@
   --f: min(1px, calc(100cqh / 911), calc(100cqw / 760));
   position: relative;
   height: max(100svh, 600px);
+  height: max(100dvh, 600px);
   overflow: hidden;
   background: #000;
   container-type: size;

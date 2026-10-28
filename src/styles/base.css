@@ -34,6 +34,23 @@ html.is-gliding {
   scroll-behavior: auto;
 }
 
+/*
+ * Touch: inside the stack a vertical finger drag never scrolls natively; stack.js
+ * turns every swipe into one section step. Without this, iOS Safari's momentum
+ * scrolling can run straight past sections. Only while stack.js is running
+ * (html.snap-on); sideways swipes (card strips) and pinch-zoom still work, and a
+ * relaxed panel's card keeps its own vertical scrolling.
+ */
+@media (min-height: 521px) {
+  html.snap-on .stack {
+    touch-action: pan-x pinch-zoom;
+  }
+
+  html.snap-on .panel.is-relaxed .panel__card {
+    touch-action: pan-y pinch-zoom;
+  }
+}
+
 html.is-locked {
   overflow: hidden;
 }

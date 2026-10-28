@@ -258,21 +258,21 @@
  * and Genshin overlapping it from either side and running off the screen edges,
  * anchored to the bottom so they always run off it.
  *
- * --fu is the fan's unit: 1% of the width, unless the space under the head is
- * short (small or toolbar-heavy screens), when the whole fan shrinks to fit.
- * Valorant shows 81 units above the bottom; the head block is at most ~290px
- * tall, plus a ~35px gap. The space above the head shrinks first (100px down
- * to 24px), then the fan. topup.js animates the cards themselves (and resets
+ * --fu is the fan's unit: 0.82% of the width, or less when the screen is short
+ * (small phones, Safari's toolbars), so the fan always fits under the head.
+ * Valorant shows 81 units above the bottom; --head-h is the head block (~290px
+ * at most) plus a ~35px gap. Any space left over is split evenly above the
+ * head and between the head and the fan, so every phone has the same rhythm. topup.js animates the cards themselves (and resets
  * their `rotate`), so the extra fan angle sits on the inner link.
  */
 @media (max-width: 767px) {
   .panel--topup .panel__card {
     --head-h: 325px;
-    --fu: min(1cqw, calc((100cqh - var(--nav-h) - 24px - var(--head-h)) / 81));
+    --fu: min(0.82cqw, calc((100cqh - var(--nav-h) - 48px - var(--head-h)) / 81));
   }
 
   .topup__head {
-    margin-top: calc(var(--nav-h) + clamp(24px, calc(100cqh - var(--nav-h) - var(--head-h) - 81 * var(--fu) - 24px), 100px));
+    margin-top: calc(var(--nav-h) + clamp(48px, calc((100cqh - var(--nav-h) - var(--head-h) - 81 * var(--fu)) / 2), 160px));
   }
 
   .game-cards {

@@ -1,0 +1,676 @@
+/* ---------- Snap stack ---------- */
+.stack {
+  position: relative;
+}
+
+/*
+ * Snap targets live on these markers rather than on the sticky panels, whose
+ * offsets change while stuck. stack.js re-measures them if a panel is relaxed.
+ */
+.snap-marker {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 100svh;
+  pointer-events: none;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.snap-marker:nth-child(1) { top: 0; }
+.snap-marker:nth-child(2) { top: 100svh; }
+.snap-marker:nth-child(3) { top: 200svh; }
+.snap-marker:nth-child(4) { top: 300svh; }
+
+.intro,
+.footer {
+  scroll-snap-align: start;
+}
+
+.panel {
+  position: sticky;
+  top: 0;
+  display: flex;
+  height: 100svh;
+  container: panel / size;
+  padding: calc(var(--nav-h) + 12px) var(--hero-gutter) 12px;
+  background: var(--bg);
+}
+
+/*
+ * The card is the 1298 × 826 artboard. --s is one artboard pixel, shrunk to fit
+ * the card in both directions (never enlarged past the design).
+ */
+.panel__card {
+  --s: min(1px, calc(100cqh / 826), calc(100cqw / 1298));
+  position: relative;
+  flex: 1;
+  display: grid;
+  align-content: safe center;
+  width: 100%;
+  max-width: var(--hero-max); /* same width as the hero frame */
+  margin-inline: auto;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  isolation: isolate;
+  container-type: size;
+  transform-origin: 50% 0;
+}
+
+/* Darkens a panel while the next one slides over it (driven by stack.js). */
+.panel__card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: #000;
+  opacity: var(--shade, 0);
+  pointer-events: none;
+}
+
+.panel.is-relaxed .panel__card {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.panel__content {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-self: start;
+  /* Offsets live on the content: padding on the card would shrink its cq units. */
+  margin: calc(48 * var(--s)) calc(80 * var(--s)) calc(48 * var(--s)) calc(62 * var(--s));
+}
+
+.panel__content--end {
+  justify-self: end;
+  align-items: flex-end;
+  text-align: right;
+}
+
+.panel__title {
+  max-width: 6.6em;
+  font-family: var(--font-display);
+  font-size: max(40px, calc(88 * var(--s)));
+  font-weight: 400;
+  line-height: 0.955;
+  text-transform: uppercase;
+}
+
+.panel__lead {
+  max-width: 22.3em;
+  margin-top: calc(22 * var(--s));
+  font-size: max(16px, calc(26 * var(--s)));
+  line-height: 1.19;
+}
+
+.panel__content .outline-btn {
+  --btn-h: max(46px, calc(67 * var(--s)));
+  --btn-px: max(16px, calc(21 * var(--s)));
+  --btn-fs: max(16px, calc(23.5 * var(--s)));
+  --btn-r: max(10px, calc(14 * var(--s)));
+  margin-top: calc(17 * var(--s));
+}
+
+.panel__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.bg-noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.1;
+  mix-blend-mode: overlay;
+}
+
+/* ---------- Card rows (Sewa, Jual, Beli) ---------- */
+/*
+ * Four cards of one shape (the Sewa listing, 285 × 233) run edge to edge along the
+ * bottom; the copy is centred in the space above them.
+ */
+.panel--sewa .panel__card,
+.panel--jual .panel__card,
+.panel--beli .panel__card {
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-content: stretch;
+}
+
+.panel--sewa .panel__content,
+.panel--jual .panel__content,
+.panel--beli .panel__content {
+  align-self: center;
+}
+
+.panel__accounts {
+  --card-ratio: 285 / 233; /* card width / height */
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  gap: calc(9 * var(--s));
+  margin: 0 calc(62 * var(--s)) calc(49 * var(--s));
+}
+
+/*
+ * Cards share the row width. On wide, short screens they stop growing before they
+ * squeeze the copy: 450 artboard px is the copy block plus the row's bottom offset.
+ */
+.panel__accounts li {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: calc((100cqh - 450 * var(--s)) * var(--card-ratio));
+}
+
+.panel__accounts img {
+  width: 100%;
+  transition: transform 0.45s var(--ease-out), filter 0.45s;
+}
+
+.panel__accounts li:hover img {
+  transform: translateY(-10px);
+  filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.45));
+}
+
+/* ---------- Sewa: angular shards + diagonal stripes ---------- */
+.panel--sewa .panel__card {
+  background: linear-gradient(120deg, var(--sewa-1), var(--sewa-2));
+}
+
+.bg-sewa__stripes {
+  inset: -10%;
+  background: repeating-linear-gradient(-58deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 26px);
+  -webkit-mask: radial-gradient(110% 90% at 18% 30%, #000 10%, transparent 72%);
+  mask: radial-gradient(110% 90% at 18% 30%, #000 10%, transparent 72%);
+  animation: bg-drift 26s ease-in-out infinite alternate;
+}
+
+.bg-sewa__glow {
+  background:
+    radial-gradient(40% 55% at 72% 40%, rgba(255, 64, 104, 0.42), transparent 70%),
+    radial-gradient(32% 42% at 14% 86%, rgba(255, 128, 64, 0.16), transparent 70%),
+    linear-gradient(transparent 55%, rgba(40, 0, 6, 0.4));
+  animation: bg-pulse 8s ease-in-out infinite alternate;
+}
+
+.bg-sewa__shard {
+  position: absolute;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 72%);
+  animation: bg-float 12s ease-in-out infinite alternate;
+}
+
+.bg-sewa__shard--1 {
+  top: -6%;
+  left: 31%;
+  width: calc(440 * var(--s));
+  height: calc(440 * var(--s));
+  clip-path: polygon(0 0, 100% 16%, 36% 100%);
+}
+
+.bg-sewa__shard--2 {
+  bottom: 4%;
+  left: -3%;
+  width: calc(280 * var(--s));
+  height: calc(280 * var(--s));
+  clip-path: polygon(18% 0, 100% 62%, 0 100%);
+  animation-duration: 15s;
+  animation-delay: -5s;
+}
+
+.bg-sewa__shard--3 {
+  top: 6%;
+  right: 6%;
+  width: calc(190 * var(--s));
+  height: calc(190 * var(--s));
+  clip-path: polygon(0 32%, 100% 0, 62% 100%);
+  animation-duration: 10s;
+  animation-delay: -2s;
+}
+
+/* Light streaks that sweep across the card along the stripe angle, then rest. */
+.bg-sewa__streak {
+  position: absolute;
+  top: -25%;
+  left: 0;
+  width: calc(220 * var(--s));
+  height: 150%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16) 45%, rgba(255, 196, 206, 0.24) 50%, rgba(255, 255, 255, 0.16) 55%, transparent);
+  mix-blend-mode: overlay;
+  transform: translateX(-30cqw) skewX(-32deg);
+  animation: bg-streak 7s var(--ease-standard) infinite;
+}
+
+.bg-sewa__streak--2 {
+  width: calc(90 * var(--s));
+  animation-delay: 0.45s;
+}
+
+.sewa__neon {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0; /* the art is cut flat at its bottom edge; the card's edge hides it */
+  width: calc(901 * var(--s));
+  max-width: none;
+  pointer-events: none;
+}
+
+/* ---------- Jual: dot matrix + radar sweep around Cypher ---------- */
+.panel--jual .panel__card {
+  background: linear-gradient(120deg, var(--jual-1), var(--jual-2));
+}
+
+.bg-jual__dots {
+  inset: -6%;
+  background: radial-gradient(rgba(255, 255, 255, 0.24) 1px, transparent 1.6px) 0 0 / 22px 22px;
+  -webkit-mask: radial-gradient(70% 80% at 76% 50%, #000, transparent 75%);
+  mask: radial-gradient(70% 80% at 76% 50%, #000, transparent 75%);
+  animation: bg-drift 30s ease-in-out infinite alternate-reverse;
+}
+
+.bg-jual__sweep {
+  inset: auto;
+  top: 50%;
+  left: calc(354 * var(--s));
+  width: calc(1500 * var(--s));
+  height: calc(1500 * var(--s));
+  margin: calc(-750 * var(--s)) 0 0 calc(-750 * var(--s));
+  border-radius: 50%;
+  background: conic-gradient(from 90deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0) 18%, rgba(255, 255, 255, 0) 99%, rgba(255, 255, 255, 0.11));
+  -webkit-mask: radial-gradient(closest-side, #000 18%, transparent);
+  mask: radial-gradient(closest-side, #000 18%, transparent);
+  animation: bg-spin 16s linear infinite;
+}
+
+.bg-jual__ring {
+  position: absolute;
+  top: 50%;
+  left: calc(354 * var(--s));
+  width: calc(560 * var(--s));
+  height: calc(560 * var(--s));
+  margin: calc(-280 * var(--s)) 0 0 calc(-280 * var(--s));
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  animation: bg-ring 7s ease-out infinite;
+}
+
+.bg-jual__ring--2 {
+  animation-delay: -3.5s;
+}
+
+.jual__cypher {
+  position: absolute;
+  z-index: 2;
+  left: calc(74 * var(--s));
+  bottom: 0;
+  width: calc(560 * var(--s));
+  max-width: none;
+  pointer-events: none;
+}
+
+/* Benefit cards: black like the account cards, with grain + hatch texture and a 3D icon; text stays in HTML so it's crisp. */
+.jual__perks li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: calc(6 * var(--s));
+  padding: calc(20 * var(--s)) calc(22 * var(--s)) calc(22 * var(--s));
+  border-radius: max(10px, calc(12 * var(--s)));
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /*
+   * Top to bottom: icon glow, light grain, a black wash that fades the hatch
+   * lines out towards the icon, the hatch lines, then the black base.
+   */
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(calc(110 * var(--s)) circle at calc(56 * var(--s)) calc(56 * var(--s)), rgba(142, 48, 255, 0.35), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    linear-gradient(155deg, #000 30%, rgba(0, 0, 0, 0) 80%),
+    repeating-linear-gradient(-55deg, rgba(168, 112, 255, 0.18) 0 1px, transparent 1px 8px),
+    linear-gradient(155deg, #000 0%, #0b0b0b 40%, #1a0b33 100%);
+  color: var(--text);
+  box-shadow: 0 18px 40px -22px rgba(40, 6, 90, 0.7);
+  transition: transform 0.45s var(--ease-out), box-shadow 0.45s;
+}
+
+/* Same hover as the account cards in the other sections: lift + drop shadow. */
+.jual__perks li:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 18px 22px rgba(0, 0, 0, 0.45);
+}
+
+/* HUD bracket corners, like a tactical UI frame. */
+.jual__perks li::before {
+  --c: rgba(190, 150, 255, 0.7);
+  --l: max(12px, calc(20 * var(--s)));
+  --w: 2px;
+  content: '';
+  position: absolute;
+  inset: max(6px, calc(9 * var(--s)));
+  z-index: -1;
+  background:
+    linear-gradient(var(--c), var(--c)) top left / var(--l) var(--w),
+    linear-gradient(var(--c), var(--c)) top left / var(--w) var(--l),
+    linear-gradient(var(--c), var(--c)) top right / var(--l) var(--w),
+    linear-gradient(var(--c), var(--c)) top right / var(--w) var(--l),
+    linear-gradient(var(--c), var(--c)) bottom left / var(--l) var(--w),
+    linear-gradient(var(--c), var(--c)) bottom left / var(--w) var(--l),
+    linear-gradient(var(--c), var(--c)) bottom right / var(--l) var(--w),
+    linear-gradient(var(--c), var(--c)) bottom right / var(--w) var(--l);
+  background-repeat: no-repeat;
+}
+
+/* Hatched tab in the top-right corner. */
+.jual__perks li::after {
+  content: '';
+  position: absolute;
+  top: max(14px, calc(22 * var(--s)));
+  right: max(16px, calc(26 * var(--s)));
+  z-index: -1;
+  width: max(36px, calc(64 * var(--s)));
+  height: max(6px, calc(10 * var(--s)));
+  background: repeating-linear-gradient(-55deg, rgba(190, 150, 255, 0.55) 0 2px, transparent 2px 6px);
+  clip-path: polygon(14% 0, 100% 0, 86% 100%, 0 100%);
+}
+
+.jual__perks .perk__icon {
+  width: max(44px, calc(72 * var(--s)));
+  margin: 0 0 calc(10 * var(--s)) calc(-4 * var(--s));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
+}
+
+/* The card itself lifts; keep the generic account-image hover off the icon. */
+.jual__perks li:hover .perk__icon {
+  transform: none;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
+}
+
+.perk__title {
+  font-family: var(--font-condensed);
+  font-size: max(17px, calc(26 * var(--s)));
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.perk__text {
+  font-size: max(12px, calc(15 * var(--s)));
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ---------- Beli: perspective grid + light rays + rank-up chevrons ---------- */
+.panel--beli .panel__card {
+  background: linear-gradient(125deg, var(--beli-1), var(--beli-2));
+}
+
+.panel--beli .panel__content {
+  text-shadow: 0 2px 18px rgba(92, 72, 0, 0.35);
+}
+
+.bg-beli__grid {
+  inset: -8%;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px) 0 0 / 56px 56px;
+  -webkit-mask: radial-gradient(75% 85% at 22% 46%, #000, transparent 72%);
+  mask: radial-gradient(75% 85% at 22% 46%, #000, transparent 72%);
+  animation: bg-drift 28s ease-in-out infinite alternate;
+}
+
+.bg-beli__rays {
+  inset: auto;
+  top: calc(-560 * var(--s));
+  right: calc(-360 * var(--s));
+  width: calc(1600 * var(--s));
+  height: calc(1600 * var(--s));
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.14) 0 4deg, transparent 4deg 13deg);
+  -webkit-mask: radial-gradient(closest-side, #000 12%, transparent 70%);
+  mask: radial-gradient(closest-side, #000 12%, transparent 70%);
+  animation: bg-sway 12s ease-in-out infinite alternate;
+}
+
+.bg-beli__chevron {
+  position: absolute;
+  width: calc(230 * var(--s));
+  height: calc(190 * var(--s));
+  background: linear-gradient(rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
+  clip-path: polygon(50% 0, 100% 46%, 100% 72%, 50% 27%, 0 72%, 0 46%);
+  animation: bg-rise 9s ease-in-out infinite alternate;
+}
+
+.bg-beli__chevron--1 {
+  top: 12%;
+  left: 41%;
+}
+
+.bg-beli__chevron--2 {
+  top: 46%;
+  left: 35%;
+  width: calc(150 * var(--s));
+  height: calc(124 * var(--s));
+  animation-duration: 11s;
+  animation-delay: -4s;
+}
+
+.beli__gekko {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  width: calc(620 * var(--s));
+  max-width: none;
+  pointer-events: none;
+}
+
+/* ---------- Ambient keyframes (transform / opacity only) ---------- */
+@keyframes bg-drift {
+  from { transform: translate3d(-1.5%, 1%, 0); }
+  to { transform: translate3d(1.5%, -1%, 0); }
+}
+
+@keyframes bg-pulse {
+  from { opacity: 0.7; transform: scale(1); }
+  to { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes bg-float {
+  from { transform: translate3d(0, 0, 0) rotate(0deg); }
+  to { transform: translate3d(0, -18px, 0) rotate(4deg); }
+}
+
+@keyframes bg-spin {
+  to { transform: rotate(1turn); }
+}
+
+@keyframes bg-ring {
+  from { transform: scale(0.5); opacity: 0.9; }
+  to { transform: scale(1.65); opacity: 0; }
+}
+
+@keyframes bg-sway {
+  from { transform: rotate(-6deg); }
+  to { transform: rotate(6deg); }
+}
+
+@keyframes bg-streak {
+  0% { transform: translateX(-30cqw) skewX(-32deg); }
+  45%, 100% { transform: translateX(130cqw) skewX(-32deg); }
+}
+
+@keyframes bg-rise {
+  from { transform: translateY(18px); opacity: 0.45; }
+  to { transform: translateY(-18px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel__bg * {
+    animation: none !important;
+  }
+}
+
+/* ---------- Section dots ---------- */
+.dots {
+  position: fixed;
+  z-index: 40;
+  top: calc(50% + 40px);
+  left: calc(var(--hero-gutter) / 2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transform: translateY(-50%);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s, visibility 0s linear 0.35s;
+}
+
+.dots.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.35s;
+}
+
+.dots a {
+  width: 11px;
+  height: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 6px;
+  transition: background-color 0.3s, border-color 0.3s, transform 0.3s var(--ease-out);
+}
+
+.dots a:hover {
+  border-color: var(--gold);
+  transform: scale(1.12);
+}
+
+.dots a[aria-current='true'] {
+  background: #fff;
+  border-color: #fff;
+}
+
+@media (max-width: 899px) {
+  .dots {
+    display: none;
+  }
+}
+
+/* ---------- Portrait panels (phones, tablets upright): stacked layout ---------- */
+@container panel (max-aspect-ratio: 1 / 1) {
+  .panel__card {
+    align-content: start;
+  }
+
+  .panel__content,
+  .panel__content--end {
+    margin: 28px 20px;
+    justify-self: start;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .panel--sewa .panel__content,
+  .panel--jual .panel__content,
+  .panel--beli .panel__content {
+    align-self: start;
+  }
+
+  .panel__title {
+    font-size: clamp(40px, 11cqw, 76px);
+  }
+
+  .panel__lead {
+    max-width: 30em;
+    margin-top: 12px;
+    font-size: clamp(16px, 3.6cqw, 22px);
+  }
+
+  .panel__content .outline-btn {
+    --btn-h: 48px;
+    --btn-fs: 17px;
+    --btn-px: 18px;
+    --btn-r: 12px;
+    margin-top: 18px;
+  }
+
+  .sewa__neon {
+    right: -14cqw;
+    bottom: 70px;
+    width: auto;
+    height: 60cqh;
+  }
+
+  .panel__accounts {
+    position: absolute;
+    left: 16px;
+    bottom: 16px;
+    margin: 0;
+    gap: 6px;
+  }
+
+  .panel__accounts li {
+    flex: none;
+    width: clamp(120px, 34cqw, 230px);
+    max-width: none;
+  }
+
+  /* Text cards need more width than screenshots: a full-width 2 × 2 grid. */
+  .panel__accounts.jual__perks {
+    right: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .panel__accounts.jual__perks li {
+    width: auto;
+    padding: 14px;
+    gap: 4px;
+  }
+
+  .jual__perks .perk__icon {
+    margin-bottom: 4px;
+  }
+
+  .jual__cypher {
+    left: auto;
+    right: -4cqw;
+    width: auto;
+    height: 64cqh;
+  }
+
+  .beli__gekko {
+    right: -10cqw;
+    width: auto;
+    height: 64cqh;
+  }
+
+  .bg-jual__sweep,
+  .bg-jual__ring {
+    left: 70%;
+    top: 68%;
+  }
+}
+
+/* ---------- Very short screens (landscape phones): no sticky, no snap ---------- */
+@media (max-height: 520px) {
+  .snap-marker {
+    display: none;
+  }
+
+  .panel {
+    position: relative;
+    height: 560px;
+  }
+}

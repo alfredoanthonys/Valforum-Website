@@ -1,0 +1,227 @@
+.quicklinks {
+  --ql-pad: 78px;
+  max-width: calc(var(--hero-max) + 2 * var(--hero-gutter)); /* same frame as the hero */
+  margin-inline: auto;
+  /*
+   * The first panel opens with nav-height + 12px of empty padding (room for the
+   * fixed navbar). Pulling it up under this section keeps the gap below the
+   * cards equal to --ql-pad, same as above; z-index keeps the cards on top.
+   */
+  position: relative;
+  z-index: 1;
+  margin-bottom: calc(var(--ql-pad) - var(--nav-h) - 12px);
+  padding: var(--ql-pad) var(--hero-gutter) 0;
+  scroll-margin-top: var(--nav-h);
+}
+
+.ql-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 21px 20px;
+}
+
+/*
+ * Card artboard is 639 × 200; artwork is placed in artboard pixels via --q.
+ * Hover: the card fills with its section colour and a `color` blend layer
+ * re-tints the artwork, as in the design's hover state.
+ */
+.ql-card {
+  --q: calc(100cqw / 639);
+  --tint: var(--gold);
+  position: relative;
+  display: flex;
+  height: 200px;
+  border: 1px solid var(--line-card);
+  border-radius: var(--radius-card);
+  background: #000;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+  transition: border-color 0.4s, transform 0.4s var(--ease-out), box-shadow 0.4s;
+}
+
+.ql-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--hover-bg);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out);
+}
+
+.ql-card--sewa {
+  --tint: #e0202f;
+  --hover-bg: linear-gradient(120deg, #c01f27, #7d1016);
+}
+
+.ql-card--jual {
+  --tint: #9b4dff;
+  --hover-bg: linear-gradient(120deg, #8e30ff, #5a12c4);
+}
+
+.ql-card--beli {
+  --tint: #f2da37;
+  --hover-bg: linear-gradient(120deg, #e9d24a, #c1aa24);
+}
+
+.ql-card--topup {
+  --tint: #d6b25a;
+  --hover-bg: linear-gradient(120deg, var(--topup-hover-1), var(--topup-hover-2));
+}
+
+.ql-card__art {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Re-tint layer; must stay in the card's stacking context to blend with the art. */
+.ql-card__art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--tint);
+  mix-blend-mode: color;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out);
+}
+
+.ql-art {
+  position: absolute;
+  max-width: none;
+  transition: transform 0.6s var(--ease-out), opacity 0.45s;
+}
+
+.ql-card__body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 37px 30px 30px;
+}
+
+.ql-card__title {
+  font-family: var(--font-condensed);
+  font-size: clamp(26px, calc(35 * var(--q)), 35px);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+.ql-card__text {
+  display: block;
+  max-width: 320px;
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 1.26;
+  letter-spacing: -0.03em;
+}
+
+.ql-card__title + .ql-card__text {
+  margin-top: auto;
+}
+
+.ql-card__text + .ql-card__text {
+  margin-top: 8px;
+}
+
+.ql-card--topup .ql-card__text {
+  max-width: 252px;
+}
+
+/* Hover / focus */
+.ql-card:hover,
+.ql-card:focus-visible {
+  border-color: color-mix(in srgb, var(--tint) 70%, white);
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px -18px color-mix(in srgb, var(--tint) 60%, transparent);
+}
+
+.ql-card:hover::before,
+.ql-card:focus-visible::before,
+.ql-card:hover .ql-card__art::after,
+.ql-card:focus-visible .ql-card__art::after {
+  opacity: 1;
+}
+
+.ql-card--beli:is(:hover, :focus-visible) .ql-card__body {
+  text-shadow: 0 1px 14px rgba(70, 55, 0, 0.45);
+}
+
+/* Artwork positions (artboard px) */
+.ql-art--acc-diamond { left: calc(468 * var(--q)); top: calc(8 * var(--q)); width: calc(170 * var(--q)); }
+.ql-art--acc-platinum { left: calc(410 * var(--q)); top: calc(36 * var(--q)); width: calc(181 * var(--q)); }
+.ql-art--acc-gold { left: calc(351 * var(--q)); top: calc(66 * var(--q)); width: calc(181 * var(--q)); }
+
+.ql-art--vandal { left: calc(308 * var(--q)); top: calc(-1 * var(--q)); width: calc(330 * var(--q)); }
+.ql-art--spectre { left: calc(500 * var(--q)); top: calc(-1 * var(--q)); width: calc(138 * var(--q)); }
+
+.ql-art--operator { left: calc(291 * var(--q)); top: calc(85 * var(--q)); width: calc(255 * var(--q)); }
+.ql-art--odin { left: calc(439 * var(--q)); top: calc(115 * var(--q)); width: calc(199 * var(--q)); }
+
+.ql-art--beli-1,
+.ql-art--beli-2,
+.ql-art--beli-3 { width: calc(124 * var(--q)); transform-origin: 50% 100%; }
+/* Hand-of-cards fan (Sewa uses a straight staircase): outer cards tilt out, the middle one leads. */
+.ql-art--beli-1 { left: calc(392 * var(--q)); top: calc(44 * var(--q)); rotate: -12deg; }
+.ql-art--beli-3 { left: calc(512 * var(--q)); top: calc(44 * var(--q)); rotate: 12deg; }
+.ql-art--beli-2 { left: calc(452 * var(--q)); top: calc(16 * var(--q)); }
+
+.ql-art--vp-1000 { left: calc(348 * var(--q)); top: calc(-1 * var(--q)); width: calc(291 * var(--q)); }
+.ql-art--vp-2050 { left: calc(450 * var(--q)); top: calc(20 * var(--q)); width: calc(188 * var(--q)); }
+.ql-art--vp-475 { left: calc(244 * var(--q)); top: calc(-1 * var(--q)); width: calc(360 * var(--q)); }
+
+.ql-card:hover .ql-art--acc-diamond { transform: translate(14px, -6px) rotate(2deg); }
+.ql-card:hover .ql-art--acc-platinum { transform: translate(6px, -3px); }
+.ql-card:hover .ql-art--acc-gold { transform: translate(-8px, 3px) rotate(-1.5deg); }
+.ql-card:hover .ql-art--vandal { transform: translate(-10px, 4px) rotate(-2deg); }
+.ql-card:hover .ql-art--spectre { transform: translate(6px, -4px) rotate(3deg); }
+.ql-card:hover .ql-art--operator { transform: translate(-8px, -4px) rotate(-2deg); }
+.ql-card:hover .ql-art--odin { transform: translate(8px, -6px) rotate(2deg); }
+.ql-card:hover .ql-art--beli-1 { transform: translate(-14px, 4px) rotate(-4deg); }
+.ql-card:hover .ql-art--beli-2 { transform: translateY(-8px); }
+.ql-card:hover .ql-art--beli-3 { transform: translate(14px, 4px) rotate(4deg); }
+.ql-card:hover .ql-art--vp-1000 { transform: translate(8px, -8px) rotate(2deg); }
+.ql-card:hover .ql-art--vp-2050 { transform: translate(12px, 4px) rotate(4deg); }
+.ql-card:hover .ql-art--vp-475 { transform: translate(-8px, -6px) rotate(-3deg); }
+
+@media (max-width: 899px) {
+  .ql-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+
+  .ql-card {
+    height: 180px;
+  }
+
+  /* Single column: nudge the artwork right so it stays clear of the copy. */
+  .ql-card__art {
+    left: 18%;
+  }
+
+  /* The fan already starts past the copy; a smaller nudge keeps its right card on screen. */
+  .ql-card--beli .ql-card__art {
+    left: 4%;
+  }
+
+  .ql-card__body {
+    padding: 26px 22px 22px;
+  }
+
+  .ql-card__text {
+    max-width: 58%;
+    font-size: 13px;
+  }
+
+  .ql-card--topup .ql-card__text {
+    max-width: 58%;
+  }
+}
+
+@media (max-width: 767px) {
+  .quicklinks {
+    --ql-pad: 40px;
+  }
+}

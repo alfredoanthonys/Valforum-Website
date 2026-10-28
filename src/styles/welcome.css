@@ -1,0 +1,270 @@
+/* First-visit service picker */
+.welcome {
+  width: min(100% - 32px, 480px);
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  color: var(--text);
+  background: transparent;
+  overflow: visible;
+}
+
+.welcome::backdrop {
+  background: rgba(0, 0, 0, 0.74);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.welcome[open] {
+  animation: welcome-fade 0.35s var(--ease-out);
+}
+
+.welcome[open]::backdrop {
+  animation: welcome-fade 0.35s var(--ease-out);
+}
+
+.welcome.is-closing,
+.welcome.is-closing::backdrop {
+  animation: welcome-fade 0.25s ease-in reverse forwards;
+}
+
+.welcome__box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 32px);
+  padding: 30px 20px 18px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 60% at 50% 0%, rgba(235, 192, 74, 0.14), transparent 60%),
+    var(--bg-raised);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(235, 192, 74, 0.06) inset;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.welcome__box:focus {
+  outline: none;
+}
+
+.welcome[open] .welcome__box {
+  animation: welcome-pop 0.5s var(--ease-out);
+}
+
+/* Gold hairline across the top, echoing the ticker */
+.welcome__box::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, var(--copper), var(--gold-deep) 35%, var(--gold-light) 70%, #fbf5c9);
+}
+
+.welcome__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #151515;
+  color: #bdbdbd;
+  transition: transform 0.45s cubic-bezier(0.2, 1.4, 0.3, 1), color 0.2s, border-color 0.2s;
+}
+
+.welcome__close:hover {
+  color: var(--gold);
+  border-color: var(--gold);
+  transform: rotate(90deg);
+}
+
+.welcome__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 28px 20px;
+  text-align: center;
+}
+
+.welcome__logo {
+  width: 112px;
+}
+
+.welcome__title {
+  margin-top: 14px;
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.welcome__desc {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #bdbdbd;
+}
+
+.welcome__list {
+  display: grid;
+  gap: 10px;
+}
+
+.welcome__list li {
+  animation: welcome-rise 0.5s var(--ease-out) both;
+}
+
+.welcome__list li:nth-child(2) { animation-delay: 0.06s; }
+.welcome__list li:nth-child(3) { animation-delay: 0.12s; }
+.welcome__list li:nth-child(4) { animation-delay: 0.18s; }
+
+.welcome-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  background: #141414;
+  overflow: hidden;
+  isolation: isolate;
+  transition: border-color 0.3s, transform 0.3s var(--ease-out);
+}
+
+.welcome-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(110deg, var(--accent-bg), transparent 75%);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out);
+}
+
+.welcome-card--sewa { --accent: #ff3347; --accent-bg: rgba(196, 5, 22, 0.55); }
+.welcome-card--jual { --accent: #a866ff; --accent-bg: rgba(142, 48, 255, 0.5); }
+.welcome-card--beli { --accent: #f2da37; --accent-bg: rgba(200, 178, 30, 0.45); }
+.welcome-card--topup { --accent: var(--gold); --accent-bg: rgba(201, 165, 78, 0.45); }
+
+.welcome-card__num {
+  flex: none;
+  width: 34px;
+  font-family: var(--font-condensed);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.welcome-card__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.welcome-card__tag {
+  font-family: var(--font-condensed);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.welcome-card__name {
+  margin-top: 5px;
+  font-family: var(--font-display);
+  font-size: 23px;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.welcome-card__desc {
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #bdbdbd;
+}
+
+.welcome-card__arrow {
+  flex: none;
+  margin-left: auto;
+  color: #8a8a8a;
+  transition: transform 0.3s var(--ease-out), color 0.3s;
+}
+
+.welcome-card:hover,
+.welcome-card:focus-visible {
+  border-color: color-mix(in srgb, var(--accent) 65%, transparent);
+  transform: translateX(3px);
+}
+
+.welcome-card:hover::before,
+.welcome-card:focus-visible::before {
+  opacity: 1;
+}
+
+.welcome-card:hover .welcome-card__arrow,
+.welcome-card:focus-visible .welcome-card__arrow {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+
+.welcome__foot {
+  margin-top: 16px;
+  font-size: 13px;
+  text-align: center;
+  color: #9a9a9a;
+}
+
+.welcome__foot a {
+  color: var(--gold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@keyframes welcome-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes welcome-pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes welcome-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 480px) {
+  .welcome__box {
+    padding: 26px 14px 16px;
+  }
+
+  .welcome__head {
+    padding-inline: 32px;
+  }
+
+  .welcome__title {
+    font-size: 28px;
+  }
+
+  .welcome-card {
+    gap: 12px;
+    padding: 12px;
+  }
+}

@@ -1,0 +1,137 @@
+/*
+ * The footer reproduces a 1440 × 911 artboard centred in the viewport.
+ * --f is one artboard pixel, shrunk for short or narrow screens.
+ */
+.footer {
+  --f: min(1px, calc(100cqh / 911), calc(100cqw / 760));
+  position: relative;
+  height: max(100svh, 600px);
+  overflow: hidden;
+  background: #000;
+  container-type: size;
+}
+
+.footer__bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.footer__glow {
+  position: absolute;
+  top: calc(50% + (470 - 455.5) * var(--f));
+  width: calc(900 * var(--f));
+  height: calc(1200 * var(--f));
+  margin-top: calc(-600 * var(--f));
+  animation: footer-breathe 7s ease-in-out infinite alternate;
+}
+
+.footer__glow--left {
+  left: calc(50% - 302 * var(--f) - 690 * var(--f));
+  background: radial-gradient(closest-side at 76% 50%, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.1) 55%, transparent);
+}
+
+.footer__glow--right {
+  left: calc(50% + 324 * var(--f) - 210 * var(--f));
+  background: radial-gradient(closest-side at 24% 50%, rgba(235, 192, 74, 0.36), rgba(235, 192, 74, 0.1) 55%, transparent);
+  animation-delay: -3.5s;
+}
+
+/* Floor reflections running out to the bottom corners */
+.footer__beam {
+  position: absolute;
+  bottom: calc(50% - 600 * var(--f));
+  width: calc(620 * var(--f));
+  height: calc(110 * var(--f));
+  filter: blur(calc(22 * var(--f)));
+}
+
+.footer__beam--left {
+  left: calc(50% - 840 * var(--f));
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.18) 70%, transparent);
+  transform: rotate(-36deg);
+  transform-origin: 0 50%;
+}
+
+.footer__beam--right {
+  right: calc(50% - 840 * var(--f));
+  background: linear-gradient(270deg, rgba(235, 192, 74, 0.8), rgba(235, 192, 74, 0.2) 70%, transparent);
+  transform: rotate(36deg);
+  transform-origin: 100% 50%;
+}
+
+.footer__line {
+  position: absolute;
+  top: calc(50% + (165 - 455.5) * var(--f));
+  width: 3px;
+  height: calc(495 * var(--f));
+  border-radius: 2px;
+}
+
+.footer__line--left {
+  left: calc(50% - 302 * var(--f));
+  background: #dcdcdc;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.55), 0 0 32px rgba(255, 255, 255, 0.2);
+}
+
+.footer__line--right {
+  left: calc(50% + 324 * var(--f));
+  background: #f4ecc9;
+  box-shadow: 0 0 10px rgba(235, 192, 74, 0.9), 0 0 36px rgba(235, 192, 74, 0.45);
+}
+
+.footer__content {
+  position: absolute;
+  top: calc(50% + (272 - 455.5) * var(--f));
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.footer__logo {
+  width: calc(280 * var(--f));
+  min-width: 150px;
+}
+
+.footer__title {
+  margin-top: calc(1 * var(--f));
+  font-family: var(--font-condensed);
+  font-size: max(27px, calc(54 * var(--f)));
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.footer__content .outline-btn--footer {
+  --btn-h: max(44px, calc(56 * var(--f)));
+  --btn-px: max(16px, calc(27 * var(--f)));
+  --btn-fs: max(14px, calc(21 * var(--f)));
+  margin-top: calc(40 * var(--f));
+}
+
+.footer__wa {
+  display: block;
+  width: calc(441 * var(--f));
+  min-width: 220px;
+  margin-top: calc(112 * var(--f));
+  transition: transform 0.4s var(--ease-out), filter 0.4s;
+}
+
+.footer__wa:hover {
+  transform: translateY(-4px) scale(1.03);
+  filter: drop-shadow(0 0 22px rgba(255, 196, 64, 0.45));
+}
+
+.footer__wa:active {
+  transform: scale(0.98);
+}
+
+@keyframes footer-breathe {
+  from { opacity: 0.8; }
+  to { opacity: 1; }
+}

@@ -1,0 +1,69 @@
+:root {
+  /* Surfaces */
+  --bg: #000;
+  --bg-raised: #0f0f0f;
+  --bg-band: #171717;
+  --line: #676868;
+  --line-warm: #999072;
+  --line-card: rgba(255, 255, 255, 0.36);
+  --pill: #555656;
+  --pill-line: #828283;
+
+  /* Text */
+  --text: #fff;
+  --text-soft: rgba(255, 255, 255, 0.86);
+  --light: #f9fafb;
+  --ink: #0b0b0b;
+
+  /* Brand gold */
+  --gold: #ebc04a;
+  --gold-light: #fbec98;
+  --gold-deep: #b88342;
+  --copper: #8c421d;
+
+  /* Section gradients (sampled from the design) */
+  --sewa-1: #c40516;
+  --sewa-2: #66020a;
+  --jual-1: #8e30ff;
+  --jual-2: #5205ae;
+  --beli-1: #f2da37;
+  --beli-2: #968303;
+  --topup-1: #262626;
+  --topup-2: #050505;
+  --topup-hover-1: #c9a54e;
+  --topup-hover-2: #5c4818;
+
+  /* Type */
+  --font-display: 'Staatliches', sans-serif;
+  --font-condensed: 'Antonio', sans-serif;
+  --font-body: 'Instrument Sans', sans-serif;
+
+  /* Layout */
+  --gutter: clamp(16px, 4.93vw, 71px);
+  --hero-gutter: clamp(12px, 3.68vw, 53px);
+  --hero-max: 1334px; /* hero frame width; the navbar shares it so the logo stays in the tab */
+  --container: 1298px;
+  --nav-h: 92px; /* fixed navbar height once scrolled */
+  --radius-card: 8px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --nav-h: 64px;
+  }
+}
+
+/*
+ * Desktop hero keeps the artboard's aspect ratio, so it narrows on short screens
+ * until the whole frame fits on first load: 128px covers the tab above the stage
+ * (20 + 84) and a 24px gap below it.
+ */
+@media (min-width: 1024px) {
+  :root {
+    --hero-max: clamp(760px, calc((100svh - 128px) * 1332 / 784), 1334px);
+  }
+}

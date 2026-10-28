@@ -1,0 +1,254 @@
+.panel--topup .panel__card {
+  --gs: var(--s);
+  align-content: start;
+  justify-items: center;
+  background: linear-gradient(118deg, var(--topup-1), var(--topup-2));
+}
+
+/* ---------- Ambient bg: gold diamond lattice + glow + rising VP coins ---------- */
+.bg-topup__grid {
+  inset: -8%;
+  background:
+    repeating-linear-gradient(45deg, rgba(235, 192, 74, 0.16) 0 1px, transparent 1px 38px),
+    repeating-linear-gradient(-45deg, rgba(235, 192, 74, 0.16) 0 1px, transparent 1px 38px);
+  -webkit-mask: radial-gradient(70% 75% at 50% 32%, #000 15%, transparent 75%);
+  mask: radial-gradient(70% 75% at 50% 32%, #000 15%, transparent 75%);
+  animation: bg-drift 28s ease-in-out infinite alternate;
+}
+
+.bg-topup__glow {
+  background:
+    radial-gradient(36% 40% at 50% 24%, rgba(235, 192, 74, 0.26), transparent 70%),
+    radial-gradient(55% 38% at 50% 100%, rgba(235, 192, 74, 0.2), transparent 72%);
+  animation: bg-pulse 8s ease-in-out infinite alternate;
+}
+
+/* VP coins (design asset used as a mask, filled with the brand gold) that spin as they rise behind the cards. */
+.bg-topup__coin {
+  position: absolute;
+  bottom: 14%;
+  width: calc(56 * var(--s));
+  height: calc(56 * var(--s));
+  filter: drop-shadow(0 0 calc(10 * var(--s)) rgba(235, 192, 74, 0.6));
+  opacity: 0;
+  animation: coin-rise 11s linear infinite;
+}
+
+/* The mask sits on the pseudo-element so the parent's glow isn't masked away. */
+.bg-topup__coin::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(150deg, var(--gold-light), var(--gold) 45%, var(--gold-deep));
+  -webkit-mask: url('../assets/img/topup-coin.webp') center / contain no-repeat;
+  mask: url('../assets/img/topup-coin.webp') center / contain no-repeat;
+}
+
+.bg-topup__coin--1 { left: 7%; }
+.bg-topup__coin--2 { left: 17%; width: calc(38 * var(--s)); height: calc(38 * var(--s)); animation-duration: 14s; animation-delay: -6s; }
+.bg-topup__coin--3 { left: 28%; width: calc(46 * var(--s)); height: calc(46 * var(--s)); animation-duration: 12s; animation-delay: -9s; }
+.bg-topup__coin--4 { right: 26%; width: calc(42 * var(--s)); height: calc(42 * var(--s)); animation-duration: 13s; animation-delay: -3s; }
+.bg-topup__coin--5 { right: 15%; width: calc(64 * var(--s)); height: calc(64 * var(--s)); animation-duration: 10s; animation-delay: -7s; }
+.bg-topup__coin--6 { right: 6%; width: calc(36 * var(--s)); height: calc(36 * var(--s)); animation-duration: 15s; animation-delay: -11s; }
+
+@keyframes coin-rise {
+  0% { opacity: 0; transform: translateY(0) rotateY(0deg); }
+  12%, 75% { opacity: 0.85; }
+  100% { opacity: 0; transform: translateY(-60cqh) rotateY(720deg); }
+}
+
+/* Without motion the coins stay put, scattered at different heights. */
+@media (prefers-reduced-motion: reduce) {
+  .bg-topup__coin { opacity: 0.6; }
+  .bg-topup__coin:nth-child(odd) { bottom: 40%; }
+}
+
+
+.topup__head {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: calc(75 * var(--s));
+  padding-inline: 24px;
+  text-align: center;
+}
+
+.topup__title {
+  font-family: var(--font-display);
+  font-size: max(48px, calc(88 * var(--s)));
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.topup__lead {
+  margin-top: calc(21 * var(--s));
+  font-size: max(16px, calc(23.4 * var(--s)));
+  line-height: 1.2;
+}
+
+.topup__partners {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: calc(26 * var(--s));
+}
+
+.topup__partners img {
+  opacity: 0.92;
+  transition: opacity 0.25s, transform 0.25s var(--ease-out);
+}
+
+.topup__partners li:hover img {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.topup__more {
+  font-family: var(--font-condensed);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.topup__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: calc(28 * var(--s));
+}
+
+.topup__links {
+  margin-top: calc(29 * var(--s));
+  font-size: 14px;
+  line-height: 25px;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.topup__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(168, 168, 168, 0.7);
+  transition: color 0.25s, text-decoration-color 0.25s;
+}
+
+.topup__links a::after {
+  content: '→';
+  font-size: 12px;
+  text-decoration: none;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.topup__links a:hover {
+  color: var(--text);
+  text-decoration-color: var(--gold);
+}
+
+.topup__links a:hover::after {
+  transform: translateX(3px);
+}
+
+/*
+ * Game cards: a 1192 × 317 artboard row, bottom-anchored to the panel. The row
+ * reaches 80px higher than the cards so the bottom fade mask never clips a card
+ * that hops or lifts on hover.
+ */
+.game-cards {
+  position: absolute;
+  z-index: 3;
+  bottom: 0;
+  left: 50%;
+  width: calc(1192 * var(--gs));
+  height: calc(317 * var(--gs) + 80px);
+  margin-left: calc(-596 * var(--gs));
+  -webkit-mask: linear-gradient(#000 calc(100% - 36px), rgba(0, 0, 0, 0.35));
+  mask: linear-gradient(#000 calc(100% - 36px), rgba(0, 0, 0, 0.35));
+}
+
+/*
+ * Card images end in a straight cut. Sinking them below the panel's clipped edge
+ * keeps that cut hidden while a card hops (topup.js) or lifts on hover (14px).
+ */
+.game-card {
+  position: absolute;
+  bottom: -24px;
+}
+
+.game-card--pointblank { left: 0; width: calc(270 * var(--gs)); z-index: 1; }
+.game-card--mlbb { left: calc(201 * var(--gs)); width: calc(269 * var(--gs)); z-index: 2; }
+.game-card--valorant { left: calc(449 * var(--gs)); width: calc(258 * var(--gs)); z-index: 5; }
+.game-card--genshin { left: calc(681 * var(--gs)); width: calc(274 * var(--gs)); z-index: 3; }
+.game-card--pubg { left: calc(927 * var(--gs)); width: calc(265 * var(--gs)); z-index: 4; }
+
+.game-card:hover,
+.game-card:focus-within {
+  z-index: 10;
+}
+
+.game-card__inner {
+  display: block;
+  transform-origin: 50% 100%;
+  transition: transform 0.45s var(--ease-out), filter 0.45s;
+}
+
+.game-card__inner img {
+  width: 100%;
+}
+
+.game-card__inner:hover,
+.game-card__inner:focus-visible {
+  transform: translateY(-14px) scale(1.04);
+  filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.55));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-card__inner:hover,
+  .game-card__inner:focus-visible {
+    transform: none;
+    filter: brightness(1.12) drop-shadow(0 0 0 transparent);
+  }
+}
+
+@container panel (max-aspect-ratio: 1 / 1) {
+  .panel--topup .panel__card {
+    --gs: clamp(0.42px, calc(100cqw / 700), 0.8px);
+  }
+
+  .topup__head {
+    margin-top: 32px;
+  }
+
+  .topup__title {
+    font-size: clamp(48px, 13cqw, 80px);
+  }
+
+  .topup__lead {
+    margin-top: 10px;
+  }
+
+  .topup__partners,
+  .topup__cta {
+    margin-top: 18px;
+  }
+
+  .topup__partners {
+    gap: 8px 12px;
+  }
+
+  .topup__head {
+    padding-inline: 16px;
+  }
+
+  .topup__links {
+    margin-top: 14px;
+  }
+}

@@ -1,0 +1,79 @@
+/* Outlined CTA used in the sections and footer; fills from the bottom on hover. */
+.outline-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55em;
+  height: var(--btn-h, 66px);
+  padding: 0 var(--btn-px, 20px);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  border-radius: var(--btn-r, 14px);
+  font-size: var(--btn-fs, 22px);
+  font-weight: var(--btn-fw, 400);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text);
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s;
+}
+
+.outline-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--text);
+  transform: translateY(101%);
+  transition: transform 0.4s var(--ease-out);
+}
+
+.outline-btn svg {
+  flex: none;
+  stroke-width: var(--btn-arrow-w, 1.4);
+  transition: transform 0.3s var(--ease-out);
+}
+
+.outline-btn:hover {
+  color: var(--btn-hover-ink, var(--ink));
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -12px rgba(0, 0, 0, 0.55);
+}
+
+.outline-btn:hover::before {
+  transform: none;
+}
+
+.outline-btn:hover svg {
+  transform: translateX(3px);
+}
+
+.outline-btn:active {
+  transform: scale(0.98);
+}
+
+/* "TOP UP SEKARANG" */
+.outline-btn--condensed {
+  --btn-h: 54px;
+  --btn-px: 21px;
+  --btn-r: 6px;
+  --btn-fs: 22px;
+  --btn-fw: 500;
+  padding-bottom: 0.15em; /* centres Antonio's caps */
+  font-family: var(--font-condensed);
+  letter-spacing: -0.05em;
+  text-transform: uppercase;
+}
+
+/* "FAQ, Testimony, reviews" */
+.outline-btn--footer {
+  --btn-h: 56px;
+  --btn-px: 27px;
+  --btn-r: 12px;
+  --btn-fs: 21px;
+  --btn-fw: 600;
+  --btn-arrow-w: 3.2;
+  gap: 4px;
+  letter-spacing: -0.01em;
+}

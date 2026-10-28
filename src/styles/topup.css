@@ -252,3 +252,64 @@
     margin-top: 14px;
   }
 }
+
+/*
+ * Phones (like the mobile design): Valorant large in the middle, Mobile Legends
+ * and Genshin overlapping it from either side and running off the screen edges.
+ * Cards are anchored to the bottom (in cqw, so the fan keeps its shape) and
+ * always run off it, whatever the phone's height. topup.js animates
+ * the cards themselves (and resets their `rotate`), so the extra fan angle sits
+ * on the inner link.
+ */
+@media (max-width: 767px) {
+  .topup__head {
+    margin-top: calc(var(--nav-h) + 132px);
+  }
+
+  .game-cards {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    margin-left: 0;
+  }
+
+  .game-card {
+    top: auto;
+  }
+
+  .game-card--pointblank,
+  .game-card--pubg {
+    display: none;
+  }
+
+  .game-card--valorant {
+    bottom: -10cqw;
+    left: 13%;
+    width: 74%;
+    z-index: 1;
+  }
+
+  .game-card--mlbb {
+    bottom: -12cqw;
+    left: -12%;
+    width: 50%;
+    z-index: 3;
+  }
+
+  .game-card--mlbb .game-card__inner {
+    rotate: 5deg;
+  }
+
+  .game-card--genshin {
+    bottom: -20cqw;
+    left: auto;
+    right: -12%;
+    width: 52%;
+    z-index: 3;
+  }
+
+  .game-card--genshin .game-card__inner {
+    rotate: -12deg;
+  }
+}

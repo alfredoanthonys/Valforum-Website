@@ -23,6 +23,9 @@ npm run preview   # serve the production build
 | Animated Valforum logo (Lottie, loops; reduced motion shows the still SVG) | `src/js/logo.js`, `src/assets/brands/valforum.json` |
 | Snap stack and parallax depth | `src/js/stack.js` |
 | Welcome popup (every page load) | `src/js/welcome.js` |
+| Tablet / phone menu (brand cards, opened from the navbar button) | `src/styles/nav.css`, `src/js/menu.js` |
+| Login: popup on tablet/desktop, its own page on phones | `src/styles/login.css`, `src/js/login.js`, `login.html` |
+| Login art (greyscale; the CSS tints it gold) | `src/assets/img/login-bg.webp` |
 
 ## Images
 

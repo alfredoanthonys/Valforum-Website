@@ -7,7 +7,9 @@ export default {
     valjubel: '#',
     search: '#',
     topup: '#',
-    login: '#',
+    loginSubmit: '#', // form action for the login form
+    signup: '#',
+    forgotPassword: '#',
 
     // Section CTAs
     sewaAccounts: '#',

@@ -1,4 +1,7 @@
-/* Outlined CTA used in the sections and footer; fills from the bottom on hover. */
+/*
+ * Outlined CTA used in the sections and footer. On hover a fill slides in:
+ * white from the bottom by default; sections set --btn-hover-bg / -from / -ink.
+ */
 .outline-btn {
   position: relative;
   display: inline-flex;
@@ -24,8 +27,8 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--text);
-  transform: translateY(101%);
+  background: var(--btn-hover-bg, var(--text));
+  transform: var(--btn-hover-from, translateY(101%));
   transition: transform 0.4s var(--ease-out);
 }
 

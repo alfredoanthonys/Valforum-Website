@@ -28,6 +28,9 @@
   <!-- Fixed navbar: transparent over the hero, solid black once the page scrolls -->
   <header class="site-nav" data-nav>
     <nav class="site-nav__inner" aria-label="Navigasi utama">
+      <button class="site-nav__menu" type="button" aria-label="Buka menu" aria-haspopup="dialog" aria-controls="site-menu" data-menu-open>
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h8M3 18h7"/><circle cx="16.5" cy="15.5" r="3.5"/><path d="m19.2 18.2 2.3 2.3"/></svg>
+      </button>
       <a class="site-nav__logo" href="#top" aria-label="Valforum, kembali ke atas">
         <span class="logo-anim" data-logo-anim>
           <img class="logo-anim__still" src="/src/assets/brands/valforum.svg" width="161" height="38" alt="">
@@ -45,13 +48,68 @@
           <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12l4 6-10 12L2 9z"/><path d="M2 9h20M12 21 8.5 9 12 3l3.5 6z"/></svg>
           <span>Top Up</span>
         </a>
-        <a class="nav-btn nav-btn--light" href="%link:login%">
+        <a class="nav-btn nav-btn--light" href="login.html" data-login-open>
           <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4.5"/><path d="M3.5 21c1.2-4.2 4.5-6.5 8.5-6.5s7.3 2.3 8.5 6.5"/></svg>
           <span>Login/Sign Up</span>
         </a>
       </div>
     </nav>
   </header>
+
+  <!-- Tablet / phone menu: the Valforum brands, opened from the navbar button -->
+  <dialog class="site-menu" id="site-menu" aria-label="Menu" data-menu>
+    <div class="site-menu__bar">
+      <button class="site-menu__close" type="button" aria-label="Tutup menu" data-menu-close>
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20"/></svg>
+      </button>
+    </div>
+    <ul class="site-menu__list">
+      <li>
+        <a class="menu-card menu-card--valforum" href="%link:topup%">
+          <img class="menu-card__logo" src="/src/assets/brands/valforum.svg" width="161" height="38" alt="Valforum">
+          <span class="menu-card__title">Top up VP - Via Website</span>
+          <span class="menu-card__desc">Tercepat Se-Indonesia</span>
+        </a>
+      </li>
+      <li>
+        <a class="menu-card menu-card--valsewa" href="%link:valsewa%">
+          <img class="menu-card__logo" src="/src/assets/brands/valsewa.svg" width="133" height="32" alt="Valsewa">
+          <span class="menu-card__title">Katalog Sewa Akun</span>
+          <span class="menu-card__desc">Rare skin, mulai dari 25k Sehari!</span>
+        </a>
+      </li>
+      <li>
+        <a class="menu-card menu-card--valjubel" href="%link:valjubel%">
+          <img class="menu-card__logo" src="/src/assets/brands/valjubel.svg" width="133" height="32" alt="Valjubel">
+          <span class="menu-card__title">Jual Beli Akun Valorant</span>
+          <span class="menu-card__desc">Terlengkap, Teraman! #1</span>
+        </a>
+      </li>
+    </ul>
+  </dialog>
+
+  <!-- Desktop login popup; phones go to login.html instead (login.js) -->
+  <dialog class="login" aria-labelledby="login-title" data-login>
+    <div class="login__box">
+      <div class="login__art">
+        <img class="login__logo" src="/src/assets/brands/valforum.svg" width="161" height="38" alt="Valforum">
+        <p class="login__tagline"><span>World's #1</span> Store Valorant Terlengkap</p>
+      </div>
+      <div class="login__main">
+        <button class="login-close" type="button" aria-label="Tutup" data-login-close>
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
+        </button>
+        <form class="login-form" action="%link:loginSubmit%" method="post">
+            <p class="login-form__switch">First time here? <a href="%link:signup%">Sign up</a></p>
+            <h2 class="login-form__title" id="login-title">Welcome back</h2>
+            <label class="login-form__field"><span class="sr-only">Username</span><input type="text" name="username" autocomplete="username" placeholder="Username" required></label>
+            <label class="login-form__field"><span class="sr-only">Password</span><input type="password" name="password" autocomplete="current-password" placeholder="Password" required></label>
+            <a class="login-form__forgot" href="%link:forgotPassword%">Forgot Password?</a>
+            <button class="login-form__submit" type="submit">Log in</button>
+          </form>
+      </div>
+    </div>
+  </dialog>
 
   <main id="main">
     <div class="intro" id="top">

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Login | Valforum</title>
+  <meta name="description" content="Top up VP 24 jam termurah, tercepat, dan teraman se-Indonesia. Sewa, jual, dan beli akun Valorant di Valforum.">
+  <meta name="theme-color" content="#0f0f0f">
+  <link rel="icon" type="image/png" href="/src/assets/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Antonio:wght@400..700&family=Instrument+Sans:wght@400..600&family=Staatliches&display=swap">
+  <script type="module" src="/src/login-page.js"></script>
+</head>
+<body>
+  <main class="login-page">
+    <div class="login-page__glow" aria-hidden="true"></div>
+    <a class="login-close login-page__close" href="./" aria-label="Kembali ke beranda">
+      <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19"/></svg>
+    </a>
+    <img class="login-page__logo" src="/src/assets/brands/valforum.svg" width="161" height="38" alt="Valforum">
+    <form class="login-form" action="%link:loginSubmit%" method="post">
+      <p class="login-form__switch">First time here? <a href="%link:signup%">Sign up</a></p>
+      <h1 class="login-form__title" id="login-title">Welcome back</h1>
+      <label class="login-form__field"><span class="sr-only">Username</span><input type="text" name="username" autocomplete="username" placeholder="Username" required></label>
+      <label class="login-form__field"><span class="sr-only">Password</span><input type="password" name="password" autocomplete="current-password" placeholder="Password" required></label>
+      <a class="login-form__forgot" href="%link:forgotPassword%">Forgot Password?</a>
+      <button class="login-form__submit" type="submit">Log in</button>
+    </form>
+  </main>
+</body>
+</html>

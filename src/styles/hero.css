@@ -377,3 +377,32 @@
     padding-inline-start: 48px;
   }
 }
+
+/* Phones: a shorter frame the characters fill top to bottom, the badge centred over them. */
+@media (max-width: 767px) {
+  /* The brands live in the navbar menu on phones. */
+  .brand-pill--stage {
+    display: none;
+  }
+
+  .hero__stage {
+    justify-content: center;
+    min-height: clamp(500px, 136vw, 620px);
+  }
+
+  .hero__phoenix {
+    left: -16%;
+    width: auto;
+    height: 94%;
+  }
+
+  .hero__jett {
+    right: -34%;
+    width: auto;
+    height: 84%;
+  }
+
+  .hero__actions {
+    margin-top: 26px;
+  }
+}

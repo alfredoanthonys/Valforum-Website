@@ -106,6 +106,19 @@
   line-height: 1.19;
 }
 
+/* Each section's deep tone: the button's hover fill (and its resting fill on phones). */
+.panel--sewa { --btn-fill: var(--sewa-2); }
+.panel--jual { --btn-fill: var(--jual-2); }
+.panel--beli { --btn-fill: #6b5d02; }
+.panel--topup { --btn-fill: var(--topup-hover-2); }
+
+/* Section buttons fill with that colour from left to right; the text stays white. */
+.panel .outline-btn {
+  --btn-hover-bg: var(--btn-fill);
+  --btn-hover-from: translateX(-101%);
+  --btn-hover-ink: var(--text);
+}
+
 .panel__content .outline-btn {
   --btn-h: max(46px, calc(67 * var(--s)));
   --btn-px: max(16px, calc(21 * var(--s)));
@@ -660,6 +673,188 @@
   .bg-jual__ring {
     left: 70%;
     top: 68%;
+  }
+}
+
+/*
+ * ---------- Phones: full-bleed panels, like the mobile design ----------
+ * Each panel fills the screen edge to edge (the fixed navbar floats over the
+ * top), the character art is large, and the card row becomes a swipeable strip
+ * along the bottom. --row-w / --row-h size that strip.
+ */
+@media (max-width: 767px) {
+  .panel {
+    padding: 0;
+  }
+
+  .panel__card {
+    --row-w: min(62cqw, 260px);
+    --row-h: calc(var(--row-w) * 233 / 285);
+    max-width: none;
+    border-radius: 0;
+  }
+
+  .panel__content,
+  .panel__content--end {
+    margin: calc(var(--nav-h) + 28px) 20px 0;
+  }
+
+  .panel__content--end {
+    justify-self: end;
+    align-items: flex-end;
+    text-align: right;
+  }
+
+  .panel__title {
+    font-size: clamp(44px, 13.5cqw, 64px);
+  }
+
+  .panel__lead {
+    max-width: 19em;
+    font-size: clamp(15px, 4.1cqw, 18px);
+  }
+
+  /* Copy sits low, over the art, just above the card strip. */
+  .panel--sewa .panel__content,
+  .panel--jual .panel__content,
+  .panel--beli .panel__content {
+    align-self: end;
+    margin-bottom: calc(var(--row-h) + 44px);
+  }
+
+  .panel--sewa .panel__content {
+    text-shadow: 0 2px 16px rgba(60, 0, 6, 0.55);
+  }
+
+  .panel--beli .panel__content {
+    text-shadow: 0 2px 14px rgba(60, 48, 0, 0.7);
+  }
+
+  /* Cypher's coat is white, so the copy gets a heavier shadow here. */
+  .panel--jual .panel__content {
+    text-shadow: 0 1px 3px rgba(30, 2, 70, 0.7), 0 2px 18px rgba(30, 2, 70, 0.8);
+  }
+
+  /* Filled buttons, in each section's deep colour, so they read over the art. */
+  .panel__content .outline-btn {
+    background: var(--btn-fill);
+  }
+
+
+  /* Raised so her face clears the copy; the flat-cut bottom fades out behind the card strip. */
+  .sewa__neon {
+    right: -40cqw;
+    bottom: calc(var(--row-h) * 0.6);
+    height: 72cqh;
+    -webkit-mask: linear-gradient(#000 82%, transparent);
+    mask: linear-gradient(#000 82%, transparent);
+  }
+
+  /* Cypher mirrors the others: on the left (the copy is right-aligned), same size, sonar around him. */
+  .jual__cypher {
+    left: -26cqw;
+    right: auto;
+    bottom: calc(var(--row-h) * 0.6);
+    height: 72cqh;
+    -webkit-mask: linear-gradient(#000 82%, transparent);
+    mask: linear-gradient(#000 82%, transparent);
+  }
+
+  .bg-jual__sweep,
+  .bg-jual__ring {
+    left: 32%;
+    top: 40%;
+  }
+
+  .bg-jual__sweep {
+    width: 300cqw;
+    height: 300cqw;
+    margin: -150cqw 0 0 -150cqw;
+  }
+
+  .bg-jual__ring {
+    width: 110cqw;
+    height: 110cqw;
+    margin: -55cqw 0 0 -55cqw;
+  }
+
+  /* Perk cards match the account cards' height. */
+  .panel__accounts.jual__perks li {
+    min-height: var(--row-h);
+  }
+
+  /* Rays and rank-up chevrons sized to the phone, not the desktop artboard. */
+  .bg-beli__rays {
+    top: -70cqw;
+    right: -90cqw;
+    width: 260cqw;
+    height: 260cqw;
+  }
+
+  /* In the gap above Gekko's hand, and brighter so they read on the yellow. */
+  .bg-beli__chevron {
+    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.05));
+  }
+
+  .bg-beli__chevron--1 {
+    top: 10%;
+    left: 6%;
+    width: 36cqw;
+    height: 30cqw;
+  }
+
+  .bg-beli__chevron--2 {
+    top: 19%;
+    left: -2%;
+    width: 24cqw;
+    height: 20cqw;
+  }
+
+  /* Raised like Neon, so the copy sits over his body rather than his face. */
+  .beli__gekko {
+    right: -22cqw;
+    bottom: calc(var(--row-h) * 0.6);
+    height: 68cqh;
+    -webkit-mask: linear-gradient(#000 82%, transparent);
+    mask: linear-gradient(#000 82%, transparent);
+  }
+
+  /* Card strip: swipe sideways; the top padding leaves room for the hover lift. */
+  .panel__accounts,
+  .panel__accounts.jual__perks {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    gap: 10px;
+    margin: 0;
+    padding: 14px 16px 18px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 16px;
+    scrollbar-width: none;
+  }
+
+  .panel__accounts::-webkit-scrollbar {
+    display: none;
+  }
+
+  .panel__accounts li,
+  .panel__accounts.jual__perks li {
+    flex: none;
+    width: var(--row-w);
+    max-width: none;
+    scroll-snap-align: start;
+  }
+
+  .panel__accounts.jual__perks li {
+    padding: 16px;
+    gap: 4px;
+  }
+
+  .jual__perks .perk__icon {
+    width: 52px;
+    margin-bottom: 6px;
   }
 }
 

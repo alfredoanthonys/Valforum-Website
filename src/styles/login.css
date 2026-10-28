@@ -1,0 +1,303 @@
+/*
+ * Login: a split popup on desktop (index.html) and its own page on phones
+ * (login.html). Both share the form below. The art is a greyscale map shot,
+ * tinted gold by multiplying it with a gradient.
+ */
+:root {
+  --login-art: url('../assets/img/login-bg.webp');
+  --login-gold: #5c4c22;
+  --login-gold-hover: #75602b;
+}
+
+/* ---------- Form ---------- */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 426px;
+  margin-inline: auto;
+}
+
+.login-form__switch {
+  font-size: 13px;
+  text-align: center;
+  color: var(--text-soft);
+}
+
+.login-form__switch a,
+.login-form__forgot {
+  color: var(--text);
+  text-underline-offset: 2px;
+  transition: color 0.15s var(--ease-standard);
+}
+
+.login-form__switch a {
+  text-decoration: underline;
+}
+
+.login-form__switch a:hover,
+.login-form__forgot:hover {
+  color: var(--gold);
+}
+
+.login-form__title {
+  margin: 26px 0 40px;
+  font-family: var(--font-condensed);
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.login-form__field + .login-form__field {
+  margin-top: 11px;
+}
+
+.login-form__field input {
+  width: 100%;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 13px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  transition: border-color 0.15s var(--ease-standard), box-shadow 0.15s var(--ease-standard);
+}
+
+.login-form__field input::placeholder {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.login-form__field input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(235, 192, 74, 0.18);
+}
+
+.login-form__forgot {
+  align-self: flex-start;
+  margin-top: 30px;
+  font-size: 13px;
+}
+
+.login-form__submit {
+  height: 52px;
+  margin-top: 64px;
+  border-radius: 5px;
+  background: var(--login-gold);
+  color: var(--text);
+  font-family: var(--font-condensed);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  transition: background-color 0.15s var(--ease-standard), transform 0.15s var(--ease-standard);
+}
+
+.login-form__submit:hover {
+  background: var(--login-gold-hover);
+}
+
+.login-form__submit:active {
+  transform: scale(0.98);
+}
+
+.login-close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  color: var(--text);
+  transition: background-color 0.15s var(--ease-standard);
+}
+
+.login-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.login-close svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+/* ---------- Desktop popup ---------- */
+.login {
+  width: min(100% - 48px, 1030px);
+  max-width: none;
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  overflow: visible;
+}
+
+.login::backdrop {
+  background: rgba(0, 0, 0, 0.72);
+}
+
+.login[open],
+.login[open]::backdrop {
+  animation: login-fade 0.3s var(--ease-out);
+}
+
+.login[open] .login__box {
+  animation: login-pop 0.45s var(--ease-out);
+}
+
+.login.is-closing,
+.login.is-closing::backdrop {
+  animation: login-fade 0.22s ease-in reverse forwards;
+}
+
+.login__box {
+  position: relative;
+  display: grid;
+  grid-template-columns: 370fr 432fr;
+  min-height: min(700px, calc(100dvh - 48px));
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  background: #000;
+  overflow: hidden;
+}
+
+.login__art {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 28px 52px;
+  background:
+    linear-gradient(180deg, #c9a54e 0%, #8a6f2f 45%, #2c2410 85%, #000 100%),
+    var(--login-art) center / cover;
+  background-blend-mode: multiply;
+}
+
+.login__logo {
+  width: 126px;
+  margin-bottom: 18px;
+}
+
+.login__tagline {
+  font-family: var(--font-condensed);
+  font-size: 59px;
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+}
+
+.login__tagline span {
+  display: block;
+  font-size: 39px;
+}
+
+.login__main {
+  display: grid;
+  place-items: center;
+  padding: 60px 72px;
+}
+
+.login__main .login-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+@keyframes login-fade {
+  from { opacity: 0; }
+}
+
+@keyframes login-pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login[open],
+  .login[open]::backdrop,
+  .login[open] .login__box,
+  .login.is-closing,
+  .login.is-closing::backdrop {
+    animation: none;
+  }
+}
+
+/* ---------- Phone page (login.html) ---------- */
+.login-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100svh;
+  padding: 0 28px 48px;
+  background: #000;
+  isolation: isolate;
+}
+
+/* Gold-tinted art behind the logo, fading into black under the title. */
+.login-page__glow {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: 62svh;
+  background:
+    radial-gradient(70% 55% at 50% 0%, #e0b85a, #8a6f2f 55%, #3a2f14),
+    var(--login-art) center top / cover;
+  background-blend-mode: multiply;
+  -webkit-mask: radial-gradient(120% 95% at 50% 0%, #000 45%, transparent 78%);
+  mask: radial-gradient(120% 95% at 50% 0%, #000 45%, transparent 78%);
+}
+
+.login-page__close {
+  align-self: flex-end;
+  margin: 26px -8px 0 0;
+}
+
+.login-page__logo {
+  width: min(78%, 288px);
+  margin-top: max(48px, 12svh);
+  margin-bottom: 14px;
+}
+
+.login-page .login-form {
+  max-width: 404px;
+}
+
+.login-page .login-form__switch {
+  font-size: 13px;
+}
+
+.login-page .login-form__title {
+  margin: 30px 0 38px;
+  font-size: 46px;
+}
+
+.login-page .login-form__field input {
+  height: 52px;
+  padding: 0 20px;
+  border-radius: 14px;
+  font-size: 14px;
+}
+
+.login-page .login-form__field + .login-form__field {
+  margin-top: 12px;
+}
+
+.login-page .login-form__forgot {
+  margin-top: 36px;
+  font-size: 13px;
+}
+
+.login-page .login-form__submit {
+  height: 58px;
+  margin-top: 16px;
+  border-radius: 6px;
+  font-size: 32px;
+}

@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import site from './site.config.js';
 
@@ -21,6 +22,13 @@ export default defineConfig({
   base: './',
   plugins: [siteLinks()],
   build: {
+    // Two pages: the landing page and the phone login page.
+    rollupOptions: {
+      input: {
+        main: fileURLToPath(new URL('index.html', import.meta.url)),
+        login: fileURLToPath(new URL('login.html', import.meta.url)),
+      },
+    },
     // Images are already optimised WebP; keep them as files so they cache independently.
     assetsInlineLimit: 0,
     target: 'es2020',

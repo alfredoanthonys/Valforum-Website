@@ -150,27 +150,27 @@
 }
 
 /* Artwork positions (artboard px) */
-.ql-art--acc-diamond { left: calc(468 * var(--q)); top: calc(8 * var(--q)); width: calc(170 * var(--q)); }
-.ql-art--acc-platinum { left: calc(410 * var(--q)); top: calc(36 * var(--q)); width: calc(181 * var(--q)); }
-.ql-art--acc-gold { left: calc(351 * var(--q)); top: calc(66 * var(--q)); width: calc(181 * var(--q)); }
+.ql-art--acc-diamond { left: calc(var(--ox, 0px) + 468 * var(--q)); top: calc(8 * var(--q)); width: calc(170 * var(--q)); }
+.ql-art--acc-platinum { left: calc(var(--ox, 0px) + 410 * var(--q)); top: calc(36 * var(--q)); width: calc(181 * var(--q)); }
+.ql-art--acc-gold { left: calc(var(--ox, 0px) + 351 * var(--q)); top: calc(66 * var(--q)); width: calc(181 * var(--q)); }
 
-.ql-art--vandal { left: calc(308 * var(--q)); top: calc(-1 * var(--q)); width: calc(330 * var(--q)); }
-.ql-art--spectre { left: calc(500 * var(--q)); top: calc(-1 * var(--q)); width: calc(138 * var(--q)); }
+.ql-art--vandal { left: calc(var(--ox, 0px) + 308 * var(--q)); top: calc(-1 * var(--q)); width: calc(330 * var(--q)); }
+.ql-art--spectre { left: calc(var(--ox, 0px) + 500 * var(--q)); top: calc(-1 * var(--q)); width: calc(138 * var(--q)); }
 
-.ql-art--operator { left: calc(291 * var(--q)); top: calc(85 * var(--q)); width: calc(255 * var(--q)); }
-.ql-art--odin { left: calc(439 * var(--q)); top: calc(115 * var(--q)); width: calc(199 * var(--q)); }
+.ql-art--operator { left: calc(var(--ox, 0px) + 291 * var(--q)); top: calc(85 * var(--q)); width: calc(255 * var(--q)); }
+.ql-art--odin { left: calc(var(--ox, 0px) + 439 * var(--q)); top: calc(115 * var(--q)); width: calc(199 * var(--q)); }
 
 .ql-art--beli-1,
 .ql-art--beli-2,
 .ql-art--beli-3 { width: calc(124 * var(--q)); transform-origin: 50% 100%; }
 /* Hand-of-cards fan (Sewa uses a straight staircase): outer cards tilt out, the middle one leads. */
-.ql-art--beli-1 { left: calc(392 * var(--q)); top: calc(44 * var(--q)); rotate: -12deg; }
-.ql-art--beli-3 { left: calc(512 * var(--q)); top: calc(44 * var(--q)); rotate: 12deg; }
-.ql-art--beli-2 { left: calc(452 * var(--q)); top: calc(16 * var(--q)); }
+.ql-art--beli-1 { left: calc(var(--ox, 0px) + 392 * var(--q)); top: calc(44 * var(--q)); rotate: -12deg; }
+.ql-art--beli-3 { left: calc(var(--ox, 0px) + 512 * var(--q)); top: calc(44 * var(--q)); rotate: 12deg; }
+.ql-art--beli-2 { left: calc(var(--ox, 0px) + 452 * var(--q)); top: calc(16 * var(--q)); }
 
-.ql-art--vp-1000 { left: calc(348 * var(--q)); top: calc(-1 * var(--q)); width: calc(291 * var(--q)); }
-.ql-art--vp-2050 { left: calc(450 * var(--q)); top: calc(20 * var(--q)); width: calc(188 * var(--q)); }
-.ql-art--vp-475 { left: calc(244 * var(--q)); top: calc(-1 * var(--q)); width: calc(360 * var(--q)); }
+.ql-art--vp-1000 { left: calc(var(--ox, 0px) + 348 * var(--q)); top: calc(-1 * var(--q)); width: calc(291 * var(--q)); }
+.ql-art--vp-2050 { left: calc(var(--ox, 0px) + 450 * var(--q)); top: calc(20 * var(--q)); width: calc(188 * var(--q)); }
+.ql-art--vp-475 { left: calc(var(--ox, 0px) + 244 * var(--q)); top: calc(-1 * var(--q)); width: calc(360 * var(--q)); }
 
 .ql-card:hover .ql-art--acc-diamond { transform: translate(14px, -6px) rotate(2deg); }
 .ql-card:hover .ql-art--acc-platinum { transform: translate(6px, -3px); }
@@ -186,6 +186,14 @@
 .ql-card:hover .ql-art--vp-2050 { transform: translate(12px, 4px) rotate(4deg); }
 .ql-card:hover .ql-art--vp-475 { transform: translate(-8px, -6px) rotate(-3deg); }
 
+/*
+ * Single column: the card keeps the desktop artboard's shape (639 × 200) so the
+ * artwork reaches the top, right and bottom edges as it does on desktop, and
+ * the copy scales with it. Below ~360px wide the card stops shrinking in height
+ * (min-height); --q then follows that height and --ox keeps the art on the right.
+ * --ox also pushes the art 44 artboard px further right than on desktop (it
+ * runs a little more off the edge) for breathing room next to the copy.
+ */
 @media (max-width: 899px) {
   .ql-grid {
     grid-template-columns: minmax(0, 1fr);
@@ -193,35 +201,40 @@
   }
 
   .ql-card {
-    height: 180px;
-  }
-
-  /* Single column: nudge the artwork right so it stays clear of the copy. */
-  .ql-card__art {
-    left: 18%;
-  }
-
-  /* The fan already starts past the copy; a smaller nudge keeps its right card on screen. */
-  .ql-card--beli .ql-card__art {
-    left: 4%;
+    --q: max(calc(100cqw / 639), 0.56px);
+    --ox: calc(100cqw - 595 * var(--q));
+    height: auto;
+    min-height: 112px;
+    aspect-ratio: 639 / 200;
   }
 
   .ql-card__body {
-    padding: 26px 22px 22px;
+    padding: calc(30 * var(--q)) calc(26 * var(--q)) calc(24 * var(--q));
+  }
+
+  .ql-card__title {
+    font-size: clamp(19px, calc(35 * var(--q)), 35px);
   }
 
   .ql-card__text {
-    max-width: 58%;
-    font-size: 13px;
+    max-width: calc(330 * var(--q));
+    font-size: clamp(9px, calc(11.5 * var(--q)), 13px);
+  }
+
+  .ql-card__text + .ql-card__text {
+    margin-top: calc(6 * var(--q));
   }
 
   .ql-card--topup .ql-card__text {
-    max-width: 58%;
+    max-width: calc(268 * var(--q));
   }
 }
 
 @media (max-width: 767px) {
+  /* Phone panels have no top padding to tuck under, so the gap is plain padding. */
   .quicklinks {
     --ql-pad: 40px;
+    margin-bottom: 0;
+    padding-bottom: var(--ql-pad);
   }
 }

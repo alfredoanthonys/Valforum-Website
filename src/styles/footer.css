@@ -111,6 +111,7 @@
   --btn-h: max(44px, calc(56 * var(--f)));
   --btn-px: max(16px, calc(27 * var(--f)));
   --btn-fs: max(14px, calc(21 * var(--f)));
+  --btn-hover-from: translateX(-101%); /* left to right like the section buttons; the fill stays white */
   margin-top: calc(40 * var(--f));
 }
 

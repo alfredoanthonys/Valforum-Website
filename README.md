@@ -22,7 +22,7 @@ npm run preview   # serve the production build
 | Fixed navbar (transparent → black on scroll, same as valjubel.com) | `src/styles/nav.css`, `src/js/nav.js` |
 | Animated Valforum logo (Lottie, loops; reduced motion shows the still SVG) | `src/js/logo.js`, `src/assets/brands/valforum.json` |
 | Snap stack and parallax depth | `src/js/stack.js` |
-| Welcome popup (once per session) | `src/js/welcome.js` |
+| Welcome popup (every page load) | `src/js/welcome.js` |
 
 ## Images
 

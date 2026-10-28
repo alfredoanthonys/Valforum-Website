@@ -1,35 +1,17 @@
-// Service picker shown on the first page view of each browser session.
+// Service picker shown on every page load.
 
-const STORAGE_KEY = 'valforum:welcome-shown';
 const OPEN_DELAY = 500; // ms after load, so it never competes with the hero paint
 const CLOSE_FALLBACK = 320; // ms; in case animationend never fires
 
-function alreadyShown() {
-  try {
-    return sessionStorage.getItem(STORAGE_KEY) === '1';
-  } catch {
-    return false;
-  }
-}
-
-function remember() {
-  try {
-    sessionStorage.setItem(STORAGE_KEY, '1');
-  } catch {
-    // Private mode / storage disabled: the picker may show again on reload.
-  }
-}
-
 export function initWelcome({ reduceMotion }) {
   const dialog = document.querySelector('[data-welcome]');
-  if (!dialog || typeof dialog.showModal !== 'function' || alreadyShown()) return;
+  if (!dialog || typeof dialog.showModal !== 'function') return;
 
   const root = document.documentElement;
 
   function open() {
     dialog.showModal();
     root.classList.add('is-locked');
-    remember();
   }
 
   function close(then) {

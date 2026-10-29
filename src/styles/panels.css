@@ -63,14 +63,17 @@
   transform-origin: 50% 0;
 }
 
-/* Darkens a panel while the next one slides over it (driven by stack.js). */
-.panel__card::after {
-  content: '';
+/*
+ * Darkens a panel while the next one slides over it. stack.js adds it and sets its
+ * opacity directly: a custom property on the card would restyle the whole card
+ * every scroll frame.
+ */
+.panel__shade {
   position: absolute;
   inset: 0;
   z-index: 20;
   background: #000;
-  opacity: var(--shade, 0);
+  opacity: 0;
   pointer-events: none;
 }
 

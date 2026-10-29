@@ -27,6 +27,7 @@ export function initStack({ reduceMotion }) {
   const panels = [...stack.querySelectorAll('[data-panel]')];
   const markers = [...stack.querySelectorAll('[data-marker]')];
   const cards = panels.map((panel) => panel.querySelector('.panel__card'));
+  const shades = cards.map((card) => card.appendChild(Object.assign(document.createElement('span'), { className: 'panel__shade' })));
   const copy = panels.map((panel) => panel.querySelector('.panel__content, .topup__head'));
   const layers = panels.map((panel) =>
     [...panel.querySelectorAll('[data-parallax]')].map((el) => ({ el, depth: Number(el.dataset.parallax) })),
@@ -97,7 +98,7 @@ export function initStack({ reduceMotion }) {
       if (cover !== prev.cover) {
         prev.cover = cover;
         cards[i].style.transform = cover > 0 && cover < 1 ? `scale(${1 - cover * COVER_SCALE})` : '';
-        cards[i].style.setProperty('--shade', (cover * COVER_SHADE).toFixed(3));
+        shades[i].style.opacity = (cover * COVER_SHADE).toFixed(3);
       }
       if (enter !== prev.enter) {
         prev.enter = enter;
@@ -146,6 +147,7 @@ export function initStack({ reduceMotion }) {
     if (target === undefined) return false;
     gliding = true;
     root.classList.add('is-gliding');
+    document.dispatchEvent(new CustomEvent('stack:glide', { detail: true }));
     const state = { y: window.scrollY };
     gsap.to(state, {
       y: target,
@@ -156,6 +158,7 @@ export function initStack({ reduceMotion }) {
       onComplete: () => {
         gliding = false;
         root.classList.remove('is-gliding');
+        document.dispatchEvent(new CustomEvent('stack:glide', { detail: false }));
       },
     });
     return true;

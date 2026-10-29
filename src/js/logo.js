@@ -34,8 +34,15 @@ export function initLogo({ reduceMotion }) {
         clearTimeout(timer);
         fallback();
       });
-      // Pause while the tab is hidden.
-      document.addEventListener('visibilitychange', () => (document.hidden ? anim.pause() : anim.play()));
+      // Pause while the tab is hidden, and during section glides (stack.js) so the
+      // SVG frames don't compete with the scroll on phones.
+      let gliding = false;
+      const sync = () => (document.hidden || gliding ? anim.pause() : anim.play());
+      document.addEventListener('visibilitychange', sync);
+      document.addEventListener('stack:glide', (event) => {
+        gliding = event.detail;
+        sync();
+      });
     } catch (error) {
       clearTimeout(timer);
       fallback();

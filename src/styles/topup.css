@@ -29,7 +29,9 @@
   bottom: 14%;
   width: calc(56 * var(--s));
   height: calc(56 * var(--s));
-  filter: drop-shadow(0 0 calc(10 * var(--s)) rgba(235, 192, 74, 0.6));
+  border-radius: 50%;
+  /* A round glow rather than a drop-shadow filter, which Safari repaints every frame while the coin spins. */
+  box-shadow: 0 0 calc(12 * var(--s)) rgba(235, 192, 74, 0.45);
   opacity: 0;
   animation: coin-rise 11s linear infinite;
 }
@@ -159,8 +161,7 @@
 
 /*
  * Game cards: a 1192 × 317 artboard row, bottom-anchored to the panel. The row
- * reaches 80px higher than the cards so the bottom fade mask never clips a card
- * that hops or lifts on hover.
+ * reaches 80px higher than the cards so a card that hops or lifts on hover stays inside it.
  */
 .game-cards {
   position: absolute;
@@ -170,8 +171,20 @@
   width: calc(1192 * var(--gs));
   height: calc(317 * var(--gs) + 80px);
   margin-left: calc(-596 * var(--gs));
-  -webkit-mask: linear-gradient(#000 calc(100% - 36px), rgba(0, 0, 0, 0.35));
-  mask: linear-gradient(#000 calc(100% - 36px), rgba(0, 0, 0, 0.35));
+}
+
+/*
+ * The cards fade into the panel's dark bottom edge. A tint over them rather than a
+ * mask: Safari redraws a masked group on every frame while the cards hop.
+ */
+.game-cards::after {
+  content: '';
+  position: absolute;
+  z-index: 20;
+  inset: auto 0 0;
+  height: 36px;
+  background: linear-gradient(rgba(14, 14, 14, 0), rgba(14, 14, 14, 0.65));
+  pointer-events: none;
 }
 
 /*

@@ -76,7 +76,26 @@
   --btn-r: 12px;
   --btn-fs: 21px;
   --btn-fw: 600;
-  --btn-arrow-w: 3.2;
-  gap: 4px;
   letter-spacing: -0.01em;
+}
+
+/* Phones: every button rests filled white with dark text, the same in every section. */
+@media (max-width: 767px) {
+  .outline-btn,
+  .outline-btn:hover {
+    background: var(--text);
+    color: var(--ink);
+    text-shadow: none;
+    outline: 1px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 3px;
+  }
+
+  /* Keeps the gold keyboard-focus ring over the decorative outline above. */
+  .outline-btn:focus-visible {
+    outline: 2px solid var(--gold);
+  }
+
+  .outline-btn::before {
+    background: var(--text);
+  }
 }

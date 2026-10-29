@@ -540,6 +540,11 @@
   }
 }
 
+/* Set by stack.js on panels that are off-screen or fully covered. */
+.panel.is-idle .panel__bg * {
+  animation: none;
+}
+
 /* ---------- Section dots ---------- */
 .dots {
   position: fixed;

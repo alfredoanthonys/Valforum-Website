@@ -90,9 +90,13 @@ export function initStack({ reduceMotion }) {
       const cover = next === undefined ? 0 : clamp((y - tops[i]) / (next - tops[i]), 0, 1);
       const prev = last[i];
 
+      // Off-screen or fully covered panels stop their ambient animations, so phones
+      // don't hold GPU layers for four animated backgrounds at once.
+      panel.classList.toggle('is-idle', enter < 0.01 || cover > 0.99); // a pixel of rounding slack
+
       if (cover !== prev.cover) {
         prev.cover = cover;
-        cards[i].style.transform = cover > 0 ? `scale(${1 - cover * COVER_SCALE})` : '';
+        cards[i].style.transform = cover > 0 && cover < 1 ? `scale(${1 - cover * COVER_SCALE})` : '';
         cards[i].style.setProperty('--shade', (cover * COVER_SHADE).toFixed(3));
       }
       if (enter !== prev.enter) {

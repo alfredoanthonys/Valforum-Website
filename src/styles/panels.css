@@ -112,7 +112,7 @@
   line-height: 1.19;
 }
 
-/* The button's hover fill (and its resting fill on phones): white with dark text like the
+/* The button's hover fill: white with dark text like the
    FAQ button, except Top Up, which keeps its deep tone with white text. */
 .panel { --btn-fill: var(--text); --btn-fill-ink: var(--ink); }
 .panel--topup { --btn-fill: var(--topup-hover-2); --btn-fill-ink: var(--text); }
@@ -743,13 +743,6 @@
   /* Cypher's coat is white, so the copy gets a heavier shadow here. */
   .panel--jual .panel__content {
     text-shadow: 0 1px 3px rgba(30, 2, 70, 0.7), 0 2px 18px rgba(30, 2, 70, 0.8);
-  }
-
-  /* Filled buttons, so they read over the art. */
-  .panel__content .outline-btn {
-    background: var(--btn-fill);
-    color: var(--btn-fill-ink);
-    text-shadow: none;
   }
 
 

@@ -112,17 +112,16 @@
   line-height: 1.19;
 }
 
-/* Each section's deep tone: the button's hover fill (and its resting fill on phones). */
-.panel--sewa { --btn-fill: var(--sewa-2); }
-.panel--jual { --btn-fill: var(--jual-2); }
-.panel--beli { --btn-fill: #6b5d02; }
-.panel--topup { --btn-fill: var(--topup-hover-2); }
+/* The button's hover fill (and its resting fill on phones): white with dark text like the
+   FAQ button, except Top Up, which keeps its deep tone with white text. */
+.panel { --btn-fill: var(--text); --btn-fill-ink: var(--ink); }
+.panel--topup { --btn-fill: var(--topup-hover-2); --btn-fill-ink: var(--text); }
 
-/* Section buttons fill with that colour from left to right; the text stays white. */
+/* Section buttons fill with that colour from left to right. */
 .panel .outline-btn {
   --btn-hover-bg: var(--btn-fill);
   --btn-hover-from: translateX(-101%);
-  --btn-hover-ink: var(--text);
+  --btn-hover-ink: var(--btn-fill-ink);
 }
 
 .panel__content .outline-btn {
@@ -741,9 +740,11 @@
     text-shadow: 0 1px 3px rgba(30, 2, 70, 0.7), 0 2px 18px rgba(30, 2, 70, 0.8);
   }
 
-  /* Filled buttons, in each section's deep colour, so they read over the art. */
+  /* Filled buttons, so they read over the art. */
   .panel__content .outline-btn {
     background: var(--btn-fill);
+    color: var(--btn-fill-ink);
+    text-shadow: none;
   }
 
 

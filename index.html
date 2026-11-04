@@ -37,8 +37,9 @@
         </span>
       </a>
       <ul class="brand-pill" aria-label="Layanan Valforum">
-        <li><a class="brand-pill__item" href="%link:valsewa%"><img src="/src/assets/brands/valsewa.svg" width="133" height="32" alt="Valsewa"></a></li>
-        <li><a class="brand-pill__item" href="%link:valjubel%"><img src="/src/assets/brands/valjubel.svg" width="133" height="32" alt="Valjubel"></a></li>
+        <li><a class="brand-pill__item brand-pill__item--sewa" href="%link:valsewa%" aria-label="Sewa Akun di Valsewa"><img src="/src/assets/brands/valsewa.svg" width="133" height="32" alt=""><span class="brand-pill__label" aria-hidden="true">Sewa Akun</span></a></li>
+        <li><a class="brand-pill__item brand-pill__item--jubel" href="%link:valjubel%" aria-label="Beli Akun di Valjubel"><img src="/src/assets/brands/valjubel.svg" width="133" height="32" alt=""><span class="brand-pill__label" aria-hidden="true">Beli Akun</span></a></li>
+        <li><a class="brand-pill__item brand-pill__item--jubel" href="%link:valjubel%" aria-label="Jual Akun di Valjubel"><img src="/src/assets/brands/valjubel.svg" width="133" height="32" alt=""><span class="brand-pill__label" aria-hidden="true">Jual Akun</span></a></li>
       </ul>
       <a class="nav-btn nav-btn--icon site-nav__search" href="%link:search%" aria-label="Cari akun">
         <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -125,18 +126,19 @@
             <img class="hero__jett" src="/src/assets/img/hero-jett.webp" srcset="/src/assets/img/hero-jett.webp 704w, /src/assets/img/hero-jett-2x.webp 1408w" sizes="(max-width: 1023px) min(72vw, 520px), min(49.1vw, 704px)" width="704" height="669" alt="" fetchpriority="high" data-hero-art>
 
             <ul class="brand-pill brand-pill--stage" aria-label="Layanan Valforum">
-              <li><a class="brand-pill__item" href="%link:valsewa%"><img src="/src/assets/brands/valsewa.svg" width="133" height="32" alt="Valsewa"></a></li>
-              <li><a class="brand-pill__item" href="%link:valjubel%"><img src="/src/assets/brands/valjubel.svg" width="133" height="32" alt="Valjubel"></a></li>
+              <li><a class="brand-pill__item brand-pill__item--sewa" href="%link:valsewa%" aria-label="Sewa Akun di Valsewa"><img src="/src/assets/brands/valsewa.svg" width="133" height="32" alt=""><span class="brand-pill__label" aria-hidden="true">Sewa Akun</span></a></li>
+              <li><a class="brand-pill__item brand-pill__item--jubel" href="%link:valjubel%" aria-label="Beli Akun di Valjubel"><img src="/src/assets/brands/valjubel.svg" width="133" height="32" alt=""><span class="brand-pill__label" aria-hidden="true">Beli Akun</span></a></li>
+              <li><a class="brand-pill__item brand-pill__item--jubel" href="%link:valjubel%" aria-label="Jual Akun di Valjubel"><img src="/src/assets/brands/valjubel.svg" width="133" height="32" alt=""><span class="brand-pill__label" aria-hidden="true">Jual Akun</span></a></li>
             </ul>
 
             <h1 class="hero__badge" id="hero-title" data-hero-badge>
               <img src="/src/assets/img/hero-badge.webp" srcset="/src/assets/img/hero-badge.webp 523w, /src/assets/img/hero-badge-2x.webp 1046w" sizes="(max-width: 1023px) min(82vw, 440px), min(36.5vw, 523px)" width="523" height="328" alt="World's #1 Store Valorant Terlengkap" fetchpriority="high">
             </h1>
             <ul class="hero__actions" aria-label="Pilih layanan">
-              <li><a class="hero-btn" href="#sewa" data-hero-btn>Sewa</a></li>
-              <li><a class="hero-btn" href="#jual" data-hero-btn>Jual</a></li>
-              <li><a class="hero-btn" href="#beli" data-hero-btn>Beli</a></li>
-              <li><a class="hero-btn" href="#topup" data-hero-btn>Top Up</a></li>
+              <li><a class="hero-btn hero-btn--sewa" href="#sewa" data-hero-btn>Sewa</a></li>
+              <li><a class="hero-btn hero-btn--topup" href="#topup" data-hero-btn>Top Up</a></li>
+              <li><a class="hero-btn hero-btn--jubel" href="#jualbeli" data-hero-btn>Jual</a></li>
+              <li><a class="hero-btn hero-btn--jubel" href="#jualbeli" data-hero-btn>Beli</a></li>
             </ul>
             <p class="hero__caption" data-hero-caption>
               Semua layanan mulai dari top up VP hingga sewa akun Sultan! Kami buka 24 jam, terpercaya, dan profesional. Kunjungi IG <a href="%link:instagramValforum%">@VALFORUM</a>.
@@ -172,7 +174,7 @@
             </a>
           </li>
           <li data-reveal>
-            <a class="ql-card ql-card--jual" href="#jual">
+            <a class="ql-card ql-card--jual" href="#jualbeli">
               <span class="ql-card__art" aria-hidden="true">
                 <img class="ql-art ql-art--spectre" src="/src/assets/img/ql-gun-spectre.webp" srcset="/src/assets/img/ql-gun-spectre.webp 1x, /src/assets/img/ql-gun-spectre-2x.webp 2x" width="138" height="82" alt="" loading="lazy">
                 <img class="ql-art ql-art--operator" src="/src/assets/img/ql-gun-operator.webp" srcset="/src/assets/img/ql-gun-operator.webp 1x, /src/assets/img/ql-gun-operator-2x.webp 2x" width="255" height="115" alt="" loading="lazy">
@@ -183,20 +185,6 @@
                 <h3 class="ql-card__title">Jual Akun Valorant</h3>
                 <span class="ql-card__text">Jual akun menggunakan cashout pertama di Indonesia</span>
                 <span class="ql-card__text">Jual gampang</span>
-              </span>
-            </a>
-          </li>
-          <li data-reveal>
-            <a class="ql-card ql-card--beli" href="#beli">
-              <span class="ql-card__art" aria-hidden="true">
-                <img class="ql-art ql-art--beli-1" src="/src/assets/img/beli-acc-4.webp" srcset="/src/assets/img/beli-acc-4.webp 1x, /src/assets/img/beli-acc-4-2x.webp 2x" width="230" height="317" alt="" loading="lazy">
-                <img class="ql-art ql-art--beli-3" src="/src/assets/img/beli-acc-2.webp" srcset="/src/assets/img/beli-acc-2.webp 1x, /src/assets/img/beli-acc-2-2x.webp 2x" width="230" height="317" alt="" loading="lazy">
-                <img class="ql-art ql-art--beli-2" src="/src/assets/img/beli-acc-3.webp" srcset="/src/assets/img/beli-acc-3.webp 1x, /src/assets/img/beli-acc-3-2x.webp 2x" width="230" height="317" alt="" loading="lazy">
-              </span>
-              <span class="ql-card__body">
-                <h3 class="ql-card__title">Beli Akun Valorant</h3>
-                <span class="ql-card__text">Beli akun Valorant dengan aman</span>
-                <span class="ql-card__text">Beli aman, jual gampang</span>
               </span>
             </a>
           </li>
@@ -213,6 +201,20 @@
               </span>
             </a>
           </li>
+          <li data-reveal>
+            <a class="ql-card ql-card--beli" href="#jualbeli">
+              <span class="ql-card__art" aria-hidden="true">
+                <img class="ql-art ql-art--beli-1" src="/src/assets/img/beli-acc-4.webp" srcset="/src/assets/img/beli-acc-4.webp 1x, /src/assets/img/beli-acc-4-2x.webp 2x" width="230" height="317" alt="" loading="lazy">
+                <img class="ql-art ql-art--beli-3" src="/src/assets/img/beli-acc-2.webp" srcset="/src/assets/img/beli-acc-2.webp 1x, /src/assets/img/beli-acc-2-2x.webp 2x" width="230" height="317" alt="" loading="lazy">
+                <img class="ql-art ql-art--beli-2" src="/src/assets/img/beli-acc-3.webp" srcset="/src/assets/img/beli-acc-3.webp 1x, /src/assets/img/beli-acc-3-2x.webp 2x" width="230" height="317" alt="" loading="lazy">
+              </span>
+              <span class="ql-card__body">
+                <h3 class="ql-card__title">Beli Akun Valorant</h3>
+                <span class="ql-card__text">Beli akun Valorant dengan aman</span>
+                <span class="ql-card__text">Beli aman, jual gampang</span>
+              </span>
+            </a>
+          </li>
         </ul>
       </section>
     </div>
@@ -220,8 +222,7 @@
     <!-- Snap stack: each panel sticks while the next one slides over it -->
     <div class="stack" data-stack>
       <div class="snap-marker" id="sewa" data-marker></div>
-      <div class="snap-marker" id="jual" data-marker></div>
-      <div class="snap-marker" id="beli" data-marker></div>
+      <div class="snap-marker" id="jualbeli" data-marker></div>
       <div class="snap-marker" id="topup" data-marker></div>
 
       <section class="panel panel--sewa" aria-labelledby="sewa-title" data-panel>
@@ -241,7 +242,7 @@
             <h2 class="panel__title" id="sewa-title" data-reveal>Sewa Account Valorant</h2>
             <p class="panel__lead" data-reveal>160 skins, 25rb? Ada dong!</p>
             <a class="outline-btn" href="%link:sewaAccounts%" data-reveal>
-              Explore accounts
+              Lihat akun
               <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg>
             </a>
           </div>
@@ -254,7 +255,7 @@
         </div>
       </section>
 
-      <section class="panel panel--jual" aria-labelledby="jual-title" data-panel>
+      <section class="panel panel--jual" aria-labelledby="jualbeli-title" data-panel>
         <div class="panel__card">
           <div class="panel__bg" aria-hidden="true">
             <span class="bg-layer bg-jual__dots" data-parallax="40"></span>
@@ -265,55 +266,25 @@
           </div>
           <img class="jual__cypher" src="/src/assets/img/jual-cypher.webp" width="560" height="766" alt="" loading="lazy" data-reveal="art">
           <div class="panel__content panel__content--end">
-            <h2 class="panel__title" id="jual-title" data-reveal>Jual Account Valorant</h2>
-            <p class="panel__lead" data-reveal>Jual akun menggunakan cashout pertama di Indonesia</p>
-            <a class="outline-btn" href="%link:jualAccount%" data-reveal>
-              Jual sekarang
-              <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg>
-            </a>
-          </div>
-          <ul class="panel__accounts jual__perks" aria-label="Keuntungan jual akun di Valjubel">
-            <li data-reveal="card">
-              <img class="perk__icon" src="/src/assets/img/jual-icon-1.webp" width="256" height="256" alt="" loading="lazy">
-              <h3 class="perk__title">Cashout Instan</h3>
-              <p class="perk__text">Dana langsung cair begitu akunmu selesai dicek.</p>
-            </li>
-            <li data-reveal="card">
-              <img class="perk__icon" src="/src/assets/img/jual-icon-2.webp" width="256" height="256" alt="" loading="lazy">
-              <h3 class="perk__title">Hackback 100% Refund</h3>
-              <p class="perk__text">Garansi refund penuh kalau terjadi hackback.</p>
-            </li>
-            <li data-reveal="card">
-              <img class="perk__icon" src="/src/assets/img/jual-icon-3.webp" width="256" height="256" alt="" loading="lazy">
-              <h3 class="perk__title">Harga Terbaik</h3>
-              <p class="perk__text">Penawaran harga tertinggi untuk akun Valorant-mu.</p>
-            </li>
-            <li data-reveal="card">
-              <img class="perk__icon" src="/src/assets/img/jual-icon-4.webp" width="256" height="256" alt="" loading="lazy">
-              <h3 class="perk__title">Open 24 Jam</h3>
-              <p class="perk__text">Jual kapan saja, tim kami siap 24/7.</p>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="panel panel--beli" aria-labelledby="beli-title" data-panel>
-        <div class="panel__card">
-          <div class="panel__bg" aria-hidden="true">
-            <span class="bg-layer bg-beli__grid" data-parallax="40"></span>
-            <span class="bg-layer bg-beli__rays"></span>
-            <span class="bg-beli__chevron bg-beli__chevron--1" data-parallax="80"></span>
-            <span class="bg-beli__chevron bg-beli__chevron--2" data-parallax="120"></span>
-            <span class="bg-layer bg-noise"></span>
-          </div>
-          <img class="beli__gekko" src="/src/assets/img/beli-gekko.webp" width="620" height="789" alt="" loading="lazy" data-reveal="art">
-          <div class="panel__content">
-            <h2 class="panel__title" id="beli-title" data-reveal>Beli Account Valorant</h2>
-            <p class="panel__lead" data-reveal>Beli akun Valorant dengan aman</p>
-            <a class="outline-btn" href="%link:beliAccounts%" data-reveal>
-              Explore accounts
-              <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg>
-            </a>
+            <h2 class="panel__title" id="jualbeli-title" data-reveal>Jual Beli Account Valorant</h2>
+            <p class="panel__lead" data-reveal>Beli aman, jual gampang. Cashout pertama di Indonesia!</p>
+            <div class="panel__btns" data-reveal>
+              <button class="guarantee" type="button" aria-describedby="guarantee-tip">
+                <img class="guarantee__badge" src="/src/assets/img/guarantee-badge.webp" srcset="/src/assets/img/guarantee-badge.webp 1x, /src/assets/img/guarantee-badge-2x.webp 2x" width="128" height="130" alt="Garansi 100% uang kembali">
+                <span class="guarantee__tip" id="guarantee-tip" role="tooltip">
+                  <strong class="guarantee__title">Garansi 100% uang kembali</strong>
+                  <span class="guarantee__text">Kalau akun ditarik balik (hackback), uangmu kembali penuh.</span>
+                </span>
+              </button>
+              <a class="outline-btn" href="%link:jualAccount%">
+                Jual akun
+                <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg>
+              </a>
+              <a class="outline-btn" href="%link:beliAccounts%">
+                Beli akun
+                <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg>
+              </a>
+            </div>
           </div>
           <ul class="panel__accounts" aria-label="Contoh akun yang bisa dibeli">
             <li data-reveal="card"><img src="/src/assets/img/beli-row-1.webp" srcset="/src/assets/img/beli-row-1.webp 1x, /src/assets/img/beli-row-1-2x.webp 2x" width="285" height="233" alt="Akun Immortal 1 VAL-5697, level 204" loading="lazy"></li>
@@ -382,8 +353,7 @@
 
     <nav class="dots" aria-label="Navigasi section" data-dots>
       <a href="#sewa" aria-label="Sewa Account Valorant"></a>
-      <a href="#jual" aria-label="Jual Account Valorant"></a>
-      <a href="#beli" aria-label="Beli Account Valorant"></a>
+      <a href="#jualbeli" aria-label="Jual Beli Account Valorant"></a>
       <a href="#topup" aria-label="Top Up Games"></a>
     </nav>
   </main>
@@ -410,64 +380,78 @@
     </div>
   </footer>
 
-  <!-- First-visit service picker (shown once per session) -->
+  <!-- Floating livechat; livechat.js sets the mode, link and status from site.config.js -->
+  <a class="livechat" href="%link:chatLeaveMessage%" data-state="offline" aria-label="Chat admin: tinggalkan pesan" data-livechat>
+    <span class="livechat__pill" aria-hidden="true">
+      <span class="livechat__title">Chat Admin</span>
+      <span class="livechat__status"><span class="livechat__status-dot"></span><span data-livechat-text>Tinggalkan pesan</span></span>
+    </span>
+    <span class="livechat__orb" aria-hidden="true">
+      <img class="livechat__mark" src="/src/assets/brands/valforum-mark.svg" width="1340" height="935" alt="">
+      <span class="livechat__presence"></span>
+      <span class="livechat__badge livechat__badge--chat">
+        <svg viewBox="0 0 24 24"><path d="M12 3.5a8.5 8.5 0 0 1 0 17c-1.4 0-2.7-.3-3.9-.9L3.5 21l1.3-4.3A8.5 8.5 0 0 1 12 3.5Z"/></svg>
+      </span>
+      <span class="livechat__badge livechat__badge--wa">
+        <svg viewBox="0 0 24 24"><path d="M12 2.2A9.8 9.8 0 0 0 3.6 17l-1.4 4.8 5-1.3A9.8 9.8 0 1 0 12 2.2Zm5.7 13.9c-.2.7-1.4 1.3-2 1.4-.5.1-1.2.1-1.9-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5-4.5-.2-.2-1.2-1.6-1.2-3s.8-2.2 1-2.5c.3-.3.6-.4.8-.4h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.6 2.1 1.1 1 2.1 1.3 2.4 1.4.3.2.5.1.6 0l.9-1.1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.1.1.6-.1 1.3Z"/></svg>
+      </span>
+    </span>
+  </a>
+
+  <!-- Service picker on page load, modelled on the Valjubel one; Valforum's own service is highlighted -->
   <dialog class="welcome" aria-labelledby="welcome-title" aria-describedby="welcome-desc" data-welcome>
     <div class="welcome__box" tabindex="-1" autofocus>
-      <button class="welcome__close" type="button" aria-label="Tutup" data-welcome-close>
-        <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true"><path d="M1 1l12 12M13 1 1 13"/></svg>
-      </button>
       <header class="welcome__head">
-        <img class="welcome__logo" src="/src/assets/brands/valforum.svg" width="128" height="30" alt="Valforum">
-        <h2 class="welcome__title" id="welcome-title">Selamat datang di Valforum!</h2>
-        <p class="welcome__desc" id="welcome-desc">Mau sewa, jual, beli, atau top up? Langsung pilih di bawah.</p>
+        <img class="welcome__logo" src="/src/assets/brands/valforum.svg" width="3945" height="935" alt="Valforum">
+        <h2 class="welcome__title" id="welcome-title">Forum butuh apa?</h2>
+        <p class="sr-only" id="welcome-desc">Pilih layanan Valforum yang kamu butuhkan.</p>
+        <button class="welcome__close" type="button" aria-label="Tutup" data-welcome-close>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
       </header>
-      <ul class="welcome__list">
-        <li>
-          <a class="welcome-card welcome-card--sewa" href="#sewa" data-welcome-link>
-            <span class="welcome-card__num">01</span>
-            <span class="welcome-card__body">
-              <span class="welcome-card__tag">Valsewa</span>
-              <span class="welcome-card__name">Sewa Akun</span>
-              <span class="welcome-card__desc">160 skins, 25rb? Ada dong!</span>
-            </span>
-            <svg class="welcome-card__arrow" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 5.5 19.5 12 13 18.5"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="welcome-card welcome-card--jual" href="#jual" data-welcome-link>
-            <span class="welcome-card__num">02</span>
-            <span class="welcome-card__body">
-              <span class="welcome-card__tag">Valjubel</span>
-              <span class="welcome-card__name">Jual Akun</span>
-              <span class="welcome-card__desc">Cashout pertama di Indonesia.</span>
-            </span>
-            <svg class="welcome-card__arrow" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 5.5 19.5 12 13 18.5"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="welcome-card welcome-card--beli" href="#beli" data-welcome-link>
-            <span class="welcome-card__num">03</span>
-            <span class="welcome-card__body">
-              <span class="welcome-card__tag">Valjubel</span>
-              <span class="welcome-card__name">Beli Akun</span>
-              <span class="welcome-card__desc">Beli akun Valorant dengan aman.</span>
-            </span>
-            <svg class="welcome-card__arrow" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 5.5 19.5 12 13 18.5"/></svg>
-          </a>
-        </li>
-        <li>
-          <a class="welcome-card welcome-card--topup" href="#topup" data-welcome-link>
-            <span class="welcome-card__num">04</span>
-            <span class="welcome-card__body">
-              <span class="welcome-card__tag">Top Up</span>
-              <span class="welcome-card__name">Top Up Games</span>
-              <span class="welcome-card__desc">VP, Mobile Legends, Genshin, dan lainnya.</span>
-            </span>
-            <svg class="welcome-card__arrow" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M13 5.5 19.5 12 13 18.5"/></svg>
-          </a>
-        </li>
-      </ul>
-      <p class="welcome__foot">Butuh bantuan? Gabung <a href="%link:whatsappCommunity%">WhatsApp Community</a> kami.</p>
+      <nav class="welcome__list" aria-label="Layanan">
+        <div class="welcome__featured" style="--d: 250ms">
+        <a class="welcome-row welcome-row--featured" href="#topup" data-welcome-link style="--d: 250ms">
+          <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+          <span class="welcome-row__name">Top Up</span>
+          <span class="welcome-row__chip welcome-row__chip--valforum"><img src="/src/assets/brands/valforum.svg" width="3945" height="935" alt=""></span>
+          <span class="welcome-row__shine" aria-hidden="true"></span>
+        </a>
+        </div>
+        <a class="welcome-row" href="#sewa" data-welcome-link style="--d: 340ms">
+          <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>
+          <span class="welcome-row__name">Sewa Akun</span>
+          <span class="welcome-row__chip welcome-row__chip--valsewa"><img src="/src/assets/brands/valsewa.svg" width="3945" height="935" alt=""></span>
+          <span class="welcome-row__shine" aria-hidden="true"></span>
+        </a>
+        <a class="welcome-row" href="#jualbeli" data-welcome-link style="--d: 430ms">
+          <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
+          <span class="welcome-row__name">Jual Akun</span>
+          <span class="welcome-row__chip welcome-row__chip--valjubel"><img src="/src/assets/brands/valjubel.svg" width="3945" height="935" alt=""></span>
+          <span class="welcome-row__shine" aria-hidden="true"></span>
+        </a>
+        <a class="welcome-row" href="#jualbeli" data-welcome-link style="--d: 520ms">
+          <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span class="welcome-row__name">Beli Akun</span>
+          <span class="welcome-row__chip welcome-row__chip--valjubel"><img src="/src/assets/brands/valjubel.svg" width="3945" height="935" alt=""></span>
+          <span class="welcome-row__shine" aria-hidden="true"></span>
+        </a>
+        <a class="welcome-row" href="%link:whatsappCommunity%" style="--d: 610ms">
+          <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="welcome-row__name">Join Komunitas WhatsApp</span>
+          <svg class="welcome-row__out" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
+          <span class="welcome-row__shine" aria-hidden="true"></span>
+        </a>
+        <a class="welcome-row" href="%link:chatLeaveMessage%" data-chat-link style="--d: 700ms">
+          <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          <span class="welcome-row__name">Hubungi Admin</span>
+          <span class="welcome-row__meta" data-chat-status>Offline</span>
+          <span class="welcome-row__shine" aria-hidden="true"></span>
+        </a>
+      </nav>
+      <div class="welcome__foot" style="--d: 790ms">
+        <button class="welcome__never" type="button" data-welcome-never>Jangan tampilkan lagi</button>
+      </div>
     </div>
   </dialog>
 </body>

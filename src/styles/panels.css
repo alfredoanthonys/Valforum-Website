@@ -20,7 +20,6 @@
 .snap-marker:nth-child(1) { top: 0; }
 .snap-marker:nth-child(2) { top: 100svh; }
 .snap-marker:nth-child(3) { top: 200svh; }
-.snap-marker:nth-child(4) { top: 300svh; }
 
 .intro,
 .footer {
@@ -128,6 +127,114 @@
   margin-top: calc(17 * var(--s));
 }
 
+/* Jual Beli has two buttons side by side; the row carries the spacing instead. */
+.panel__btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: max(10px, calc(14 * var(--s)));
+  margin-top: calc(17 * var(--s));
+}
+
+.panel__btns .outline-btn {
+  margin-top: 0;
+}
+
+/*
+ * Money-back badge before the Jual Beli buttons. The art carries its own glow, so
+ * negative block margins keep it from making the row taller. Hover, focus or a tap
+ * opens the bubble above it, anchored to its left edge so it never runs off a phone.
+ */
+.guarantee {
+  --badge: max(62px, calc(92 * var(--s)));
+  position: relative;
+  flex: none;
+  align-self: center;
+  width: var(--badge);
+  margin-block: calc(var(--badge) * -0.12);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: help;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.guarantee__badge {
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: transform 0.45s var(--ease-out), filter 0.45s var(--ease-out);
+}
+
+.guarantee:hover .guarantee__badge,
+.guarantee:focus-visible .guarantee__badge {
+  transform: rotate(-10deg) scale(1.07);
+  filter: drop-shadow(0 0 14px rgba(235, 192, 74, 0.55));
+}
+
+.guarantee:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+.guarantee__tip {
+  position: absolute;
+  left: calc(var(--badge) * 0.04);
+  bottom: calc(100% + 12px);
+  width: max-content;
+  max-width: min(300px, 78vw);
+  padding: 14px 16px 15px;
+  border-radius: 10px;
+  background:
+    linear-gradient(90deg, var(--gold-light), var(--gold) 45%, var(--gold-deep)) top / 100% 3px no-repeat,
+    var(--text);
+  box-shadow: 0 18px 40px -14px rgba(30, 2, 70, 0.75), 0 2px 6px rgba(30, 2, 70, 0.25);
+  text-align: left;
+  text-shadow: none;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(8px) scale(0.96);
+  transform-origin: calc(var(--badge) * 0.46) 100%;
+  transition: opacity 0.25s var(--ease-standard), transform 0.4s var(--ease-out);
+}
+
+/* The notch, centred under the badge. */
+.guarantee__tip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: calc(var(--badge) * 0.46 - 7px);
+  border: 7px solid transparent;
+  border-top-color: var(--text);
+}
+
+.guarantee:hover .guarantee__tip,
+.guarantee:focus-visible .guarantee__tip,
+.guarantee:focus .guarantee__tip {
+  opacity: 1;
+  transform: none;
+}
+
+.guarantee__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-transform: uppercase;
+}
+
+.guarantee__text {
+  display: block;
+  margin-top: 6px;
+  font-size: 15px;
+  line-height: 1.35;
+  color: #3a3a3c;
+  white-space: normal;
+}
+
 .panel__bg {
   position: absolute;
   inset: 0;
@@ -147,21 +254,19 @@
   mix-blend-mode: overlay;
 }
 
-/* ---------- Card rows (Sewa, Jual, Beli) ---------- */
+/* ---------- Card rows (Sewa, Jual Beli) ---------- */
 /*
  * Four cards of one shape (the Sewa listing, 285 × 233) run edge to edge along the
  * bottom; the copy is centred in the space above them.
  */
 .panel--sewa .panel__card,
-.panel--jual .panel__card,
-.panel--beli .panel__card {
+.panel--jual .panel__card {
   grid-template-rows: minmax(0, 1fr) auto;
   align-content: stretch;
 }
 
 .panel--sewa .panel__content,
-.panel--jual .panel__content,
-.panel--beli .panel__content {
+.panel--jual .panel__content {
   align-self: center;
 }
 
@@ -331,165 +436,6 @@
   pointer-events: none;
 }
 
-/* Benefit cards: black like the account cards, with grain + hatch texture and a 3D icon; text stays in HTML so it's crisp. */
-.jual__perks li {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: calc(6 * var(--s));
-  padding: calc(20 * var(--s)) calc(22 * var(--s)) calc(22 * var(--s));
-  border-radius: max(10px, calc(12 * var(--s)));
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  /*
-   * Top to bottom: icon glow, light grain, a black wash that fades the hatch
-   * lines out towards the icon, the hatch lines, then the black base.
-   */
-  border: 1px solid var(--line);
-  background:
-    radial-gradient(calc(110 * var(--s)) circle at calc(56 * var(--s)) calc(56 * var(--s)), rgba(142, 48, 255, 0.35), transparent 70%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
-    linear-gradient(155deg, #000 30%, rgba(0, 0, 0, 0) 80%),
-    repeating-linear-gradient(-55deg, rgba(168, 112, 255, 0.18) 0 1px, transparent 1px 8px),
-    linear-gradient(155deg, #000 0%, #0b0b0b 40%, #1a0b33 100%);
-  color: var(--text);
-  box-shadow: 0 18px 40px -22px rgba(40, 6, 90, 0.7);
-  transition: transform 0.45s var(--ease-out), box-shadow 0.45s;
-}
-
-/* Same hover as the account cards in the other sections: lift + drop shadow. */
-.jual__perks li:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 18px 22px rgba(0, 0, 0, 0.45);
-}
-
-/* HUD bracket corners, like a tactical UI frame. */
-.jual__perks li::before {
-  --c: rgba(190, 150, 255, 0.7);
-  --l: max(12px, calc(20 * var(--s)));
-  --w: 2px;
-  content: '';
-  position: absolute;
-  inset: max(6px, calc(9 * var(--s)));
-  z-index: -1;
-  background:
-    linear-gradient(var(--c), var(--c)) top left / var(--l) var(--w),
-    linear-gradient(var(--c), var(--c)) top left / var(--w) var(--l),
-    linear-gradient(var(--c), var(--c)) top right / var(--l) var(--w),
-    linear-gradient(var(--c), var(--c)) top right / var(--w) var(--l),
-    linear-gradient(var(--c), var(--c)) bottom left / var(--l) var(--w),
-    linear-gradient(var(--c), var(--c)) bottom left / var(--w) var(--l),
-    linear-gradient(var(--c), var(--c)) bottom right / var(--l) var(--w),
-    linear-gradient(var(--c), var(--c)) bottom right / var(--w) var(--l);
-  background-repeat: no-repeat;
-}
-
-/* Hatched tab in the top-right corner. */
-.jual__perks li::after {
-  content: '';
-  position: absolute;
-  top: max(14px, calc(22 * var(--s)));
-  right: max(16px, calc(26 * var(--s)));
-  z-index: -1;
-  width: max(36px, calc(64 * var(--s)));
-  height: max(6px, calc(10 * var(--s)));
-  background: repeating-linear-gradient(-55deg, rgba(190, 150, 255, 0.55) 0 2px, transparent 2px 6px);
-  clip-path: polygon(14% 0, 100% 0, 86% 100%, 0 100%);
-}
-
-.jual__perks .perk__icon {
-  width: max(44px, calc(72 * var(--s)));
-  margin: 0 0 calc(10 * var(--s)) calc(-4 * var(--s));
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
-}
-
-/* The card itself lifts; keep the generic account-image hover off the icon. */
-.jual__perks li:hover .perk__icon {
-  transform: none;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
-}
-
-.perk__title {
-  font-family: var(--font-condensed);
-  font-size: max(17px, calc(26 * var(--s)));
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
-.perk__text {
-  font-size: max(12px, calc(15 * var(--s)));
-  line-height: 1.35;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-/* ---------- Beli: perspective grid + light rays + rank-up chevrons ---------- */
-.panel--beli .panel__card {
-  background: linear-gradient(125deg, var(--beli-1), var(--beli-2));
-}
-
-.panel--beli .panel__content {
-  text-shadow: 0 2px 18px rgba(92, 72, 0, 0.35);
-}
-
-.bg-beli__grid {
-  inset: -8%;
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px) 0 0 / 56px 56px,
-    linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px) 0 0 / 56px 56px;
-  -webkit-mask: radial-gradient(75% 85% at 22% 46%, #000, transparent 72%);
-  mask: radial-gradient(75% 85% at 22% 46%, #000, transparent 72%);
-  animation: bg-drift 28s ease-in-out infinite alternate;
-}
-
-.bg-beli__rays {
-  inset: auto;
-  top: calc(-560 * var(--s));
-  right: calc(-360 * var(--s));
-  width: calc(1600 * var(--s));
-  height: calc(1600 * var(--s));
-  border-radius: 50%;
-  background: repeating-conic-gradient(from 0deg, rgba(255, 255, 255, 0.14) 0 4deg, transparent 4deg 13deg);
-  -webkit-mask: radial-gradient(closest-side, #000 12%, transparent 70%);
-  mask: radial-gradient(closest-side, #000 12%, transparent 70%);
-  animation: bg-sway 12s ease-in-out infinite alternate;
-}
-
-.bg-beli__chevron {
-  position: absolute;
-  width: calc(230 * var(--s));
-  height: calc(190 * var(--s));
-  background: linear-gradient(rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
-  clip-path: polygon(50% 0, 100% 46%, 100% 72%, 50% 27%, 0 72%, 0 46%);
-  animation: bg-rise 9s ease-in-out infinite alternate;
-}
-
-.bg-beli__chevron--1 {
-  top: 12%;
-  left: 41%;
-}
-
-.bg-beli__chevron--2 {
-  top: 46%;
-  left: 35%;
-  width: calc(150 * var(--s));
-  height: calc(124 * var(--s));
-  animation-duration: 11s;
-  animation-delay: -4s;
-}
-
-.beli__gekko {
-  position: absolute;
-  z-index: 2;
-  right: 0;
-  bottom: 0;
-  width: calc(620 * var(--s));
-  max-width: none;
-  pointer-events: none;
-}
-
 /* ---------- Ambient keyframes (transform / opacity only) ---------- */
 @keyframes bg-drift {
   from { transform: translate3d(-1.5%, 1%, 0); }
@@ -533,6 +479,16 @@
 @media (prefers-reduced-motion: reduce) {
   .panel__bg * {
     animation: none !important;
+  }
+
+  .guarantee__badge,
+  .guarantee__tip {
+    transition: opacity 0.2s;
+  }
+
+  .guarantee:hover .guarantee__badge,
+  .guarantee:focus-visible .guarantee__badge {
+    transform: none;
   }
 }
 
@@ -601,8 +557,7 @@
   }
 
   .panel--sewa .panel__content,
-  .panel--jual .panel__content,
-  .panel--beli .panel__content {
+  .panel--jual .panel__content {
     align-self: start;
   }
 
@@ -621,6 +576,10 @@
     --btn-fs: 17px;
     --btn-px: 18px;
     --btn-r: 12px;
+    margin-top: 18px;
+  }
+
+  .panel__btns {
     margin-top: 18px;
   }
 
@@ -645,32 +604,9 @@
     max-width: none;
   }
 
-  /* Text cards need more width than screenshots: a full-width 2 × 2 grid. */
-  .panel__accounts.jual__perks {
-    right: 16px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .panel__accounts.jual__perks li {
-    width: auto;
-    padding: 14px;
-    gap: 4px;
-  }
-
-  .jual__perks .perk__icon {
-    margin-bottom: 4px;
-  }
-
   .jual__cypher {
     left: auto;
     right: -4cqw;
-    width: auto;
-    height: 64cqh;
-  }
-
-  .beli__gekko {
-    right: -10cqw;
     width: auto;
     height: 64cqh;
   }
@@ -722,8 +658,7 @@
 
   /* Copy sits low, over the art, just above the card strip. */
   .panel--sewa .panel__content,
-  .panel--jual .panel__content,
-  .panel--beli .panel__content {
+  .panel--jual .panel__content {
     align-self: end;
     margin-bottom: calc(var(--row-h) + 44px);
   }
@@ -732,8 +667,18 @@
     text-shadow: 0 2px 16px rgba(60, 0, 6, 0.55);
   }
 
-  .panel--beli .panel__content {
-    text-shadow: 0 2px 14px rgba(60, 48, 0, 0.7);
+  /* Both Jual Beli buttons share one row. */
+  .panel__btns {
+    gap: 8px;
+  }
+
+  .panel__btns .outline-btn {
+    --btn-px: 14px;
+    --btn-fs: 15px;
+  }
+
+  .guarantee {
+    --badge: 54px;
   }
 
   /* Cypher's coat is white, so the copy gets a heavier shadow here. */
@@ -744,12 +689,10 @@
   /* Each section's deep tone, for the subheadline's shadow. */
   .panel--sewa { --tone: 60, 0, 6; }
   .panel--jual { --tone: 30, 2, 70; }
-  .panel--beli { --tone: 50, 40, 0; }
 
   /* The thin subheadline needs a tighter, darker shadow than the headline to hold up over the art. */
   .panel--sewa .panel__lead,
-  .panel--jual .panel__lead,
-  .panel--beli .panel__lead {
+  .panel--jual .panel__lead {
     text-shadow: 0 1px 2px rgba(var(--tone), 0.9), 0 1px 10px rgba(var(--tone), 0.85), 0 2px 22px rgba(var(--tone), 0.7);
   }
 
@@ -791,50 +734,8 @@
     margin: -55cqw 0 0 -55cqw;
   }
 
-  /* Perk cards match the account cards' height. */
-  .panel__accounts.jual__perks li {
-    min-height: var(--row-h);
-  }
-
-  /* Rays and rank-up chevrons sized to the phone, not the desktop artboard. */
-  .bg-beli__rays {
-    top: -70cqw;
-    right: -90cqw;
-    width: 260cqw;
-    height: 260cqw;
-  }
-
-  /* In the gap above Gekko's hand, and brighter so they read on the yellow. */
-  .bg-beli__chevron {
-    background: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.05));
-  }
-
-  .bg-beli__chevron--1 {
-    top: 10%;
-    left: 6%;
-    width: 36cqw;
-    height: 30cqw;
-  }
-
-  .bg-beli__chevron--2 {
-    top: 19%;
-    left: -2%;
-    width: 24cqw;
-    height: 20cqw;
-  }
-
-  /* Raised like Neon, so the copy sits over his body rather than his face. */
-  .beli__gekko {
-    right: -22cqw;
-    bottom: calc(var(--row-h) * 0.6);
-    height: 68cqh;
-    -webkit-mask: linear-gradient(#000 82%, transparent);
-    mask: linear-gradient(#000 82%, transparent);
-  }
-
   /* Card strip: swipe sideways; the top padding leaves room for the hover lift. */
-  .panel__accounts,
-  .panel__accounts.jual__perks {
+  .panel__accounts {
     position: absolute;
     inset: auto 0 0;
     display: flex;
@@ -852,22 +753,11 @@
     display: none;
   }
 
-  .panel__accounts li,
-  .panel__accounts.jual__perks li {
+  .panel__accounts li {
     flex: none;
     width: var(--row-w);
     max-width: none;
     scroll-snap-align: start;
-  }
-
-  .panel__accounts.jual__perks li {
-    padding: 16px;
-    gap: 4px;
-  }
-
-  .jual__perks .perk__icon {
-    width: 52px;
-    margin-bottom: 6px;
   }
 }
 

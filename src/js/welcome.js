@@ -1,11 +1,29 @@
-// Service picker shown on every page load.
+// Service picker shown on every page load, until the visitor picks "Jangan tampilkan lagi".
 
 const OPEN_DELAY = 500; // ms after load, so it never competes with the hero paint
 const CLOSE_FALLBACK = 320; // ms; in case animationend never fires
+const HIDE_KEY = 'valforum:welcome-hidden';
+
+// Storage can throw (private mode, blocked site data); the picker then just shows.
+function isHidden() {
+  try {
+    return localStorage.getItem(HIDE_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+function hideForGood() {
+  try {
+    localStorage.setItem(HIDE_KEY, '1');
+  } catch {
+    // Nothing to remember it in; closing is enough.
+  }
+}
 
 export function initWelcome({ reduceMotion }) {
   const dialog = document.querySelector('[data-welcome]');
-  if (!dialog || typeof dialog.showModal !== 'function') return;
+  if (!dialog || typeof dialog.showModal !== 'function' || isHidden()) return;
 
   const root = document.documentElement;
 
@@ -41,6 +59,10 @@ export function initWelcome({ reduceMotion }) {
     if (event.target === dialog) close();
   });
   dialog.querySelector('[data-welcome-close]')?.addEventListener('click', () => close());
+  dialog.querySelector('[data-welcome-never]')?.addEventListener('click', () => {
+    hideForGood();
+    close();
+  });
 
   for (const link of dialog.querySelectorAll('[data-welcome-link]')) {
     link.addEventListener('click', (event) => {

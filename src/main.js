@@ -7,6 +7,7 @@ import { initReveals } from './js/reveal.js';
 import { initTopUp } from './js/topup.js';
 import { initWelcome } from './js/welcome.js';
 import { initLogin } from './js/login.js';
+import { initLivechat } from './js/livechat.js';
 
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -21,3 +22,4 @@ initReveals({ reduceMotion });
 initTopUp({ reduceMotion });
 initWelcome({ reduceMotion });
 initLogin({ reduceMotion });
+initLivechat();

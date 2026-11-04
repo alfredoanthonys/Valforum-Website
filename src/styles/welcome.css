@@ -1,11 +1,17 @@
-/* First-visit service picker */
+/*
+ * Service picker shown on page load. Layout and motion follow the Valjubel
+ * picker; the colours are Valforum's gold, and Valforum's own service (Top Up)
+ * sits in the highlighted group. Everything is sized in em off the box's font
+ * size, which shrinks the whole picker to fit small or short screens.
+ */
 .welcome {
-  width: min(100% - 32px, 480px);
+  width: 22.5em;
   max-width: none;
-  max-height: calc(100dvh - 32px);
+  max-height: calc(100svh - 2rem);
   margin: auto;
   padding: 0;
   border: 0;
+  font-size: min(1.3rem, calc((100vw - 2rem) / 22.5), calc((100svh - 2rem) / 35));
   color: var(--text);
   background: transparent;
   overflow: visible;
@@ -17,222 +23,294 @@
   -webkit-backdrop-filter: blur(6px);
 }
 
-.welcome[open] {
-  animation: welcome-fade 0.35s var(--ease-out);
+.welcome[open],
+.welcome[open]::backdrop {
+  animation: welcome-fade 0.2s var(--ease-out);
 }
 
-.welcome[open]::backdrop {
-  animation: welcome-fade 0.35s var(--ease-out);
+.welcome[open] .welcome__box {
+  animation: welcome-zoom 0.2s var(--ease-out);
 }
 
 .welcome.is-closing,
 .welcome.is-closing::backdrop {
-  animation: welcome-fade 0.25s ease-in reverse forwards;
+  animation: welcome-fade 0.2s ease-in reverse forwards;
 }
 
+.welcome.is-closing .welcome__box {
+  animation: welcome-zoom 0.2s ease-in reverse forwards;
+}
+
+/* Gold gradient border (border-box layer) around a near-black face. */
 .welcome__box {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  max-height: calc(100dvh - 32px);
-  padding: 30px 20px 18px;
-  border: 1px solid var(--line);
-  border-radius: 16px;
+  max-height: calc(100svh - 2rem);
+  border: 1px solid transparent;
+  border-radius: 1.125em;
   background:
-    radial-gradient(120% 60% at 50% 0%, rgba(235, 192, 74, 0.14), transparent 60%),
-    var(--bg-raised);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(235, 192, 74, 0.06) inset;
+    radial-gradient(90% 40% at 100% 100%, rgba(235, 192, 74, 0.12), transparent 75%) padding-box,
+    linear-gradient(#0f0f11, #0f0f11) padding-box,
+    linear-gradient(var(--gold-deep), #2a2216 45%, #3a2e16 75%, var(--gold)) border-box;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
   overflow-x: hidden;
   overflow-y: auto;
   scrollbar-width: none;
+}
+
+.welcome__box::-webkit-scrollbar {
+  display: none;
 }
 
 .welcome__box:focus {
   outline: none;
 }
 
-.welcome[open] .welcome__box {
-  animation: welcome-pop 0.5s var(--ease-out);
+/* ---------- Header ---------- */
+.welcome__head {
+  position: relative;
+  padding: 1.5em 1.375em;
+  border-bottom: 1px solid #45412b;
+  background: radial-gradient(75% 100% at 0% 0%, rgba(184, 131, 66, 0.5), transparent 70%);
 }
 
-/* Gold hairline across the top, echoing the ticker */
-.welcome__box::before {
-  content: '';
-  position: absolute;
-  inset: 0 0 auto;
-  height: 1px;
-  background: linear-gradient(90deg, var(--copper), var(--gold-deep) 35%, var(--gold-light) 70%, #fbf5c9);
+.welcome__logo {
+  display: block;
+  width: auto;
+  height: 1.5em;
+}
+
+.welcome__title {
+  margin-top: 1em;
+  font-size: 1.25em;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #d9d9d9;
+  animation: welcome-focus 0.8s ease-out 0.1s both;
 }
 
 .welcome__close {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 2;
+  top: 0.75em;
+  right: 0.75em;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--line);
-  border-radius: 9px;
-  background: #151515;
-  color: #bdbdbd;
-  transition: transform 0.45s cubic-bezier(0.2, 1.4, 0.3, 1), color 0.2s, border-color 0.2s;
+  width: 2.5em;
+  height: 2.5em;
+  border-radius: 0.75em;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  transition: background-color 0.15s var(--ease-standard);
 }
 
 .welcome__close:hover {
-  color: var(--gold);
-  border-color: var(--gold);
-  transform: rotate(90deg);
+  background: rgba(255, 255, 255, 0.1);
 }
 
-.welcome__head {
+.welcome__close:focus-visible {
+  outline: 2px solid #fff;
+}
+
+.welcome__close svg {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+/* ---------- Rows ---------- */
+.welcome__list {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 0 28px 20px;
-  text-align: center;
+  gap: 0.5em;
+  padding: 1.25em;
 }
 
-.welcome__logo {
-  width: 112px;
+/* Rows, the featured group and the footer rise in one after another (--d). */
+.welcome__featured,
+.welcome-row,
+.welcome__foot {
+  animation: welcome-rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--d, 0ms);
 }
 
-.welcome__title {
-  margin-top: 14px;
-  font-family: var(--font-display);
-  font-size: 34px;
-  font-weight: 400;
-  line-height: 1;
-  text-transform: uppercase;
+.welcome__featured {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  margin-inline: -0.5em;
+  padding: 0.5em;
+  border-radius: 1em;
+  background:
+    radial-gradient(70% 90% at 100% 0%, rgba(235, 192, 74, 0.28), transparent 70%),
+    radial-gradient(60% 80% at 0% 100%, rgba(140, 66, 29, 0.25), transparent 70%),
+    #1a1712;
+  box-shadow: 0 0 1.25em rgba(235, 192, 74, 0.2);
 }
 
-.welcome__desc {
-  margin-top: 8px;
-  font-size: 14px;
-  line-height: 1.45;
-  color: #bdbdbd;
-}
-
-.welcome__list {
-  display: grid;
-  gap: 10px;
-}
-
-.welcome__list li {
-  animation: welcome-rise 0.5s var(--ease-out) both;
-}
-
-.welcome__list li:nth-child(2) { animation-delay: 0.06s; }
-.welcome__list li:nth-child(3) { animation-delay: 0.12s; }
-.welcome__list li:nth-child(4) { animation-delay: 0.18s; }
-
-.welcome-card {
+.welcome-row {
+  --brand: 203, 180, 89;
   position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 14px 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  background: #141414;
-  overflow: hidden;
-  isolation: isolate;
-  transition: border-color 0.3s, transform 0.3s var(--ease-out);
+  gap: 0.75em;
+  height: 3em;
+  padding: 0 0.625em 0 1.125em;
+  border: 1px solid #28282d;
+  border-radius: 0.75em;
+  background: #171719;
+  transition: border-color 0.15s var(--ease-standard), background-color 0.15s var(--ease-standard);
 }
 
-.welcome-card::before {
-  content: '';
+.welcome-row:hover {
+  border-color: #6b6438;
+  background: #1c1b1e;
+}
+
+.welcome-row:focus-visible {
+  outline: 2px solid var(--gold-light);
+}
+
+.welcome-row--featured,
+.welcome-row--featured:hover {
+  border-color: #6b6438;
+  background: linear-gradient(90deg, #100f0c, #221c0f);
+}
+
+.welcome-row__icon {
+  flex: none;
+  width: 1.125em;
+  height: 1.125em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: rgba(255, 255, 255, 0.85);
+  transition: color 0.3s;
+}
+
+.welcome-row--featured .welcome-row__icon,
+.welcome-row:is(:hover, :focus-visible) .welcome-row__icon {
+  color: var(--gold-light);
+}
+
+/* The label nudges right on hover. */
+.welcome-row__name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.9375em;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  transition: padding-left 0.3s ease-out;
+}
+
+.welcome-row:is(:hover, :focus-visible) .welcome-row__name {
+  padding-left: 0.5em;
+}
+
+/* Brand chip: grey at rest, lights up in the brand's colour on hover. */
+.welcome-row__chip {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 7.25em;
+  height: 1.75em;
+  border: 1px solid #222226;
+  border-radius: 0.5em;
+  background: #17171b;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.welcome-row__chip--valforum { --brand: 203, 180, 89; }
+.welcome-row__chip--valsewa { --brand: 214, 26, 26; }
+.welcome-row__chip--valjubel { --brand: 183, 35, 197; }
+
+.welcome-row__chip img {
+  width: auto;
+  height: 1.25em;
+  filter: grayscale(1) brightness(1.6);
+  transition: filter 0.3s;
+}
+
+.welcome-row--featured .welcome-row__chip img {
+  filter: none;
+}
+
+.welcome-row:is(:hover, :focus-visible) .welcome-row__chip {
+  border-color: rgb(var(--brand));
+  box-shadow: 0 0 0.875em rgba(var(--brand), 0.5);
+}
+
+.welcome-row:is(:hover, :focus-visible) .welcome-row__chip img {
+  filter: drop-shadow(0 0 0.375em rgba(var(--brand), 0.6));
+}
+
+.welcome-row__out {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.45);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.welcome-row__meta {
+  font-size: 0.8125em;
+  color: #8a8a8c;
+}
+
+.welcome-row__meta[data-state='online'] {
+  color: #86efac;
+}
+
+/* A light streak sweeps across the row on hover. */
+.welcome-row__shine {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  background: linear-gradient(110deg, var(--accent-bg), transparent 75%);
-  opacity: 0;
-  transition: opacity 0.35s var(--ease-out);
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
 }
 
-.welcome-card--sewa { --accent: #ff3347; --accent-bg: rgba(196, 5, 22, 0.55); }
-.welcome-card--jual { --accent: #a866ff; --accent-bg: rgba(142, 48, 255, 0.5); }
-.welcome-card--beli { --accent: #f2da37; --accent-bg: rgba(200, 178, 30, 0.45); }
-.welcome-card--topup { --accent: var(--gold); --accent-bg: rgba(201, 165, 78, 0.45); }
-
-.welcome-card__num {
-  flex: none;
-  width: 34px;
-  font-family: var(--font-condensed);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  color: var(--accent);
+.welcome-row__shine::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 20%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: translateX(-150%) skewX(-20deg);
 }
 
-.welcome-card__body {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+.welcome-row:is(:hover, :focus-visible) .welcome-row__shine::before {
+  animation: welcome-shine 0.75s ease-out;
 }
 
-.welcome-card__tag {
-  font-family: var(--font-condensed);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  line-height: 1;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.welcome-card__name {
-  margin-top: 5px;
-  font-family: var(--font-display);
-  font-size: 23px;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
-.welcome-card__desc {
-  margin-top: 5px;
-  font-size: 13px;
-  line-height: 1.35;
-  color: #bdbdbd;
-}
-
-.welcome-card__arrow {
-  flex: none;
-  margin-left: auto;
-  color: #8a8a8a;
-  transition: transform 0.3s var(--ease-out), color 0.3s;
-}
-
-.welcome-card:hover,
-.welcome-card:focus-visible {
-  border-color: color-mix(in srgb, var(--accent) 65%, transparent);
-  transform: translateX(3px);
-}
-
-.welcome-card:hover::before,
-.welcome-card:focus-visible::before {
-  opacity: 1;
-}
-
-.welcome-card:hover .welcome-card__arrow,
-.welcome-card:focus-visible .welcome-card__arrow {
-  color: var(--accent);
-  transform: translateX(4px);
-}
-
+/* ---------- Footer ---------- */
 .welcome__foot {
-  margin-top: 16px;
-  font-size: 13px;
-  text-align: center;
-  color: #9a9a9a;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1.25em;
 }
 
-.welcome__foot a {
-  color: var(--gold);
+.welcome__never {
+  font-size: 0.8125em;
+  color: #8f8f8f;
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration-color: rgba(255, 255, 255, 0.25);
+  text-underline-offset: 0.3em;
+  transition: color 0.15s;
+}
+
+.welcome__never:hover {
+  color: #fff;
+}
+
+.welcome__never:focus-visible {
+  outline: 2px solid #fff;
 }
 
 @keyframes welcome-fade {
@@ -240,9 +318,9 @@
   to { opacity: 1; }
 }
 
-@keyframes welcome-pop {
-  from { opacity: 0; transform: translateY(14px) scale(0.97); }
-  to { opacity: 1; transform: none; }
+@keyframes welcome-zoom {
+  from { transform: scale(0.95); }
+  to { transform: none; }
 }
 
 @keyframes welcome-rise {
@@ -250,21 +328,26 @@
   to { opacity: 1; transform: none; }
 }
 
-@media (max-width: 480px) {
-  .welcome__box {
-    padding: 26px 14px 16px;
+@keyframes welcome-focus {
+  from { filter: blur(8px); opacity: 0.25; }
+  to { filter: none; opacity: 1; }
+}
+
+@keyframes welcome-shine {
+  from { transform: translateX(-150%) skewX(-20deg); }
+  to { transform: translateX(600%) skewX(-20deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome__title,
+  .welcome__featured,
+  .welcome-row,
+  .welcome__foot,
+  .welcome-row:is(:hover, :focus-visible) .welcome-row__shine::before {
+    animation: none;
   }
 
-  .welcome__head {
-    padding-inline: 32px;
-  }
-
-  .welcome__title {
-    font-size: 28px;
-  }
-
-  .welcome-card {
-    gap: 12px;
-    padding: 12px;
+  .welcome-row__name {
+    transition: none;
   }
 }

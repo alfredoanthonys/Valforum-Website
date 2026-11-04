@@ -142,12 +142,17 @@
   transition: border-color 0.3s, color 0.3s, transform 0.3s var(--ease-out), box-shadow 0.3s, background-color 0.3s;
 }
 
+/* Hover takes the colour of the section the button scrolls to. */
+.hero-btn--sewa { --accent: #ff3347; --accent-rgb: 196, 5, 22; }
+.hero-btn--topup { --accent: var(--gold); --accent-rgb: 235, 192, 74; }
+.hero-btn--jubel { --accent: #a866ff; --accent-rgb: 142, 48, 255; }
+
 .hero-btn:hover {
-  border-color: var(--gold);
-  color: var(--gold);
+  border-color: var(--accent);
+  color: var(--accent);
   background: #0b0904;
   transform: translateY(-3px);
-  box-shadow: 0 0 0 1px rgba(235, 192, 74, 0.25), 0 14px 32px -10px rgba(235, 192, 74, 0.45);
+  box-shadow: 0 0 0 1px rgba(var(--accent-rgb), 0.25), 0 14px 32px -10px rgba(var(--accent-rgb), 0.45);
 }
 
 .hero-btn:active {
@@ -215,10 +220,6 @@
   display: flex;
   width: max-content;
   animation: ticker 48s linear infinite;
-}
-
-.ticker:hover .ticker__track {
-  animation-play-state: paused;
 }
 
 .ticker__item {
@@ -314,8 +315,8 @@
     padding: 4px 8px;
   }
 
-  .brand-pill--stage .brand-pill__item img {
-    height: 26px;
+  .brand-pill--stage .brand-pill__item {
+    --logo-h: 26px;
   }
 
   .hero__badge,

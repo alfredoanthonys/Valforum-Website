@@ -5,6 +5,13 @@
   background: linear-gradient(118deg, var(--topup-1), var(--topup-2));
 }
 
+/* Laptops: the cards sink lower, leaving the head more room. */
+@media (min-width: 1024px) and (max-width: 1799px) {
+  .game-cards .game-card {
+    bottom: calc(-24px - 50 * var(--s));
+  }
+}
+
 /* ---------- Ambient bg: gold diamond lattice + glow + rising VP coins ---------- */
 .bg-topup__grid {
   inset: -8%;
@@ -72,7 +79,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: calc(75 * var(--s));
+  margin-top: calc(130 * var(--s));
   padding-inline: 24px;
   text-align: center;
 }

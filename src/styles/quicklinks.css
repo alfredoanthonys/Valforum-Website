@@ -21,16 +21,20 @@
 }
 
 /*
- * Card artboard is 639 × 200; artwork is placed in artboard pixels via --q.
+ * Card artboard is 639 × 200. The card keeps that shape at every width and both
+ * the artwork and the copy are sized in artboard pixels (--q), so the card
+ * scales as one picture and the copy never runs into the art. Below ~360px wide
+ * the card stops shrinking in height (min-height) and --q follows that height.
  * Hover: the card fills with its section colour and a `color` blend layer
  * re-tints the artwork, as in the design's hover state.
  */
 .ql-card {
-  --q: calc(100cqw / 639);
+  --q: max(calc(100cqw / 639), 0.56px);
   --tint: var(--gold);
   position: relative;
   display: flex;
-  height: 200px;
+  min-height: 112px;
+  aspect-ratio: 639 / 200;
   border: 1px solid var(--line-card);
   border-radius: var(--radius-card);
   background: #000;
@@ -59,9 +63,10 @@
   --hover-bg: linear-gradient(120deg, #8e30ff, #5a12c4);
 }
 
+/* Beli shares the Jual Beli section, so it shares Jual's purple. */
 .ql-card--beli {
-  --tint: #f2da37;
-  --hover-bg: linear-gradient(120deg, #e9d24a, #c1aa24);
+  --tint: #9b4dff;
+  --hover-bg: linear-gradient(120deg, #8e30ff, #5a12c4);
 }
 
 .ql-card--topup {
@@ -97,12 +102,12 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 37px 30px 30px;
+  padding: calc(37 * var(--q)) calc(30 * var(--q)) calc(30 * var(--q));
 }
 
 .ql-card__title {
   font-family: var(--font-condensed);
-  font-size: clamp(26px, calc(35 * var(--q)), 35px);
+  font-size: clamp(19px, calc(35 * var(--q)), 35px);
   font-weight: 700;
   line-height: 1.12;
   letter-spacing: -0.05em;
@@ -111,8 +116,8 @@
 
 .ql-card__text {
   display: block;
-  max-width: 320px;
-  font-size: 11.5px;
+  max-width: calc(320 * var(--q));
+  font-size: clamp(9px, calc(11.5 * var(--q)), 13px);
   font-weight: 600;
   line-height: 1.26;
   letter-spacing: -0.03em;
@@ -123,11 +128,11 @@
 }
 
 .ql-card__text + .ql-card__text {
-  margin-top: 8px;
+  margin-top: calc(8 * var(--q));
 }
 
 .ql-card--topup .ql-card__text {
-  max-width: 252px;
+  max-width: calc(252 * var(--q));
 }
 
 /* Hover / focus */
@@ -143,10 +148,6 @@
 .ql-card:hover .ql-card__art::after,
 .ql-card:focus-visible .ql-card__art::after {
   opacity: 1;
-}
-
-.ql-card--beli:is(:hover, :focus-visible) .ql-card__body {
-  text-shadow: 0 1px 14px rgba(70, 55, 0, 0.45);
 }
 
 /* Artwork positions (artboard px) */
@@ -187,12 +188,9 @@
 .ql-card:hover .ql-art--vp-475 { transform: translate(-8px, -6px) rotate(-3deg); }
 
 /*
- * Single column: the card keeps the desktop artboard's shape (639 × 200) so the
- * artwork reaches the top, right and bottom edges as it does on desktop, and
- * the copy scales with it. Below ~360px wide the card stops shrinking in height
- * (min-height); --q then follows that height and --ox keeps the art on the right.
- * --ox also pushes the art 44 artboard px further right than on desktop (it
- * runs a little more off the edge) for breathing room next to the copy.
+ * Single column: --ox pushes the art 44 artboard px further right than on
+ * desktop (it runs a little more off the edge) for breathing room next to the
+ * copy, and keeps it on the right once min-height takes over.
  */
 @media (max-width: 899px) {
   .ql-grid {
@@ -201,24 +199,15 @@
   }
 
   .ql-card {
-    --q: max(calc(100cqw / 639), 0.56px);
     --ox: calc(100cqw - 595 * var(--q));
-    height: auto;
-    min-height: 112px;
-    aspect-ratio: 639 / 200;
   }
 
   .ql-card__body {
     padding: calc(30 * var(--q)) calc(26 * var(--q)) calc(24 * var(--q));
   }
 
-  .ql-card__title {
-    font-size: clamp(19px, calc(35 * var(--q)), 35px);
-  }
-
   .ql-card__text {
     max-width: calc(330 * var(--q));
-    font-size: clamp(9px, calc(11.5 * var(--q)), 13px);
   }
 
   .ql-card__text + .ql-card__text {

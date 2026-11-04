@@ -1,0 +1,273 @@
+/*
+ * Floating livechat, fixed bottom right. At rest it is the gold Valforum orb with
+ * a presence dot (green online, grey offline, none for WhatsApp) and a chat badge.
+ * On hover or keyboard focus a pill slides out to the left with "Chat Admin" and
+ * the status line. livechat.js sets data-state: online | offline | whatsapp.
+ */
+.livechat {
+  --orb: 64px;
+  --edge: 32px;
+  --open: 0.5s var(--ease-out);
+  position: fixed;
+  z-index: 45;
+  right: var(--edge);
+  bottom: var(--edge);
+  display: block;
+  width: var(--orb);
+  height: var(--orb);
+  border-radius: 50%;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.55));
+  -webkit-tap-highlight-color: transparent;
+  animation: livechat-in 0.6s var(--ease-out) 0.8s both;
+}
+
+@keyframes livechat-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.85);
+  }
+}
+
+.livechat:focus-visible {
+  outline: none;
+}
+
+/* ---------- Orb ---------- */
+.livechat__orb {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, #f3dc7a, #b88342 40%, #e9c968 70%, #8c5a1d);
+  transition: transform var(--open);
+}
+
+/* The dark face inside the gold ring. */
+.livechat__orb::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #2a2a2a, #0b0b0b 70%);
+}
+
+.livechat:focus-visible .livechat__orb {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.livechat__mark {
+  position: relative;
+  width: 54%;
+  height: auto;
+  transition: transform var(--open);
+}
+
+.livechat__presence {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  border: 3px solid #0b0b0b;
+  border-radius: 50%;
+  background: #8e8e8e;
+}
+
+.livechat[data-state='online'] .livechat__presence {
+  background: #22c55e;
+}
+
+/* A slow ping so "online" reads as live. */
+.livechat[data-state='online'] .livechat__presence::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  animation: livechat-ping 2.4s var(--ease-out) infinite;
+}
+
+@keyframes livechat-ping {
+  from {
+    opacity: 0.8;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
+
+.livechat[data-state='whatsapp'] .livechat__presence {
+  display: none;
+}
+
+.livechat__badge {
+  position: absolute;
+  left: -8px;
+  bottom: -4px;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 3px solid #0b0b0b;
+  border-radius: 50%;
+}
+
+.livechat__badge svg {
+  width: 15px;
+  height: 15px;
+}
+
+.livechat__badge--chat {
+  background: #ffd400;
+}
+
+.livechat__badge--chat svg {
+  fill: none;
+  stroke: #0b0b0b;
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+
+.livechat__badge--wa {
+  display: none;
+  background: #25d366;
+}
+
+.livechat__badge--wa svg {
+  width: 17px;
+  height: 17px;
+  fill: #fff;
+}
+
+.livechat[data-state='whatsapp'] .livechat__badge--chat {
+  display: none;
+}
+
+.livechat[data-state='whatsapp'] .livechat__badge--wa {
+  display: grid;
+}
+
+/* ---------- Pill ---------- */
+/* Clipped down to the orb at rest; the clip opens leftwards on hover. */
+.livechat__pill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  height: var(--orb);
+  padding: 0 calc(var(--orb) + 18px) 0 26px;
+  border: 1px solid #8a7f45;
+  border-radius: var(--orb);
+  background: #0f0f0f;
+  white-space: nowrap;
+  pointer-events: none;
+  clip-path: inset(0 0 0 calc(100% - var(--orb)) round var(--orb));
+  transition: clip-path var(--open);
+}
+
+.livechat__title,
+.livechat__status {
+  opacity: 0;
+  transform: translateX(12px);
+  transition: opacity 0.25s var(--ease-standard), transform var(--open);
+}
+
+.livechat__title {
+  font-family: var(--font-condensed);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.livechat__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.livechat__status-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #8e8e8e;
+}
+
+.livechat[data-state='online'] .livechat__status {
+  color: #86efac;
+}
+
+.livechat[data-state='online'] .livechat__status-dot {
+  background: #22c55e;
+}
+
+.livechat[data-state='whatsapp'] .livechat__status-dot {
+  display: none;
+}
+
+/* Only devices that really hover open the pill; on touch a tap just opens the chat. */
+@media (hover: hover) {
+  /* Once open, the pill keeps the hover alive while the pointer is over it. */
+  .livechat:hover .livechat__pill {
+    clip-path: inset(0 round var(--orb));
+    pointer-events: auto;
+  }
+
+  .livechat:hover :is(.livechat__title, .livechat__status) {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.1s;
+  }
+
+  .livechat:hover .livechat__mark {
+    transform: scale(1.08);
+  }
+}
+
+.livechat:focus-visible .livechat__pill {
+  clip-path: inset(0 round var(--orb));
+}
+
+.livechat:focus-visible :is(.livechat__title, .livechat__status) {
+  opacity: 1;
+  transform: none;
+}
+
+.livechat:active .livechat__orb {
+  transform: scale(0.95);
+}
+
+@media (max-width: 767px) {
+  .livechat {
+    --orb: 56px;
+    --edge: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .livechat,
+  .livechat__presence::after {
+    animation: none !important;
+  }
+
+  .livechat__pill,
+  .livechat__title,
+  .livechat__status,
+  .livechat__mark {
+    transition-duration: 0s;
+  }
+}

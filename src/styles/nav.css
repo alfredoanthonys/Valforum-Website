@@ -77,10 +77,11 @@
 .brand-pill {
   display: flex;
   align-items: stretch;
-  gap: 8px;
-  height: 54px;
-  margin-left: 22px;
-  padding: 4px 13px;
+  flex: none;
+  gap: 2px;
+  height: 46px;
+  margin: 0 20px 0 22px; /* the right margin keeps it clear of the search button */
+  padding: 4px 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   background: linear-gradient(to right, #5a5a5a, #2f2f2f);
@@ -91,22 +92,97 @@
   display: flex;
 }
 
+/*
+ * At rest each item shows the brand's mark plus what it does ("Sewa Akun"). On
+ * hover it turns into the brand chip: a dark tile with the brand's border and
+ * glow, the label lifting away before the wordmark wipes in beside the mark, so
+ * the swap reads as one eased move rather than a flick. The mark is the left 35% of the logo artwork, plus its top
+ * corner, which reaches over the wordmark's first letter. --logo-h sizes
+ * everything; --brand is the brand's colour as r, g, b.
+ */
 .brand-pill__item {
-  display: flex;
+  --logo-h: 24px;
+  --brand: 255, 255, 255;
+  --swap: 0.55s var(--ease-out);
+  position: relative;
+  display: grid;
   align-items: center;
-  justify-content: center;
-  padding: 0 14.4px;
-  border-radius: 12px;
-  transition: background-color 0.15s var(--ease-standard);
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  overflow: hidden;
+  transition:
+    background-color var(--swap),
+    border-color var(--swap),
+    box-shadow var(--swap);
 }
 
-.brand-pill__item:hover {
-  background: rgba(255, 255, 255, 0.1);
+.brand-pill__item--sewa {
+  --brand: 196, 5, 22;
+}
+
+.brand-pill__item--jubel {
+  --brand: 142, 48, 255;
+}
+
+.brand-pill__item:is(:hover, :focus-visible) {
+  border-color: rgba(var(--brand), 0.75);
+  background: #101010;
+  box-shadow: 0 0 18px -2px rgba(var(--brand), 0.55);
+}
+
+.brand-pill__item:focus-visible {
+  outline: none;
+}
+
+.brand-pill__item img,
+.brand-pill__label {
+  grid-area: 1 / 1;
 }
 
 .brand-pill__item img {
   width: auto;
-  height: 31.5px;
+  height: var(--logo-h);
+  -webkit-mask:
+    linear-gradient(90deg, #000 35%, transparent 35%),
+    linear-gradient(#000, #000) left top / 38% 33% no-repeat,
+    linear-gradient(#000, #000) left / 0% 100% no-repeat;
+  mask:
+    linear-gradient(90deg, #000 35%, transparent 35%),
+    linear-gradient(#000, #000) left top / 38% 33% no-repeat,
+    linear-gradient(#000, #000) left / 0% 100% no-repeat;
+  transition: -webkit-mask-size var(--swap), mask-size var(--swap);
+}
+
+.brand-pill__item:is(:hover, :focus-visible) img {
+  -webkit-mask-size: auto, 38% 33%, 100% 100%;
+  mask-size: auto, 38% 33%, 100% 100%;
+  transition-delay: 0.08s;
+}
+
+.brand-pill__label {
+  padding-left: calc(var(--logo-h) * 1.7);
+  font-size: calc(var(--logo-h) * 0.5);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  transition: transform var(--swap), opacity 0.35s var(--ease-standard), filter 0.35s var(--ease-standard);
+}
+
+.brand-pill__item:is(:hover, :focus-visible) .brand-pill__label {
+  transform: translateY(-110%);
+  opacity: 0;
+  filter: blur(2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-pill__item img,
+  .brand-pill__label {
+    transition-duration: 0s;
+  }
 }
 
 .brand-pill--stage {
@@ -116,6 +192,18 @@
 /* Buttons */
 .site-nav__search {
   margin-left: auto;
+}
+
+/* Laptops: a narrower pill, so it never crowds the buttons. */
+@media (max-width: 1199px) {
+  .site-nav .brand-pill {
+    margin-left: 14px;
+  }
+
+  .site-nav .brand-pill__item {
+    --logo-h: 21px;
+    padding: 0 9px;
+  }
 }
 
 .site-nav__actions {
@@ -138,6 +226,7 @@
   color: var(--text);
   font-size: 14px;
   font-weight: 500;
+  flex: none;
   white-space: nowrap;
   transition:
     border-color 0.15s var(--ease-standard),

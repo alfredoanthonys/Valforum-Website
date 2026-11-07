@@ -583,6 +583,12 @@
     margin-top: 18px;
   }
 
+  /* The row carries the spacing; without this the rule above pushes the
+     buttons 18px down and the guarantee badge sits above their middle. */
+  .panel__btns .outline-btn {
+    margin-top: 0;
+  }
+
   .sewa__neon {
     right: -14cqw;
     bottom: 70px;

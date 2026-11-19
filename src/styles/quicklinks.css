@@ -154,28 +154,28 @@
   opacity: 1;
 }
 
-/* Artwork positions (artboard px) */
-.ql-art--acc-diamond { left: calc(var(--ox, 0px) + 468 * var(--q)); top: calc(8 * var(--q)); width: calc(170 * var(--q)); }
-.ql-art--acc-platinum { left: calc(var(--ox, 0px) + 410 * var(--q)); top: calc(36 * var(--q)); width: calc(181 * var(--q)); }
-.ql-art--acc-gold { left: calc(var(--ox, 0px) + 351 * var(--q)); top: calc(66 * var(--q)); width: calc(181 * var(--q)); }
+/* Artwork positions (artboard px; --qa / --ox / --oy let a taller card rescale and re-anchor them) */
+.ql-art--acc-diamond { left: calc(var(--ox, 0px) + 468 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 8 * var(--qa, var(--q))); width: calc(170 * var(--qa, var(--q))); }
+.ql-art--acc-platinum { left: calc(var(--ox, 0px) + 410 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 36 * var(--qa, var(--q))); width: calc(181 * var(--qa, var(--q))); }
+.ql-art--acc-gold { left: calc(var(--ox, 0px) + 351 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 66 * var(--qa, var(--q))); width: calc(181 * var(--qa, var(--q))); }
 
-.ql-art--vandal { left: calc(var(--ox, 0px) + 308 * var(--q)); top: calc(-1 * var(--q)); width: calc(330 * var(--q)); }
-.ql-art--spectre { left: calc(var(--ox, 0px) + 500 * var(--q)); top: calc(-1 * var(--q)); width: calc(138 * var(--q)); }
+.ql-art--vandal { left: calc(var(--ox, 0px) + 308 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + -1 * var(--qa, var(--q))); width: calc(330 * var(--qa, var(--q))); }
+.ql-art--spectre { left: calc(var(--ox, 0px) + 500 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + -1 * var(--qa, var(--q))); width: calc(138 * var(--qa, var(--q))); }
 
-.ql-art--operator { left: calc(var(--ox, 0px) + 291 * var(--q)); top: calc(85 * var(--q)); width: calc(255 * var(--q)); }
-.ql-art--odin { left: calc(var(--ox, 0px) + 439 * var(--q)); top: calc(115 * var(--q)); width: calc(199 * var(--q)); }
+.ql-art--operator { left: calc(var(--ox, 0px) + 291 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 85 * var(--qa, var(--q))); width: calc(255 * var(--qa, var(--q))); }
+.ql-art--odin { left: calc(var(--ox, 0px) + 439 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 115 * var(--qa, var(--q))); width: calc(199 * var(--qa, var(--q))); }
 
 .ql-art--beli-1,
 .ql-art--beli-2,
-.ql-art--beli-3 { width: calc(124 * var(--q)); transform-origin: 50% 100%; }
+.ql-art--beli-3 { width: calc(124 * var(--qa, var(--q))); transform-origin: 50% 100%; }
 /* Hand-of-cards fan (Sewa uses a straight staircase): outer cards tilt out, the middle one leads. */
-.ql-art--beli-1 { left: calc(var(--ox, 0px) + 392 * var(--q)); top: calc(44 * var(--q)); rotate: -12deg; }
-.ql-art--beli-3 { left: calc(var(--ox, 0px) + 512 * var(--q)); top: calc(44 * var(--q)); rotate: 12deg; }
-.ql-art--beli-2 { left: calc(var(--ox, 0px) + 452 * var(--q)); top: calc(16 * var(--q)); }
+.ql-art--beli-1 { left: calc(var(--ox, 0px) + 392 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 44 * var(--qa, var(--q))); rotate: -12deg; }
+.ql-art--beli-3 { left: calc(var(--ox, 0px) + 512 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 44 * var(--qa, var(--q))); rotate: 12deg; }
+.ql-art--beli-2 { left: calc(var(--ox, 0px) + 452 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 16 * var(--qa, var(--q))); }
 
-.ql-art--vp-1000 { left: calc(var(--ox, 0px) + 348 * var(--q)); top: calc(-1 * var(--q)); width: calc(291 * var(--q)); }
-.ql-art--vp-2050 { left: calc(var(--ox, 0px) + 450 * var(--q)); top: calc(20 * var(--q)); width: calc(188 * var(--q)); }
-.ql-art--vp-475 { left: calc(var(--ox, 0px) + 244 * var(--q)); top: calc(-1 * var(--q)); width: calc(360 * var(--q)); }
+.ql-art--vp-1000 { left: calc(var(--ox, 0px) + 348 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + -1 * var(--qa, var(--q))); width: calc(291 * var(--qa, var(--q))); }
+.ql-art--vp-2050 { left: calc(var(--ox, 0px) + 450 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + 20 * var(--qa, var(--q))); width: calc(188 * var(--qa, var(--q))); }
+.ql-art--vp-475 { left: calc(var(--ox, 0px) + 244 * var(--qa, var(--q))); top: calc(var(--oy, 0px) + -1 * var(--qa, var(--q))); width: calc(360 * var(--qa, var(--q))); }
 
 .ql-card:hover .ql-art--acc-diamond { transform: translate(14px, -6px) rotate(2deg); }
 .ql-card:hover .ql-art--acc-platinum { transform: translate(6px, -3px); }
@@ -190,6 +190,141 @@
 .ql-card:hover .ql-art--vp-1000 { transform: translate(8px, -8px) rotate(2deg); }
 .ql-card:hover .ql-art--vp-2050 { transform: translate(12px, 4px) rotate(4deg); }
 .ql-card:hover .ql-art--vp-475 { transform: translate(-8px, -6px) rotate(-3deg); }
+
+/*
+ * Landscape desktop: the ticker and the four cards fill one screen under the
+ * navbar (it scrolls freely; only the sections below snap). The cards stretch
+ * to fill the rows, never shorter than the artboard shape, so they get taller
+ * than the artboard and the art is re-composed to run from top to bottom.
+ *   --qa    art unit: the card's height is 200 of them.
+ *   --qt    copy unit: bigger copy for the taller card, capped by the card width.
+ *   Each piece is placed from the card's right edge: --r units from the right
+ *   to its left side, --t from the top, --w wide. --r-max is the leftmost piece;
+ *   when that would reach the copy column, --push slides all the art right
+ *   (off the edge) instead.
+ */
+@media (min-width: 900px) and (min-height: 521px) and (min-aspect-ratio: 5/4) {
+  .quicklinks {
+    --ql-pad: clamp(20px, 3.4svh, 44px);
+    container-type: inline-size;
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - var(--nav-h) - var(--ticker-h, 72px));
+    margin-bottom: 0;
+    padding-bottom: var(--ql-pad);
+  }
+
+  .ql-grid {
+    flex: 1;
+    grid-template-rows: repeat(2, minmax(calc((100cqw - 20px) / 2 * 200 / 639), 1fr));
+  }
+
+  .ql-grid > li {
+    display: flex;
+  }
+
+  .ql-card {
+    --copy: 175;
+    --r-max: 205;
+    --qa: calc(100cqh / 200);
+    --qt: min(calc(100cqh / 200), calc(100cqw / 639 * 1.35));
+    --copy-end: calc((30 + var(--copy)) * var(--qt) + 12px);
+    --push: max(0px, calc(var(--copy-end) - 100cqw + var(--r-max) * var(--qa)));
+    flex: 1;
+    aspect-ratio: auto;
+    container-type: size;
+  }
+
+  .ql-card .ql-art {
+    left: calc(100cqw - var(--r) * var(--qa) + var(--push));
+    top: calc(var(--oy, 0px) + var(--t) * var(--qa));
+    width: calc(var(--w) * var(--qa));
+  }
+
+  /*
+   * Pieces keep the edges they were cut against in the artboard (the 1000 VP
+   * card and the Spectre hang from the top edge; the Operator, Odin and 2050
+   * card stand on the bottom edge and run off the right) and overlap tightly,
+   * so each pile reads as one group like the original wide layout.
+   */
+
+  /* Sewa: the account screenshots step down from the top-right corner. */
+  .ql-card--sewa { --r-max: 190; }
+  .ql-card .ql-art--acc-diamond { --r: 140; --t: -6; --w: 153; }
+  .ql-card .ql-art--acc-platinum { --r: 165; --t: 40; --w: 163; }
+  .ql-card .ql-art--acc-gold { --r: 190; --t: 86; --w: 168; }
+
+  /* Jual: Spectre in the top corner, the Vandal across the middle, Operator and Odin along the bottom. */
+  /*
+   * The Odin sits on the right edge, so instead of sliding off it on tall
+   * screens the guns shrink to fit beside the copy, standing on the bottom edge.
+   * The Spectre's cut top then fades out.
+   */
+  .ql-card--jual {
+    --r-max: 222;
+    --qa: min(calc(100cqh / 200), calc((100cqw - var(--copy-end)) / var(--r-max)));
+    --oy: calc(100cqh - 200 * var(--qa));
+    --push: 0px;
+  }
+
+  .ql-card--jual .ql-art--spectre {
+    -webkit-mask-image: linear-gradient(transparent, #000 min(35%, var(--oy)));
+    mask-image: linear-gradient(transparent, #000 min(35%, var(--oy)));
+  }
+
+  .ql-card .ql-art--spectre { --r: 132; --t: -1; --w: 132; }
+  .ql-card .ql-art--vandal { --r: 245; --t: 22; --w: 275; }
+  .ql-card .ql-art--operator { --r: 247; --t: 101; --w: 220; }
+  .ql-card .ql-art--odin { --r: 117; --t: 134; --w: 155; }
+
+  /*
+   * Top Up: the three VP cards drawn the same size (the images crop them
+   * differently, so their widths differ), cascading from the top edge to the
+   * bottom-right corner: 1000, then 475 over it, then 2050 under the 475. The
+   * pile always spans the card's full height, since the 1000 export is cut at
+   * its top and that cut must stay on the card's top edge.
+   */
+  .ql-card--topup {
+    --r-max: 210; /* the 475 card's left edge; its shadow may run under the copy */
+  }
+
+  .ql-card .ql-art--vp-1000 { --r: 234; --t: -1; --w: 265; } /* the export is cut at the top: keep that on the card's top edge */
+  .ql-card .ql-art--vp-475 { --r: 271; --t: 26; --w: 321; } /* its bottom edge on the card's bottom edge */
+  .ql-card .ql-art--vp-2050 { --r: 188; --t: -11; --w: 220; }
+
+  /* Stack 2050 < 1000 < 475 so the 2050 image's shadow doesn't darken the 1000 card. */
+  .ql-card--topup .ql-art--vp-1000 { z-index: 1; }
+  .ql-card--topup .ql-art--vp-475 { z-index: 2; }
+
+
+  /* Beli: a taller fan of account cards. */
+  .ql-card--beli { --r-max: 195; }
+  .ql-card .ql-art--beli-1 { --r: 180; --t: 48; --w: 115; }
+  .ql-card .ql-art--beli-2 { --r: 130; --t: 14; --w: 115; }
+  .ql-card .ql-art--beli-3 { --r: 82; --t: 48; --w: 115; }
+
+  .ql-card__body {
+    padding: calc(30 * var(--qt));
+  }
+
+  .ql-card__title {
+    max-width: calc(var(--copy) * var(--qt));
+    font-size: calc(30 * var(--qt));
+    line-height: 1.02;
+  }
+
+  .ql-card__text,
+  .ql-card--topup .ql-card__text {
+    max-width: calc(var(--copy) * var(--qt));
+    font-size: calc(10.5 * var(--qt));
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+
+  .ql-card__text + .ql-card__text {
+    margin-top: calc(6 * var(--qt));
+  }
+}
 
 /*
  * Single column: --ox pushes the art 44 artboard px further right than on

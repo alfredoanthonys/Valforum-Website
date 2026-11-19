@@ -135,10 +135,10 @@
               <img src="/src/assets/img/hero-badge.webp" srcset="/src/assets/img/hero-badge.webp 523w, /src/assets/img/hero-badge-2x.webp 1046w" sizes="(max-width: 1023px) min(82vw, 440px), min(36.5vw, 523px)" width="523" height="328" alt="World's #1 Store Valorant Terlengkap" fetchpriority="high">
             </h1>
             <ul class="hero__actions" aria-label="Pilih layanan">
-              <li><a class="hero-btn hero-btn--sewa" href="#sewa" data-hero-btn>Sewa</a></li>
               <li><a class="hero-btn hero-btn--topup" href="#topup" data-hero-btn>Top Up</a></li>
               <li><a class="hero-btn hero-btn--jubel" href="#jualbeli" data-hero-btn>Jual</a></li>
               <li><a class="hero-btn hero-btn--jubel" href="#jualbeli" data-hero-btn>Beli</a></li>
+              <li><a class="hero-btn hero-btn--sewa" href="#sewa" data-hero-btn>Sewa</a></li>
             </ul>
             <p class="hero__caption" data-hero-caption>
               Semua layanan mulai dari top up VP hingga sewa akun Sultan! Kami buka 24 jam, terpercaya, dan profesional. Kunjungi IG <a href="%link:instagramValforum%">@VALFORUM</a>.
@@ -370,10 +370,14 @@
     <div class="footer__content">
       <img class="footer__logo" src="/src/assets/brands/valforum.svg" width="268" height="64" alt="Valforum" loading="lazy" data-reveal>
       <p class="footer__title" data-reveal>Store Valorant Terlengkap #1</p>
-      <a class="outline-btn outline-btn--footer" href="%link:faq%" data-reveal>
-        FAQ, Testimony, reviews
-        <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg>
-      </a>
+      <span class="faq-cta" data-reveal>
+        <a class="outline-btn outline-btn--footer" href="%link:faq%">
+          <span class="sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          FAQ, Testimony, reviews
+          <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg>
+        </a>
+        <span class="sparkles sparkles--out" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      </span>
       <a class="footer__wa" href="%link:whatsappCommunity%" data-reveal>
         <img src="/src/assets/img/wa-community.webp" srcset="/src/assets/img/wa-community.webp 1x, /src/assets/img/wa-community-2x.webp 2x" width="441" height="145" alt="Join our Valforum WhatsApp Community!" loading="lazy">
       </a>
@@ -418,19 +422,19 @@
           <span class="welcome-row__shine" aria-hidden="true"></span>
         </a>
         </div>
-        <a class="welcome-row" href="#sewa" data-welcome-link style="--d: 340ms">
+        <a class="welcome-row welcome-row--valsewa" href="#sewa" data-welcome-link style="--d: 340ms">
           <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"/><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"/></svg>
           <span class="welcome-row__name">Sewa Akun</span>
           <span class="welcome-row__chip welcome-row__chip--valsewa"><img src="/src/assets/brands/valsewa.svg" width="3945" height="935" alt=""></span>
           <span class="welcome-row__shine" aria-hidden="true"></span>
         </a>
-        <a class="welcome-row" href="#jualbeli" data-welcome-link style="--d: 430ms">
+        <a class="welcome-row welcome-row--valjubel" href="#jualbeli" data-welcome-link style="--d: 430ms">
           <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
           <span class="welcome-row__name">Jual Akun</span>
           <span class="welcome-row__chip welcome-row__chip--valjubel"><img src="/src/assets/brands/valjubel.svg" width="3945" height="935" alt=""></span>
           <span class="welcome-row__shine" aria-hidden="true"></span>
         </a>
-        <a class="welcome-row" href="#jualbeli" data-welcome-link style="--d: 520ms">
+        <a class="welcome-row welcome-row--valjubel" href="#jualbeli" data-welcome-link style="--d: 520ms">
           <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <span class="welcome-row__name">Beli Akun</span>
           <span class="welcome-row__chip welcome-row__chip--valjubel"><img src="/src/assets/brands/valjubel.svg" width="3945" height="935" alt=""></span>
@@ -442,7 +446,7 @@
           <svg class="welcome-row__out" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg>
           <span class="welcome-row__shine" aria-hidden="true"></span>
         </a>
-        <a class="welcome-row" href="%link:chatLeaveMessage%" data-chat-link style="--d: 700ms">
+        <a class="welcome-row welcome-row--admin" href="%link:chatLeaveMessage%" data-chat-link style="--d: 700ms">
           <svg class="welcome-row__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
           <span class="welcome-row__name">Hubungi Admin</span>
           <span class="welcome-row__meta" data-chat-status>Offline</span>

@@ -29,7 +29,7 @@
 }
 
 .welcome[open] .welcome__box {
-  animation: welcome-zoom 0.2s var(--ease-out);
+  animation: welcome-zoom 0.2s var(--ease-out), welcome-border 4.5s linear infinite;
 }
 
 .welcome.is-closing,
@@ -41,14 +41,58 @@
   animation: welcome-zoom 0.2s ease-in reverse forwards;
 }
 
-/* Gold gradient border (border-box layer) around a near-black face. */
+/*
+ * Gold gradient border (border-box layers) around a near-black face. Two bright
+ * gold glints (the conic layer) keep running round the border.
+ */
+@property --welcome-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Declared on each element that animates the angle, so var() resolves to its own angle. */
+.welcome__box,
+.welcome::before {
+  --welcome-glints: conic-gradient(
+    from var(--welcome-angle),
+    transparent 0deg 15deg,
+    rgba(235, 192, 74, 0.7) 40deg,
+    #fffbe6 58deg,
+    #fff7d1 64deg,
+    transparent 85deg 195deg,
+    rgba(235, 192, 74, 0.7) 220deg,
+    #fffbe6 238deg,
+    #fff7d1 244deg,
+    transparent 265deg
+  );
+}
+
+/* A blurred copy of the glints just outside the border, so they glow. */
+.welcome[open]::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  padding: 5px;
+  border-radius: calc(1.125em + 3px);
+  background: var(--welcome-glints);
+  -webkit-mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  filter: blur(6px);
+  opacity: 0.85;
+  pointer-events: none;
+  animation: welcome-border 4.5s linear infinite;
+}
+
 .welcome__box {
   max-height: calc(100svh - 2rem);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 1.125em;
   background:
     radial-gradient(90% 40% at 100% 100%, rgba(235, 192, 74, 0.12), transparent 75%) padding-box,
     linear-gradient(#0f0f11, #0f0f11) padding-box,
+    var(--welcome-glints) border-box,
     linear-gradient(var(--gold-deep), #2a2216 45%, #3a2e16 75%, var(--gold)) border-box;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
   overflow-x: hidden;
@@ -162,9 +206,31 @@
   transition: border-color 0.15s var(--ease-standard), background-color 0.15s var(--ease-standard);
 }
 
+/* Each row glows in its brand's colour on hover; plain rows stay gold. */
+.welcome-row--valsewa { --brand: 230, 38, 38; --brand-light: #ff7a7a; }
+.welcome-row--valjubel { --brand: 183, 35, 197; --brand-light: #e88cff; }
+.welcome-row--admin { --brand: 34, 197, 94; --brand-light: #86efac; }
+
+.welcome-row {
+  transition:
+    border-color 0.3s var(--ease-standard),
+    background-color 0.3s var(--ease-standard),
+    box-shadow 0.3s var(--ease-standard);
+}
+
 .welcome-row:hover {
   border-color: #6b6438;
   background: #1c1b1e;
+}
+
+.welcome-row:is(.welcome-row--valsewa, .welcome-row--valjubel, .welcome-row--admin):is(:hover, :focus-visible) {
+  border-color: rgba(var(--brand), 0.75);
+  background:
+    radial-gradient(80% 140% at 0% 50%, rgba(var(--brand), 0.18), transparent 70%),
+    #1a1a1d;
+  box-shadow:
+    0 0 1.25em rgba(var(--brand), 0.28),
+    inset 0 0 0.75em rgba(var(--brand), 0.12);
 }
 
 .welcome-row:focus-visible {
@@ -192,7 +258,15 @@
 
 .welcome-row--featured .welcome-row__icon,
 .welcome-row:is(:hover, :focus-visible) .welcome-row__icon {
-  color: var(--gold-light);
+  color: var(--brand-light, var(--gold-light));
+}
+
+.welcome-row:is(.welcome-row--valsewa, .welcome-row--valjubel, .welcome-row--admin):is(:hover, :focus-visible) {
+  outline-color: var(--brand-light);
+}
+
+.welcome-row--admin:is(:hover, :focus-visible) .welcome-row__meta[data-state='online'] {
+  text-shadow: 0 0 0.75em rgba(var(--brand), 0.7);
 }
 
 /* The label nudges right on hover. */
@@ -225,7 +299,7 @@
 }
 
 .welcome-row__chip--valforum { --brand: 203, 180, 89; }
-.welcome-row__chip--valsewa { --brand: 214, 26, 26; }
+.welcome-row__chip--valsewa { --brand: 230, 38, 38; }
 .welcome-row__chip--valjubel { --brand: 183, 35, 197; }
 
 .welcome-row__chip img {
@@ -313,6 +387,10 @@
   outline: 2px solid #fff;
 }
 
+@keyframes welcome-border {
+  to { --welcome-angle: 360deg; }
+}
+
 @keyframes welcome-fade {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -339,6 +417,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .welcome[open] .welcome__box {
+    animation: welcome-zoom 0.2s var(--ease-out);
+  }
+
+  .welcome[open]::before {
+    animation: none;
+  }
+
   .welcome__title,
   .welcome__featured,
   .welcome-row,

@@ -36,6 +36,7 @@ export function initStack({ reduceMotion }) {
   const dots = document.querySelector('[data-dots]');
   const dotLinks = dots ? [...dots.querySelectorAll('a')] : [];
   const tallEnough = window.matchMedia('(min-height: 521px)');
+  const ticker = document.querySelector('[data-ticker]');
 
   let stackTop = 0;
   let viewport = window.innerHeight;
@@ -48,6 +49,8 @@ export function initStack({ reduceMotion }) {
 
   function measure() {
     viewport = window.innerHeight;
+    // The quick links screen is sized off the ticker's height (CSS), so set it before measuring.
+    if (ticker) root.style.setProperty('--ticker-h', `${ticker.offsetHeight}px`);
     stackTop = stack.getBoundingClientRect().top + window.scrollY;
 
     // If a panel's copy no longer fits (tiny or heavily zoomed screens), let the card scroll internally.

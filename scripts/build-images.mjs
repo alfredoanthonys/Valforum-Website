@@ -37,16 +37,16 @@ const jobs = [
   { src: '4x/Mask group-2.png', out: 'partner-pointblank', width: 41, retina: true, lossless: true, trim: true },
 
   // Quick-link cards
-  { src: '4x/image 95-1.png', out: 'ql-vp-1000', width: 291, retina: true },
-  { src: '4x/image 94-1.png', out: 'ql-vp-475', width: 360, retina: true },
-  { src: '4x/image 96-1.png', out: 'ql-vp-2050', width: 188, retina: true },
-  { src: '4x/image 98.png', out: 'ql-gun-vandal', width: 330, retina: true },
-  { src: '4x/image 99.png', out: 'ql-gun-spectre', width: 138, retina: true },
-  { src: '4x/image 102.png', out: 'ql-gun-operator', width: 255, retina: true },
-  { src: '4x/image 100.png', out: 'ql-gun-odin', width: 199, retina: true },
-  { src: '4x/Screenshot 2026-06-03 at 16.38.02 1-1.png', out: 'ql-acc-gold', width: 181, retina: true, quality: 90 },
-  { src: '4x/Screenshot 2026-06-03 at 16.37.42 1-1.png', out: 'ql-acc-platinum', width: 181, retina: true, quality: 90 },
-  { src: '4x/Screenshot 2026-06-03 at 16.51.23 1-1.png', out: 'ql-acc-diamond', width: 170, retina: true, quality: 90 },
+  { src: '4x/image 95-1.png', out: 'ql-vp-1000', hd: true, width: 291, retina: true },
+  { src: '4x/image 94-1.png', out: 'ql-vp-475', hd: true, width: 360, retina: true },
+  { src: '4x/image 96-1.png', out: 'ql-vp-2050', hd: true, width: 188, retina: true },
+  { src: '4x/image 98.png', out: 'ql-gun-vandal', hd: true, width: 330, retina: true },
+  { src: '4x/image 99.png', out: 'ql-gun-spectre', hd: true, width: 138, retina: true },
+  { src: '4x/image 102.png', out: 'ql-gun-operator', hd: true, width: 255, retina: true },
+  { src: '4x/image 100.png', out: 'ql-gun-odin', hd: true, width: 199, retina: true },
+  { src: '4x/Screenshot 2026-06-03 at 16.38.02 1-1.png', out: 'ql-acc-gold', hd: true, width: 181, retina: true, quality: 90 },
+  { src: '4x/Screenshot 2026-06-03 at 16.37.42 1-1.png', out: 'ql-acc-platinum', hd: true, width: 181, retina: true, quality: 90 },
+  { src: '4x/Screenshot 2026-06-03 at 16.51.23 1-1.png', out: 'ql-acc-diamond', hd: true, width: 170, retina: true, quality: 90 },
 
   // Sewa
   { src: '4x/IMG_1512 1.png', out: 'sewa-neon', width: 901, retina: true },
@@ -63,9 +63,9 @@ const jobs = [
 
   // Beli account cards (portrait, used by the Beli quick link). Some screenshots stop just under the
   // listing panel and others carry a price row, so every card is cut 34px around the panel and closed below it.
-  { src: 'Beli account VAL-5697.png', out: 'beli-acc-2', extract: { left: 11, top: 13, width: 747, height: 994 }, card: { padBottom: 34 }, width: 230, retina: true, quality: 90 },
-  { src: 'Beli account VAL-5775.png', out: 'beli-acc-3', extract: { left: 11, top: 14, width: 747, height: 994 }, card: { padBottom: 34 }, width: 230, retina: true, quality: 90 },
-  { src: 'Beli account VAL-1968.png', out: 'beli-acc-4', extract: { left: 12, top: 12, width: 747, height: 994 }, card: { padBottom: 34 }, width: 230, retina: true, quality: 90 },
+  { src: 'Beli account VAL-5697.png', out: 'beli-acc-2', hd: true, extract: { left: 11, top: 13, width: 747, height: 994 }, card: { padBottom: 34 }, width: 230, retina: true, quality: 90 },
+  { src: 'Beli account VAL-5775.png', out: 'beli-acc-3', hd: true, extract: { left: 11, top: 14, width: 747, height: 994 }, card: { padBottom: 34 }, width: 230, retina: true, quality: 90 },
+  { src: 'Beli account VAL-1968.png', out: 'beli-acc-4', hd: true, extract: { left: 12, top: 12, width: 747, height: 994 }, card: { padBottom: 34 }, width: 230, retina: true, quality: 90 },
 
   // Beli panel row: the same cards cut down to the header and inventory screenshot, then fitted
   // (~6% squeeze) to the Sewa cards' 285 × 233 so every row uses one card shape.
@@ -147,13 +147,19 @@ async function favicon(img) {
 
 await mkdir(OUT, { recursive: true });
 for (const job of jobs) {
-  for (const scale of job.retina ? [1, 2] : [1]) {
-    const name = scale === 1 ? job.out : `${job.out}-${scale}x`;
+  // `hd` jobs also write <name>-hd at up to 4x (as much as the master holds): the quick-link
+  // cards grow far past their artboard on full-screen desktop, so 2x isn't enough there.
+  for (const scale of job.retina ? [1, 2, ...(job.hd ? ['hd'] : [])] : [1]) {
+    const name = scale === 1 ? job.out : scale === 'hd' ? `${job.out}-hd` : `${job.out}-${scale}x`;
     let img = sharp(path.join(SRC, job.src));
     if (job.extract) img = img.extract(job.extract);
     if (job.trim) img = img.trim({ threshold: 1 });
     if (job.card) img = await cardFrame(img, job.card);
-    if (job.width) img = img.resize(job.height ? { width: job.width * scale, height: job.height * scale, fit: 'fill' } : { width: job.width * scale });
+    if (scale === 'hd') {
+      const { width } = await sharp(await img.clone().png().toBuffer()).metadata();
+      const s = Math.min(4, width / job.width);
+      img = img.resize(job.height ? { width: Math.round(job.width * s), height: Math.round(job.height * s), fit: 'fill' } : { width: Math.round(job.width * s) });
+    } else if (job.width) img = img.resize(job.height ? { width: job.width * scale, height: job.height * scale, fit: 'fill' } : { width: job.width * scale });
     if (job.transform) img = await job.transform(img);
     const format = job.format ?? 'webp';
     const file = path.join(OUT, `${name}.${format}`);

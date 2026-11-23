@@ -286,13 +286,19 @@
  * their `rotate`), so the extra fan angle sits on the inner link.
  */
 @media (max-width: 767px) {
+  /*
+   * The cards grow as wide as the screen allows (their outer edges run a little
+   * off it) and the head sits close above them: the gap under the links is
+   * half the spare height (56–120px), the rest goes above the title.
+   */
   .panel--topup .panel__card {
-    --head-h: 325px;
-    --fu: min(0.82cqw, calc((100cqh - var(--nav-h) - 48px - var(--head-h)) / 81));
+    --head-h: 262px; /* measured: title to the links' bottom */
+    --fu: min(0.9cqw, calc((100cqh - var(--nav-h) - 96px - var(--head-h)) / 81));
+    --free: calc(100cqh - var(--nav-h) - var(--head-h) - 81 * var(--fu));
   }
 
   .topup__head {
-    margin-top: calc(var(--nav-h) + clamp(48px, calc((100cqh - var(--nav-h) - var(--head-h) - 81 * var(--fu)) / 2), 160px));
+    margin-top: calc(var(--nav-h) + var(--free) - clamp(56px, var(--free) * 0.5, 120px));
   }
 
   .game-cards {

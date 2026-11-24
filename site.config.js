@@ -19,7 +19,7 @@ export default {
     topupMobileLegends: '#',
 
     // Community
-    instagramValforum: '#',
+    instagramValforum: 'https://www.instagram.com/valforum.id/',
     instagramValsewa: '#',
     whatsappCommunity: '#',
     faq: '#',

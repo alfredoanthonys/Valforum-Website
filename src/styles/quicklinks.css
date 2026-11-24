@@ -192,7 +192,7 @@
 .ql-card:hover .ql-art--vp-475 { transform: translate(-8px, -6px) rotate(-3deg); }
 
 /*
- * Landscape desktop: the ticker and the four cards fill one screen under the
+ * Tablets and desktops: the ticker and the four cards fill one screen under the
  * navbar (it scrolls freely; only the sections below snap). The cards stretch
  * to fill the rows, never shorter than the artboard shape, so they get taller
  * than the artboard and the art is re-composed to run from top to bottom.
@@ -203,7 +203,7 @@
  *   when that would reach the copy column, --push slides all the art right
  *   (off the edge) instead.
  */
-@media (min-width: 900px) and (min-height: 521px) and (min-aspect-ratio: 5/4) {
+@media (min-width: 768px) and (min-height: 521px) {
   .quicklinks {
     --ql-pad: clamp(20px, 3.4svh, 44px);
     container-type: inline-size;
@@ -327,11 +327,54 @@
 }
 
 /*
+ * Upright tablets: the cards come out taller than wide, so the art is sized to
+ * the band between the title and the copy (never wider than the card allows)
+ * and centred in it; the copy is sized by the card's width. Capped at tablet
+ * widths: a squarish desktop window (e.g. 1166 × 1082) still gets landscape
+ * cards and keeps the laptop layout above.
+ */
+@media (min-width: 768px) and (max-width: 1024px) and (min-height: 521px) and (max-aspect-ratio: 5/4) {
+  .ql-card,
+  .ql-card--jual {
+    --qt: min(calc(100cqh / 200), calc(100cqw / 639 * 2));
+    /* the band between the title (~92 copy units from the top) and the copy (~98 from the bottom) */
+    --band: calc(100cqh - 190 * var(--qt));
+    --qa: min(calc(var(--band) / 200), calc(100cqw / 250));
+    --oy: calc(92 * var(--qt) + (var(--band) - 200 * var(--qa)) / 2);
+    --push: 0px;
+  }
+
+  .ql-card--jual .ql-art--spectre {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* The 1000 VP card and the Spectre are cut flat at their tops, and the VP
+     shadows end in a straight left edge: fade those edges into the card. */
+  .ql-card--jual .ql-card__art,
+  .ql-card--topup .ql-card__art {
+    -webkit-mask-image: linear-gradient(transparent var(--oy), #000 calc(var(--oy) + 44 * var(--qa)));
+    mask-image: linear-gradient(transparent var(--oy), #000 calc(var(--oy) + 44 * var(--qa)));
+  }
+
+  .ql-card--topup .ql-card__art {
+    -webkit-mask-image:
+      linear-gradient(transparent var(--oy), #000 calc(var(--oy) + 44 * var(--qa))),
+      linear-gradient(90deg, transparent calc(100cqw - 236 * var(--qa)), #000 calc(100cqw - 190 * var(--qa)));
+    -webkit-mask-composite: source-in;
+    mask-image:
+      linear-gradient(transparent var(--oy), #000 calc(var(--oy) + 44 * var(--qa))),
+      linear-gradient(90deg, transparent calc(100cqw - 236 * var(--qa)), #000 calc(100cqw - 190 * var(--qa)));
+    mask-composite: intersect;
+  }
+}
+
+/*
  * Single column: --ox pushes the art 44 artboard px further right than on
  * desktop (it runs a little more off the edge) for breathing room next to the
  * copy, and keeps it on the right once min-height takes over.
  */
-@media (max-width: 899px) {
+@media (max-width: 767px) {
   .ql-grid {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: none;

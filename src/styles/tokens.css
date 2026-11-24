@@ -60,10 +60,11 @@
 /*
  * Desktop hero keeps the artboard's aspect ratio, so it narrows on short screens
  * until the whole frame fits on first load: 128px covers the tab above the stage
- * (20 + 84) and a 24px gap below it.
+ * (20 + 84) and a 24px gap below it. There is no upper cap: on big screens the
+ * frame (navbar, hero, quick links, panels) grows with the screen like a laptop's.
  */
 @media (min-width: 1024px) {
   :root {
-    --hero-max: clamp(760px, calc((100svh - 128px) * 1332 / 784), 1334px);
+    --hero-max: max(760px, calc((100svh - 128px) * 1332 / 784));
   }
 }

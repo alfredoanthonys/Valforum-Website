@@ -119,7 +119,7 @@
 
 .topup__more {
   font-family: var(--font-condensed);
-  font-size: 16px;
+  font-size: 1em;
   font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 1;
@@ -133,10 +133,36 @@
   margin-top: calc(28 * var(--s));
 }
 
+/*
+ * On big screens (--s past 1px) the logos, button and links grow with the
+ * title instead of staying at their design size; they never shrink below it.
+ */
+.topup__cta .outline-btn {
+  --btn-h: max(54px, calc(54 * var(--s)));
+  --btn-px: max(21px, calc(21 * var(--s)));
+  --btn-fs: max(22px, calc(22 * var(--s)));
+  --btn-r: max(6px, calc(6 * var(--s)));
+}
+
+.topup__partners {
+  font-size: max(16px, calc(16 * var(--s)));
+  gap: 0.5em 1em;
+}
+
+.topup__partners img {
+  width: auto;
+}
+
+/* Each logo's design height in em of 16px. */
+.topup__partners li:nth-child(1) img { height: 0.625em; }
+.topup__partners li:nth-child(2) img { height: 1.125em; }
+.topup__partners li:nth-child(3) img { height: 1.5em; }
+.topup__partners li:nth-child(4) img { height: 1.4375em; }
+
 .topup__links {
   margin-top: calc(29 * var(--s));
-  font-size: 14px;
-  line-height: 25px;
+  font-size: max(14px, calc(14 * var(--s)));
+  line-height: max(25px, calc(25 * var(--s)));
   color: rgba(255, 255, 255, 0.94);
 }
 
@@ -238,6 +264,8 @@
   }
 }
 
+/* Portrait phones (upright tablets keep the desktop layout, see below). */
+@media (max-width: 767px) {
 @container panel (max-aspect-ratio: 1 / 1) {
   .panel--topup .panel__card {
     --gs: clamp(0.42px, calc(100cqw / 700), 0.8px);
@@ -272,6 +300,31 @@
     margin-top: 14px;
   }
 }
+}
+
+/*
+ * Upright tablets: the desktop composition on a tall card. The card row runs a
+ * little past both edges (panels.css sizes --s by the width) and stands on the
+ * bottom; the head sits close above it, the gap under the links being half the
+ * spare height (56–120px), and the rest of the space goes above the title.
+ * 360 artboard px is the head's height, 293 the row's visible height.
+ */
+@media (min-width: 768px) {
+  @container panel (max-aspect-ratio: 1 / 1) {
+    .panel--topup .panel__card {
+      --free: calc(100cqh - 653 * var(--s));
+    }
+
+    .topup__head {
+      margin-top: calc(var(--free) - clamp(56px, var(--free) * 0.5, 120px));
+    }
+
+    /* A 1024px-wide tablet would otherwise get the laptop rule that sinks the cards. */
+    .game-cards .game-card {
+      bottom: -24px;
+    }
+  }
+}
 
 /*
  * Phones (like the mobile design): Valorant large in the middle, Mobile Legends
@@ -289,16 +342,18 @@
   /*
    * The cards grow as wide as the screen allows (their outer edges run a little
    * off it) and the head sits close above them: the gap under the links is
-   * half the spare height (56–120px), the rest goes above the title.
+   * 38% of the spare height (48–88px), the rest goes above the title. --lift
+   * raises the cards off the bottom edge, and the head rises with them.
    */
   .panel--topup .panel__card {
     --head-h: 262px; /* measured: title to the links' bottom */
-    --fu: min(0.9cqw, calc((100cqh - var(--nav-h) - 96px - var(--head-h)) / 81));
+    --lift: 24px;
+    --fu: min(0.9cqw, calc((100cqh - var(--nav-h) - 96px - var(--lift) - var(--head-h)) / 81));
     --free: calc(100cqh - var(--nav-h) - var(--head-h) - 81 * var(--fu));
   }
 
   .topup__head {
-    margin-top: calc(var(--nav-h) + var(--free) - clamp(56px, var(--free) * 0.5, 120px));
+    margin-top: calc(var(--nav-h) + var(--free) - var(--lift) - clamp(48px, var(--free) * 0.38, 88px));
   }
 
   .game-cards {
@@ -319,14 +374,14 @@
   }
 
   .game-card--valorant {
-    bottom: calc(-10 * var(--fu));
+    bottom: calc(var(--lift) - 10 * var(--fu));
     left: calc(50% - 37 * var(--fu));
     width: calc(74 * var(--fu));
     z-index: 1;
   }
 
   .game-card--mlbb {
-    bottom: calc(-12 * var(--fu));
+    bottom: calc(var(--lift) - 12 * var(--fu));
     left: calc(50% - 62 * var(--fu));
     width: calc(50 * var(--fu));
     z-index: 3;
@@ -337,7 +392,7 @@
   }
 
   .game-card--genshin {
-    bottom: calc(-20 * var(--fu));
+    bottom: calc(var(--lift) - 20 * var(--fu));
     left: auto;
     right: calc(50% - 64 * var(--fu));
     width: calc(52 * var(--fu));

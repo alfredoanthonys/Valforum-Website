@@ -262,7 +262,7 @@
   }
 }
 
-/* ---------- Tablet & mobile: stacked composition ---------- */
+/* ---------- Phones: stacked composition ---------- */
 @media (max-width: 767px) {
   .hero-shell {
     padding-top: var(--nav-h);
@@ -281,7 +281,8 @@
   }
 }
 
-@media (max-width: 1023px) {
+/* Phones only: upright tablets keep the desktop composition at a smaller scale. */
+@media (max-width: 767px) {
   .hero__stage {
     display: flex;
     flex-direction: column;

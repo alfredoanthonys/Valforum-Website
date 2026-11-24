@@ -46,7 +46,7 @@ function reveal(group) {
   if (art.length) {
     tl.fromTo(
       art,
-      { opacity: 0, x: (_, el) => (isRightHalf(el) ? ART.shift : -ART.shift), y: ART.rise },
+      { opacity: 0, x: (_, el) => artShift(el), y: ART.rise },
       { opacity: 1, x: 0, y: 0, duration: ART.duration },
       0,
     );
@@ -59,8 +59,17 @@ function reveal(group) {
   }
 }
 
-function isRightHalf(el) {
+/*
+ * Art slides in from the side it sits on. Most character art is cut flat on
+ * the opposite side and hidden past the panel's edge, so the slide is capped
+ * at how far that edge is hidden: the cut never shows mid-animation (e.g.
+ * Cypher on phones, whose arm is cut ~20px past the left edge).
+ */
+function artShift(el) {
   const box = el.getBoundingClientRect();
-  const parent = el.parentElement.getBoundingClientRect();
-  return box.left + box.width / 2 > parent.left + parent.width / 2;
+  const frame = el.parentElement.getBoundingClientRect();
+  const fromRight = box.left + box.width / 2 > frame.left + frame.width / 2;
+  const hidden = fromRight ? frame.left - box.left : box.right - frame.right;
+  const shift = hidden > 0 ? Math.min(ART.shift, hidden) : ART.shift;
+  return fromRight ? shift : -shift;
 }

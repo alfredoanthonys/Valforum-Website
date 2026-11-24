@@ -17,10 +17,8 @@
 .ql-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  /* Markup is in mobile order (sewa, top up, jual, beli); filling by column
-     keeps the desktop 2×2 as sewa | jual over top up | beli. */
+  /* Same order as the hero buttons: top up | jual over beli | sewa (one column on phones). */
   grid-template-rows: repeat(2, auto);
-  grid-auto-flow: column;
   gap: 21px 20px;
 }
 

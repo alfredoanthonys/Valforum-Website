@@ -54,8 +54,25 @@ function reveal(group) {
   if (text.length) {
     tl.fromTo(text, { opacity: 0, y: TEXT.rise }, { opacity: 1, y: 0, duration: TEXT.duration, stagger: TEXT.stagger }, 0.1);
   }
+  // Account cards rise through --reveal-y (panels.css moves their image with it) in a
+  // tween of their own, outside the timeline: its default clearProps: 'transform' makes
+  // GSAP read the card's live transform + hover translate and write them back inline,
+  // so a card hovered mid-reveal stayed stuck lifted. The card's transform places it in
+  // the fan and its translate lifts it on hover; neither may be touched here.
   if (cards.length) {
-    tl.fromTo(cards, { opacity: 0, y: CARDS.rise }, { opacity: 1, y: 0, duration: CARDS.duration, stagger: CARDS.stagger }, CARDS.delay);
+    gsap.fromTo(
+      cards,
+      { opacity: 0, '--reveal-y': `${CARDS.rise}px` },
+      {
+        opacity: 1,
+        '--reveal-y': '0px',
+        duration: CARDS.duration,
+        stagger: CARDS.stagger,
+        delay: CARDS.delay,
+        ease: 'power3.out',
+        clearProps: '--reveal-y',
+      },
+    );
   }
 }
 

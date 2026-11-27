@@ -311,6 +311,7 @@
 
 .panel__accounts img {
   width: 100%;
+  translate: 0 var(--reveal-y, 0px); /* the entrance rise (reveal.js), apart from the hover transform */
   transition: transform 0.45s var(--ease-out), filter 0.45s;
 }
 
@@ -400,6 +401,38 @@
   .panel__accounts--full li:hover {
     z-index: 20;
     translate: 0 calc(-0.08 * var(--cw));
+  }
+
+  /*
+   * Hover areas: each card answers only to the slice of it that shows in the fan
+   * (one --step wide on the outer cards, the whole middle card). Without this a
+   * hovered card, brought to the front, covered its neighbours with its full
+   * width, so the pointer stayed on it ("stuck") until it left the whole card.
+   * The area reaches below the card by the lift, so a lifted card doesn't drop
+   * away from a pointer near its bottom edge.
+   */
+  .panel__accounts--full li {
+    pointer-events: none;
+  }
+
+  .panel__accounts--full li::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 calc(-0.1 * var(--cw));
+    z-index: 1;
+    pointer-events: auto;
+  }
+
+  /* A little wider than the slice: the cards are tilted, so exact slices leave thin gaps. */
+  .panel__accounts--full li:nth-child(-n + 2)::before {
+    right: auto;
+    width: calc(var(--step) + 0.12 * var(--cw));
+  }
+
+  .panel__accounts--full li:nth-child(4)::before,
+  .panel__accounts--full li:nth-child(5)::before {
+    left: auto;
+    width: calc(var(--step) + 0.12 * var(--cw));
   }
 
   .panel__accounts--full img {

@@ -40,13 +40,13 @@ export function initStack({ reduceMotion }) {
 
   let stackTop = 0;
   let viewport = window.innerHeight;
-  let tops = [];
+  let tops = []; // each panel's top, relative to the stack
+  let end = 0; // the stack's height: where the footer starts
   let active = -1;
   let gliding = false;
   const last = panels.map(() => ({ enter: -1, cover: -1 }));
 
-  const stackEnd = () => tops[tops.length - 1] + panels[panels.length - 1].offsetHeight;
-
+  // All layout reads happen here (on load / resize), never in the per-frame update.
   function measure() {
     viewport = window.innerHeight;
     // The quick links screen is sized off the ticker's height (CSS), so set it before measuring.
@@ -67,11 +67,11 @@ export function initStack({ reduceMotion }) {
       markers[i].style.height = `${panel.offsetHeight}px`;
       return top;
     });
+    end = y;
   }
 
   function update() {
     const y = window.scrollY - stackTop;
-    const end = stackEnd();
 
     // Snap from half a screen above the first panel onwards; above that, scroll freely.
     root.classList.toggle('snap-on', y > -viewport * 0.5);
@@ -94,8 +94,8 @@ export function initStack({ reduceMotion }) {
       const cover = next === undefined ? 0 : clamp((y - tops[i]) / (next - tops[i]), 0, 1);
       const prev = last[i];
 
-      // Off-screen or fully covered panels stop their ambient animations, so phones
-      // don't hold GPU layers for four animated backgrounds at once.
+      // Off-screen or fully covered panels are idle: their ambient animations stop and
+      // they give up their GPU layers (panels.css), so at most two panels hold layers.
       panel.classList.toggle('is-idle', enter < 0.01 || cover > 0.99); // a pixel of rounding slack
 
       if (cover !== prev.cover) {
@@ -115,7 +115,6 @@ export function initStack({ reduceMotion }) {
   function settle() {
     if (gliding || !root.classList.contains('snap-on') || !getComputedStyle(root).scrollSnapType.includes('mandatory')) return;
     const y = window.scrollY - stackTop;
-    const end = stackEnd();
     if (y <= -viewport * 0.5 || y >= end) return; // outside the stack: free scrolling
     const targets = [...tops, end];
     if (targets.some((t) => Math.abs(y - t) < 2)) return;
@@ -141,7 +140,7 @@ export function initStack({ reduceMotion }) {
   // Section positions, from the end of the quick links down to the footer.
   function stopFor(dir) {
     const y = window.scrollY;
-    const stops = [stackTop - viewport, ...tops.map((t) => stackTop + t), stackTop + stackEnd()];
+    const stops = [stackTop - viewport, ...tops.map((t) => stackTop + t), stackTop + end];
     return dir > 0 ? stops.find((s) => s > y + 2) : stops.reverse().find((s) => s < y - 2);
   }
 

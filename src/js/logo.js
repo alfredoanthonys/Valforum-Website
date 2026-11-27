@@ -25,6 +25,9 @@ export function initLogo({ reduceMotion }) {
         path: animationUrl,
         rendererSettings: { preserveAspectRatio: 'xMidYMid meet', progressiveLoad: true },
       });
+      // The animation is authored at 25 fps; without this the player redraws the SVG on
+      // every screen refresh (60–120 Hz), forever, for in-between frames nobody sees.
+      anim.setSubframe(false);
       anim.addEventListener('DOMLoaded', () => {
         clearTimeout(timer);
         host.classList.remove('is-fallback');

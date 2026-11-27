@@ -76,6 +76,25 @@
   pointer-events: none;
 }
 
+/*
+ * While the next panel slides over this one, stack.js scales the card and fades
+ * the shade every scroll frame. Their own GPU layers let the browser draw the
+ * card once and then only transform it; without them the whole full-screen card
+ * (art, backgrounds, text shadows) is re-rasterised on every frame. A visible
+ * panel keeps its layers, so they're drawn once as it scrolls in and not again
+ * when the cover starts; idle panels (off-screen or fully covered) drop them,
+ * so at most two are held. Measured: 2–4× less browser work per transition.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .panel:not(.is-idle) .panel__card {
+    will-change: transform;
+  }
+
+  .panel:not(.is-idle) .panel__shade {
+    will-change: opacity;
+  }
+}
+
 .panel.is-relaxed .panel__card {
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -300,77 +319,130 @@
   filter: drop-shadow(0 18px 22px rgba(0, 0, 0, 0.45));
 }
 
-/* ---------- Sewa: angular shards + diagonal stripes ---------- */
+/*
+ * Sewa and Jual Beli show whole listing cards (Sewa 230 × 309, Jual Beli 230 × 349,
+ * header to footer). The copy keeps its size, so the tall cards shrink to the
+ * space under it.
+ */
+.panel__accounts--full {
+  --card-ratio: 230 / 349;
+  justify-content: safe flex-end; /* `safe`: the phone strip overflows and must start at card 1 */
+  gap: calc(14 * var(--s));
+}
+
+.panel--sewa .panel__accounts--full {
+  --card-ratio: 230 / 309;
+}
+
+/*
+ * Landscape cards: a fan of five instead of a wall of cards. The row keeps the
+ * height the old straight row had (seven across the row, capped so the copy is
+ * never crowded), so the copy sits exactly where it did; the fanned cards are a
+ * little taller and rise into the gap above. The middle card is in front.
+ * Jual Beli's fan sits under its right-aligned copy, Sewa's under its left-aligned
+ * copy. Hovering the fan spreads it; hovering a card lifts it to the front.
+ * Only transform / translate animate. Cards past the fifth are phone-only here.
+ * .panel__acc-extra: hidden on upright tablets (five cards fill the row there).
+ * .panel__acc-more: phone strip only.
+ */
+@container panel (min-aspect-ratio: 1 / 1) {
+  .panel__accounts--full {
+    --row-h: min(
+      calc((100cqw - 208 * var(--s)) / 7 / (var(--card-ratio))),
+      calc(100cqh - 430 * var(--s))
+    );
+    --cw: calc(var(--row-h) * 1.2 * (var(--card-ratio)));
+    --step: calc(var(--cw) * 0.6);
+    --tilt: 5deg;
+    display: block;
+    height: var(--row-h);
+  }
+
+  .panel__accounts--full:hover {
+    --step: calc(var(--cw) * 0.86);
+    --tilt: 3deg;
+  }
+
+  .panel__accounts--full li {
+    --a: max(var(--p), -1 * var(--p)); /* distance from the middle card */
+    position: absolute;
+    bottom: calc(0.05 * var(--cw)); /* the tilted outer cards' corners stay off the panel's edge */
+    z-index: calc(10 - var(--a));
+    width: var(--cw);
+    max-width: none;
+    transform-origin: 50% 130%;
+    transition: transform 0.6s var(--ease-out), translate 0.4s var(--ease-out);
+  }
+
+  .panel__accounts--full li:nth-child(1) { --p: -2; }
+  .panel__accounts--full li:nth-child(2) { --p: -1; }
+  .panel__accounts--full li:nth-child(3) { --p: 0; }
+  .panel__accounts--full li:nth-child(4) { --p: 1; }
+  .panel__accounts--full li:nth-child(5) { --p: 2; }
+
+  .panel__accounts--full li:nth-child(n + 6) {
+    display: none;
+  }
+
+  /* Jual Beli: the fan's right edge on the copy's right edge. */
+  .panel--jual .panel__accounts--full li {
+    right: calc(0.2 * var(--cw)); /* room for the outer card's tilt */
+    transform:
+      translateX(calc((var(--p) - 2) * var(--step)))
+      translateY(calc(var(--a) * var(--a) * 0.025 * var(--cw)))
+      rotate(calc(var(--p) * var(--tilt)));
+  }
+
+  /* Sewa: the fan's left edge on the copy's left edge. */
+  .panel--sewa .panel__accounts--full li {
+    left: calc(0.2 * var(--cw));
+    transform:
+      translateX(calc((var(--p) + 2) * var(--step)))
+      translateY(calc(var(--a) * var(--a) * 0.025 * var(--cw)))
+      rotate(calc(var(--p) * var(--tilt)));
+  }
+
+  .panel__accounts--full li:hover {
+    z-index: 20;
+    translate: 0 calc(-0.08 * var(--cw));
+  }
+
+  .panel__accounts--full img {
+    filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.5));
+  }
+
+  /* The li does the lifting here. */
+  .panel__accounts--full li:hover img {
+    transform: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .panel__acc-more {
+    display: none;
+  }
+
+  @container panel (max-aspect-ratio: 1 / 1) {
+    .panel__acc-extra {
+      display: none;
+    }
+  }
+}
+
+/*
+ * ---------- Sewa: valsewa.com's closing section ----------
+ * Same look as the Sewa quick-link card's hover: black, red light rising from
+ * the bottom, red "liquid ether" smoke. A still image, drawn at panel size; tall
+ * panels (phones, upright tablets) get a portrait version.
+ */
 .panel--sewa .panel__card {
-  background: linear-gradient(120deg, var(--sewa-1), var(--sewa-2));
+  background: #000 url('../assets/img/panel-sewa-ether.webp') center / cover;
 }
 
-.bg-sewa__stripes {
-  inset: -10%;
-  background: repeating-linear-gradient(-58deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 26px);
-  -webkit-mask: radial-gradient(110% 90% at 18% 30%, #000 10%, transparent 72%);
-  mask: radial-gradient(110% 90% at 18% 30%, #000 10%, transparent 72%);
-  animation: bg-drift 26s ease-in-out infinite alternate;
-}
-
-.bg-sewa__glow {
-  background:
-    radial-gradient(40% 55% at 72% 40%, rgba(255, 64, 104, 0.42), transparent 70%),
-    radial-gradient(32% 42% at 14% 86%, rgba(255, 128, 64, 0.16), transparent 70%),
-    linear-gradient(transparent 55%, rgba(40, 0, 6, 0.4));
-  animation: bg-pulse 8s ease-in-out infinite alternate;
-}
-
-.bg-sewa__shard {
-  position: absolute;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0) 72%);
-  animation: bg-float 12s ease-in-out infinite alternate;
-}
-
-.bg-sewa__shard--1 {
-  top: -6%;
-  left: 31%;
-  width: calc(440 * var(--s));
-  height: calc(440 * var(--s));
-  clip-path: polygon(0 0, 100% 16%, 36% 100%);
-}
-
-.bg-sewa__shard--2 {
-  bottom: 4%;
-  left: -3%;
-  width: calc(280 * var(--s));
-  height: calc(280 * var(--s));
-  clip-path: polygon(18% 0, 100% 62%, 0 100%);
-  animation-duration: 15s;
-  animation-delay: -5s;
-}
-
-.bg-sewa__shard--3 {
-  top: 6%;
-  right: 6%;
-  width: calc(190 * var(--s));
-  height: calc(190 * var(--s));
-  clip-path: polygon(0 32%, 100% 0, 62% 100%);
-  animation-duration: 10s;
-  animation-delay: -2s;
-}
-
-/* Light streaks that sweep across the card along the stripe angle, then rest. */
-.bg-sewa__streak {
-  position: absolute;
-  top: -25%;
-  left: 0;
-  width: calc(220 * var(--s));
-  height: 150%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16) 45%, rgba(255, 196, 206, 0.24) 50%, rgba(255, 255, 255, 0.16) 55%, transparent);
-  mix-blend-mode: overlay;
-  transform: translateX(-30cqw) skewX(-32deg);
-  animation: bg-streak 7s var(--ease-standard) infinite;
-}
-
-.bg-sewa__streak--2 {
-  width: calc(90 * var(--s));
-  animation-delay: 0.45s;
+@container panel (max-aspect-ratio: 1 / 1) {
+  .panel--sewa .panel__card {
+    background-image: url('../assets/img/panel-sewa-ether-tall.webp');
+  }
 }
 
 .sewa__neon {
@@ -383,47 +455,20 @@
   pointer-events: none;
 }
 
-/* ---------- Jual: dot matrix + radar sweep around Cypher ---------- */
+/*
+ * ---------- Jual Beli: Valjubel's shattered glass ----------
+ * Same look as the Jual / Beli quick-link cards' hover (valforum.com/jual-beli-akun).
+ * Mirrored from the card's layout: the glass gathers on the left behind Cypher and
+ * stays calm on the right behind the copy. Still images; portrait version for tall panels.
+ */
 .panel--jual .panel__card {
-  background: linear-gradient(120deg, var(--jual-1), var(--jual-2));
+  background: #1b0833 url('../assets/img/panel-jual-shards.webp') center / cover;
 }
 
-.bg-jual__dots {
-  inset: -6%;
-  background: radial-gradient(rgba(255, 255, 255, 0.24) 1px, transparent 1.6px) 0 0 / 22px 22px;
-  -webkit-mask: radial-gradient(70% 80% at 76% 50%, #000, transparent 75%);
-  mask: radial-gradient(70% 80% at 76% 50%, #000, transparent 75%);
-  animation: bg-drift 30s ease-in-out infinite alternate-reverse;
-}
-
-.bg-jual__sweep {
-  inset: auto;
-  top: 50%;
-  left: calc(354 * var(--s));
-  width: calc(1500 * var(--s));
-  height: calc(1500 * var(--s));
-  margin: calc(-750 * var(--s)) 0 0 calc(-750 * var(--s));
-  border-radius: 50%;
-  background: conic-gradient(from 90deg, rgba(255, 255, 255, 0.11), rgba(255, 255, 255, 0) 18%, rgba(255, 255, 255, 0) 99%, rgba(255, 255, 255, 0.11));
-  -webkit-mask: radial-gradient(closest-side, #000 18%, transparent);
-  mask: radial-gradient(closest-side, #000 18%, transparent);
-  animation: bg-spin 16s linear infinite;
-}
-
-.bg-jual__ring {
-  position: absolute;
-  top: 50%;
-  left: calc(354 * var(--s));
-  width: calc(560 * var(--s));
-  height: calc(560 * var(--s));
-  margin: calc(-280 * var(--s)) 0 0 calc(-280 * var(--s));
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 50%;
-  animation: bg-ring 7s ease-out infinite;
-}
-
-.bg-jual__ring--2 {
-  animation-delay: -3.5s;
+@container panel (max-aspect-ratio: 1 / 1) {
+  .panel--jual .panel__card {
+    background-image: url('../assets/img/panel-jual-shards-tall.webp');
+  }
 }
 
 .jual__cypher {
@@ -445,35 +490,6 @@
 @keyframes bg-pulse {
   from { opacity: 0.7; transform: scale(1); }
   to { opacity: 1; transform: scale(1.06); }
-}
-
-@keyframes bg-float {
-  from { transform: translate3d(0, 0, 0) rotate(0deg); }
-  to { transform: translate3d(0, -18px, 0) rotate(4deg); }
-}
-
-@keyframes bg-spin {
-  to { transform: rotate(1turn); }
-}
-
-@keyframes bg-ring {
-  from { transform: scale(0.5); opacity: 0.9; }
-  to { transform: scale(1.65); opacity: 0; }
-}
-
-@keyframes bg-sway {
-  from { transform: rotate(-6deg); }
-  to { transform: rotate(6deg); }
-}
-
-@keyframes bg-streak {
-  0% { transform: translateX(-30cqw) skewX(-32deg); }
-  45%, 100% { transform: translateX(130cqw) skewX(-32deg); }
-}
-
-@keyframes bg-rise {
-  from { transform: translateY(18px); opacity: 0.45; }
-  to { transform: translateY(-18px); opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -617,12 +633,6 @@
     width: auto;
     height: 64cqh;
   }
-
-  .bg-jual__sweep,
-  .bg-jual__ring {
-    left: 70%;
-    top: 68%;
-  }
 }
 }
 
@@ -657,12 +667,6 @@
       left: -6cqw;
       width: auto;
       height: 66cqh;
-    }
-
-    .bg-jual__sweep,
-    .bg-jual__ring {
-      left: 30%;
-      top: 62%;
     }
 
     /* The copy may overlap the character: a soft shadow in the panel's tone keeps it legible. */
@@ -770,10 +774,18 @@
    * than the screen: his right edge sits 5cqh past the panel's so the gun's
    * muzzle runs off it, like Neon's wing. On wider screens that would carry
    * him to the right, so his left edge stops at -6cqw (arm cut hidden) and he
-   * stays on the left. --cy-left is shared with the sonar.
+   * stays on the left.
    */
+  /* Tall whole-listing cards in both strips, so each is narrower. */
+  .panel--sewa .panel__card {
+    --row-w: min(33cqw, 160px);
+    --row-h: calc(var(--row-w) * 309 / 230);
+  }
+
   .panel--jual .panel__card {
     --cy-left: min(-6cqw, calc(100cqw + 5cqh - 52.64cqh));
+    --row-w: min(33cqw, 160px);
+    --row-h: calc(var(--row-w) * 349 / 230);
   }
 
   .jual__cypher {
@@ -783,25 +795,6 @@
     height: 72cqh;
     -webkit-mask: linear-gradient(#000 82%, transparent);
     mask: linear-gradient(#000 82%, transparent);
-  }
-
-  /* Sonar centred on his chest, wherever he stands. */
-  .bg-jual__sweep,
-  .bg-jual__ring {
-    left: calc(var(--cy-left) + 29cqh);
-    top: 40%;
-  }
-
-  .bg-jual__sweep {
-    width: 300cqw;
-    height: 300cqw;
-    margin: -150cqw 0 0 -150cqw;
-  }
-
-  .bg-jual__ring {
-    width: 110cqw;
-    height: 110cqw;
-    margin: -55cqw 0 0 -55cqw;
   }
 
   /* Card strip: swipe sideways; the top padding leaves room for the hover lift. */
@@ -828,6 +821,62 @@
     width: var(--row-w);
     max-width: none;
     scroll-snap-align: start;
+  }
+
+  /*
+   * Sewa and Jual Beli on phones: the same fan as on desktop, centred along the
+   * bottom instead of a swipe strip. Five cards, the middle one in front; a tap
+   * (or hover) lifts a card to the front.
+   */
+  .panel__accounts--full {
+    --cw: var(--row-w);
+    --step: calc(var(--cw) * 0.36);
+    --tilt: 5deg;
+    display: block;
+    height: calc(var(--row-h) + 34px);
+    padding: 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .panel__accounts--full li {
+    --a: max(var(--p), -1 * var(--p));
+    position: absolute;
+    bottom: 26px; /* the tilted outer cards' corners stay on screen */
+    left: 50%;
+    z-index: calc(10 - var(--a));
+    width: var(--cw);
+    margin-left: calc(var(--cw) / -2);
+    transform:
+      translateX(calc(var(--p) * var(--step)))
+      translateY(calc(var(--a) * var(--a) * 0.02 * var(--cw)))
+      rotate(calc(var(--p) * var(--tilt)));
+    transform-origin: 50% 130%;
+    transition: transform 0.6s var(--ease-out), translate 0.4s var(--ease-out);
+    scroll-snap-align: none;
+  }
+
+  .panel__accounts--full li:nth-child(1) { --p: -2; }
+  .panel__accounts--full li:nth-child(2) { --p: -1; }
+  .panel__accounts--full li:nth-child(3) { --p: 0; }
+  .panel__accounts--full li:nth-child(4) { --p: 1; }
+  .panel__accounts--full li:nth-child(5) { --p: 2; }
+
+  .panel__accounts--full li:nth-child(n + 6) {
+    display: none;
+  }
+
+  .panel__accounts--full li:is(:hover, :active) {
+    z-index: 20;
+    translate: 0 calc(-0.1 * var(--cw));
+  }
+
+  .panel__accounts--full img {
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5));
+  }
+
+  .panel__accounts--full li:hover img {
+    transform: none;
   }
 }
 

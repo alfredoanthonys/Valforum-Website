@@ -1,0 +1,116 @@
+<!doctype html>
+<!--
+  Renders the Sewa "liquid ether" backgrounds (Sewa quick-link card + Sewa panel), after the closing
+  section of valsewa.com: black, red light rising from the bottom, red smoke folding over it.
+  A still frame (t = 3) of a domain-warped noise shader over that glow; nothing animates on the site.
+  To regenerate: `npm run dev`, open http://localhost:5173/scripts/sewa-smoke.html, click each
+  download link, and put the files in src/assets/img/ (they keep their names).
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sewa smoke backgrounds</title>
+  <style>
+    body { margin: 24px; background: #222; color: #eee; font: 14px system-ui, sans-serif; }
+    figure { display: inline-block; margin: 0 24px 24px 0; vertical-align: top; }
+    canvas { display: block; max-height: 260px; width: auto; }
+    a { color: #f99; }
+  </style>
+</head>
+<body>
+  <h1>Sewa smoke backgrounds</h1>
+  <div id="out"></div>
+  <script>
+    const T = 3; // the frame that was chosen: black top-left behind the copy, one fold rising through the middle
+    const IMAGES = [
+      { name: 'ql-sewa-ether', width: 1600, height: 800 },
+      { name: 'panel-sewa-ether', width: 2400, height: 1500 },
+      { name: 'panel-sewa-ether-tall', width: 1000, height: 2000 },
+    ];
+
+    const VERT = 'attribute vec2 a; void main() { gl_Position = vec4(a, 0.0, 1.0); }';
+    const FRAG = `
+      precision mediump float;
+      uniform vec2 res;
+      uniform float t;
+
+      float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float noise(vec2 p) {
+        vec2 i = floor(p), f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x), mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+      }
+      // Three octaves only: broad, soft folds.
+      float fbm(vec2 p) {
+        float v = 0.0, a = 0.5;
+        for (int i = 0; i < 3; i++) { v += a * noise(p); p = p * 2.03 + vec2(1.7, 9.2); a *= 0.45; }
+        return v;
+      }
+
+      void main() {
+        vec2 uv = gl_FragCoord.xy / res;
+        vec2 p = uv * vec2(res.x / res.y, 1.0) * 1.05;
+        vec2 q = vec2(fbm(p + vec2(0.0, t * 0.04)), fbm(p + vec2(5.2, 1.3) - t * 0.035));
+        vec2 r = vec2(fbm(p + 2.6 * q + vec2(1.7, 9.2) + t * 0.06), fbm(p + 2.6 * q + vec2(8.3, 2.8) - t * 0.05));
+        float f = fbm(p + 2.4 * r);
+
+        // Smoke density: broad folds with black between them, heavier towards the bottom.
+        float dens = smoothstep(0.36, 0.78, f + 0.22 * length(r) - 0.1);
+        dens *= 0.2 + 0.95 * (1.0 - uv.y);
+        dens = clamp(dens, 0.0, 1.0);
+
+        vec3 deep = vec3(0.70, 0.0, 0.0); // #b30000, valsewa.com's red
+        vec3 hot = vec3(1.0, 0.16, 0.12);
+        vec3 col = mix(deep, hot, pow(dens, 3.0) * 0.6);
+        gl_FragColor = vec4(col * dens, dens); // premultiplied
+      }`;
+
+    function smoke(W, H) {
+      const c = document.createElement('canvas');
+      c.width = W;
+      c.height = H;
+      const gl = c.getContext('webgl', { premultipliedAlpha: true, preserveDrawingBuffer: true });
+      const shader = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+      const prog = gl.createProgram();
+      gl.attachShader(prog, shader(gl.VERTEX_SHADER, VERT));
+      gl.attachShader(prog, shader(gl.FRAGMENT_SHADER, FRAG));
+      gl.linkProgram(prog);
+      gl.useProgram(prog);
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      const a = gl.getAttribLocation(prog, 'a');
+      gl.enableVertexAttribArray(a);
+      gl.vertexAttribPointer(a, 2, gl.FLOAT, false, 0, 0);
+      gl.viewport(0, 0, W, H);
+      gl.uniform2f(gl.getUniformLocation(prog, 'res'), W, H);
+      gl.uniform1f(gl.getUniformLocation(prog, 't'), T);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      return c;
+    }
+
+    for (const { name, width: W, height: H } of IMAGES) {
+      // Base: black with red light from the bottom, like radial-gradient(circle at 50% 100%, #b30000, #000 80%).
+      const out = document.createElement('canvas');
+      out.width = W;
+      out.height = H;
+      const x = out.getContext('2d');
+      x.fillStyle = '#000';
+      x.fillRect(0, 0, W, H);
+      const glow = x.createRadialGradient(W / 2, H, 0, W / 2, H, Math.hypot(W / 2, H) * 0.8);
+      glow.addColorStop(0, '#b30000');
+      glow.addColorStop(1, '#000');
+      x.fillStyle = glow;
+      x.fillRect(0, 0, W, H);
+      x.drawImage(smoke(W, H), 0, 0);
+
+      const fig = document.createElement('figure');
+      const link = document.createElement('a');
+      link.textContent = `Download ${name}.webp (${W} × ${H})`;
+      link.download = `${name}.webp`;
+      out.toBlob((blob) => { link.href = URL.createObjectURL(blob); }, 'image/webp', 0.82);
+      fig.append(out, link);
+      document.getElementById('out').append(fig);
+    }
+  </script>
+</body>
+</html>

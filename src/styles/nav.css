@@ -160,11 +160,14 @@
   transition-delay: 0.08s;
 }
 
+/* Sized so the widest label ("Sewa Akun") is no wider than the wordmark: the chip keeps
+   its width on hover instead of leaving empty space after the wordmark. */
 .brand-pill__label {
-  padding-left: calc(var(--logo-h) * 1.7);
-  font-size: calc(var(--logo-h) * 0.5);
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  padding-left: calc(var(--logo-h) * 1.6);
+  font-family: var(--font-pilot);
+  font-size: calc(var(--logo-h) * 0.42);
+  font-weight: 400;
+  letter-spacing: 0;
   line-height: 1;
   text-transform: uppercase;
   white-space: nowrap;

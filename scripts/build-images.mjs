@@ -22,9 +22,16 @@ const jobs = [
   // Hero. `retina` jobs read a 4x master from 4x/ and also write a <name>-2x file for srcset;
   // `width` is the 1x width in design pixels.
   { src: '4x/Split.png', out: 'hero-bg', width: 1329, retina: true, quality: 78, transform: gradeHero },
-  { src: '4x/Phoenix_artwork.png', out: 'hero-phoenix', width: 534, retina: true },
-  { src: '4x/Jett_artwork.png', out: 'hero-jett', width: 704, retina: true },
+  // Phoenix and Jett: the design's 4x exports are upscaled from low-res art (blocky on big screens), so
+  // these are Riot's official full portraits (valorant-api.com, 2048 × 1860) cut to the design's exact
+  // frame (Phoenix mirrored, as in the design) and re-lit with the design's soft glow and grade
+  // (official + blur(design) − blur(official)). ~1.5x the design size.
+  { src: 'Phoenix_artwork_official.png', out: 'hero-phoenix', width: 534, retina: true },
+  { src: 'Jett_artwork_official.png', out: 'hero-jett', width: 704, retina: true },
   { src: '4x/ChatGPT Image May 29 2026 Design Request 3.png', out: 'hero-badge', width: 523, retina: true },
+  // The badge's pulsing gold glow, pre-rendered (see goldGlow) so the page fades its opacity
+  // instead of animating a drop-shadow filter, which repaints the badge every frame.
+  { src: '4x/ChatGPT Image May 29 2026 Design Request 3.png', out: 'hero-badge-glow', width: 523, retina: true, transform: goldGlow },
 
   // Brand marks
   { src: 'Frame 2147223229.png', out: 'favicon', format: 'png', extract: { left: 576, top: 272, width: 100, height: 75 }, transform: favicon },
@@ -50,16 +57,21 @@ const jobs = [
 
   // Sewa
   { src: '4x/IMG_1512 1.png', out: 'sewa-neon', width: 901, retina: true },
-  { src: '4x/Frame 2147223231.png', out: 'sewa-acc-1', width: 285, retina: true, quality: 90 },
-  { src: '4x/Frame 33574.png', out: 'sewa-acc-2', width: 285, retina: true, quality: 90 },
-  { src: '4x/Frame 33501.png', out: 'sewa-acc-3', width: 285, retina: true, quality: 90 },
-  // Screenshot with a black margin: cut out along its frame, squeezed <1% to the other cards' 285 × 233.
-  { src: 'Sewa account SSS-6.png', out: 'sewa-acc-4', extract: { left: 7, top: 12, width: 916, height: 755 }, card: {}, width: 285, height: 233, retina: true, quality: 90 },
+  // Sewa row: whole listing cards cropped from the client's two listing screenshots (~310 px wide,
+  // so the 2x files are slightly upscaled), inside their own border, fitted to one 230 × 309 card.
+  { src: 'Sewa card LIMITED-2.png', out: 'sewa-card-1', extract: { left: 2, top: 2, width: 307, height: 414 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card LIMITED-1.png', out: 'sewa-card-2', extract: { left: 2, top: 2, width: 307, height: 414 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card SSS-8.png', out: 'sewa-card-3', extract: { left: 2, top: 2, width: 307, height: 414 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card SSS-6.png', out: 'sewa-card-4', extract: { left: 2, top: 2, width: 307, height: 414 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card SSS-4.png', out: 'sewa-card-5', extract: { left: 2, top: 2, width: 307, height: 414 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card SSS-2.png', out: 'sewa-card-6', extract: { left: 2, top: 2, width: 307, height: 414 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card SSS-P.png', out: 'sewa-card-7', extract: { left: 2, top: 2, width: 309, height: 416 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card SSS-3.png', out: 'sewa-card-8', extract: { left: 2, top: 2, width: 308, height: 416 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card SSS-1.png', out: 'sewa-card-9', extract: { left: 2, top: 2, width: 309, height: 416 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
+  { src: 'Sewa card S-13.png', out: 'sewa-card-10', extract: { left: 2, top: 2, width: 308, height: 416 }, card: {}, width: 230, height: 309, retina: true, quality: 90 },
 
   // Jual / Beli
   { src: 'Cypher_ingame_hd.png', out: 'jual-cypher', trim: true, width: 560 },
-  // Official full portrait (valorant-api.com), cropped to the design's framing; 624px is all the detail there is.
-  { src: 'Gekko_fullportrait.png', out: 'beli-gekko', extract: { left: 702, top: 228, width: 624, height: 794 }, width: 620 },
 
   // Beli account cards (portrait, used by the Beli quick link). Some screenshots stop just under the
   // listing panel and others carry a price row, so every card is cut 34px around the panel and closed below it.
@@ -67,12 +79,18 @@ const jobs = [
   { src: 'Beli account VAL-5775.png', out: 'beli-acc-3', hd: true, extract: { left: 11, top: 14, width: 747, height: 994 }, card: { padBottom: 34 }, width: 230, retina: true, quality: 90 },
   { src: 'Beli account VAL-1968.png', out: 'beli-acc-4', hd: true, extract: { left: 12, top: 12, width: 747, height: 994 }, card: { padBottom: 34 }, width: 230, retina: true, quality: 90 },
 
-  // Beli panel row: the same cards cut down to the header and inventory screenshot, then fitted
-  // (~6% squeeze) to the Sewa cards' 285 × 233 so every row uses one card shape.
-  { src: 'Beli account VAL-5697.png', out: 'beli-row-1', extract: { left: 11, top: 13, width: 747, height: 636 }, card: { padBottom: 14 }, width: 285, height: 233, retina: true, quality: 90 },
-  { src: 'Beli account VAL-5775.png', out: 'beli-row-2', extract: { left: 11, top: 14, width: 747, height: 636 }, card: { padBottom: 14 }, width: 285, height: 233, retina: true, quality: 90 },
-  { src: 'Beli account VAL-1968.png', out: 'beli-row-3', extract: { left: 12, top: 12, width: 747, height: 636 }, card: { padBottom: 14 }, width: 285, height: 233, retina: true, quality: 90 },
-  { src: 'Beli account VAL-5747.png', out: 'beli-row-4', extract: { left: 9, top: 14, width: 747, height: 636 }, card: { padBottom: 14 }, width: 285, height: 233, retina: true, quality: 90 },
+  // Jual Beli panel row: four full listing cards (header to price), inside their own border, all
+  // fitted to one 230 × 349 card. VAL-6477/6457/6481 were cropped from the client's listing
+  // screenshot (~485 px wide, enough for the 2x files); VAL-5697 and VAL-5775 are Beli quick-link masters.
+  { src: 'Beli account VAL-6477.png', out: 'beli-card-1', extract: { left: 2, top: 2, width: 481, height: 731 }, card: {}, width: 230, height: 349, retina: true, quality: 90 },
+  { src: 'Beli account VAL-6457.png', out: 'beli-card-2', extract: { left: 2, top: 2, width: 490, height: 745 }, card: {}, width: 230, height: 349, retina: true, quality: 90 },
+  { src: 'Beli account VAL-6481.png', out: 'beli-card-3', extract: { left: 2, top: 2, width: 481, height: 731 }, card: {}, width: 230, height: 349, retina: true, quality: 90 },
+  { src: 'Beli account VAL-5697.png', out: 'beli-card-4', extract: { left: 13, top: 14, width: 743, height: 1127 }, card: {}, width: 230, height: 349, retina: true, quality: 90 },
+  { src: 'Beli account VAL-5775.png', out: 'beli-card-5', extract: { left: 13, top: 15, width: 743, height: 1127 }, card: {}, width: 230, height: 349, retina: true, quality: 90 },
+  // Two more for the left end of the desktop row. Their masters stop above the price bar, so the
+  // card's black footer is padded back in (empty) to keep every card the same shape.
+  { src: 'Beli account VAL-1968.png', out: 'beli-card-6', extract: { left: 13, top: 14, width: 743, height: 1014 }, card: { padBottom: 113 }, width: 230, height: 349, retina: true, quality: 90 },
+  { src: 'Beli account VAL-5747.png', out: 'beli-card-7', extract: { left: 13, top: 16, width: 743, height: 1012 }, card: { padBottom: 115 }, width: 230, height: 349, retina: true, quality: 90 },
 
   // Top Up game cards
   { src: '4x/Frame 2147223256.png', out: 'game-pointblank', width: 270, retina: true },
@@ -98,6 +116,28 @@ async function gradeHero(img) {
     }
   }
   return sharp(out, { raw: { width: w, height: h, channels: 3 } });
+}
+
+// Gold glow around the hero badge, matching the old `drop-shadow(0 0 18px rgb(255 196 64))`:
+// the badge's alpha, padded by GLOW.pad of its width on every side (the glow spills past it),
+// blurred by GLOW.blur design px, filled gold. The page shows it behind the badge (hero.css).
+const GLOW = { pad: 0.08, blur: 9, rgb: [255, 196, 64] };
+
+async function goldGlow(img) {
+  const { data, info } = await img.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const { width: w, height: h } = info;
+  const pad = Math.round(w * GLOW.pad);
+  const alpha = Buffer.alloc(w * h);
+  for (let p = 0; p < w * h; p++) alpha[p] = data[p * 4 + 3];
+  const blurred = await sharp(alpha, { raw: { width: w, height: h, channels: 1 } })
+    .extend({ top: pad, bottom: pad, left: pad, right: pad, background: '#000' })
+    .blur(GLOW.blur * (w / 523))
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const { width: W, height: H, channels } = blurred.info; // extend() can return 3 channels
+  const out = Buffer.alloc(W * H * 4);
+  for (let p = 0; p < W * H; p++) out.set([...GLOW.rgb, blurred.data[p * channels]], p * 4);
+  return sharp(out, { raw: { width: W, height: H, channels: 4 } });
 }
 
 // Account screenshots: redraws the card's 2px frame (grey at top and bottom, fading to black at
@@ -146,7 +186,9 @@ async function favicon(img) {
 }
 
 await mkdir(OUT, { recursive: true });
-for (const job of jobs) {
+// `npm run images -- beli-card` rebuilds only the outputs whose name contains the filter.
+const only = process.argv[2];
+for (const job of jobs.filter((j) => !only || j.out.includes(only))) {
   // `hd` jobs also write <name>-hd at up to 4x (as much as the master holds): the quick-link
   // cards grow far past their artboard on full-screen desktop, so 2x isn't enough there.
   for (const scale of job.retina ? [1, 2, ...(job.hd ? ['hd'] : [])] : [1]) {

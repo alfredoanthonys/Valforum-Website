@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "images": "node scripts/build-images.mjs"
+    "images": "node scripts/build-images.mjs",
+    "backgrounds": "node scripts/build-backgrounds.mjs"
   },
   "type": "module",
   "devDependencies": {

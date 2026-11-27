@@ -19,7 +19,7 @@
   border: 1px solid var(--line);
   border-bottom: 0;
   border-radius: 12px 12px 0 0;
-  background: var(--bg-raised);
+  background: var(--bg); /* same black as the hero under it, so tab and frame read as one surface */
 }
 
 /* Concave fillet where the tab meets the frame's top edge */
@@ -30,13 +30,14 @@
   bottom: 0;
   width: 13px;
   height: 13px;
-  background: radial-gradient(circle at 100% 0, var(--bg-raised) 11.5px, var(--line) 11.5px 12.5px, var(--bg-raised) 12.5px);
+  background: radial-gradient(circle at 100% 0, var(--bg-raised) 11.5px, var(--line) 11.5px 12.5px, var(--bg) 12.5px);
 }
 
 /* Frame: 1px border that warms towards the right */
 .hero {
   position: relative;
   z-index: 1;
+  display: flow-root; /* keeps the stage's 1px margin inside, so the tab really overlaps the top border */
   border-radius: 0 12px 12px 12px;
 }
 
@@ -104,13 +105,29 @@
 }
 
 .hero__badge img {
+  position: relative; /* above the glow */
   width: 100%;
+}
+
+/*
+ * The badge's gold glow pulses. It is a pre-rendered image (build-images.mjs,
+ * goldGlow) behind the badge whose opacity animates, which the GPU does without
+ * repainting; animating a drop-shadow filter repainted the badge every frame.
+ * The image is the badge padded by 8% of its width on every side.
+ */
+.hero__badge .hero__badge-glow {
+  position: absolute;
+  top: -12.8%; /* 42 / 328: the padding over the badge's height */
+  left: -8%;
+  width: 116%;
+  max-width: none;
+  opacity: 0;
+  pointer-events: none;
   animation: badge-glow 4.5s ease-in-out infinite alternate;
 }
 
 @keyframes badge-glow {
-  from { filter: drop-shadow(0 0 0 rgba(255, 196, 64, 0)); }
-  to { filter: drop-shadow(0 0 18px rgba(255, 196, 64, 0.35)); }
+  to { opacity: 0.35; }
 }
 
 .hero__actions {
@@ -239,6 +256,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .hero__badge .hero__badge-glow {
+    opacity: 0.35;
+    animation: none;
+  }
+
   .ticker {
     height: auto;
     min-height: 72px;

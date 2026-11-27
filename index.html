@@ -121,9 +121,9 @@
 
         <section class="hero" aria-labelledby="hero-title">
           <div class="hero__stage">
-            <img class="hero__bg" src="/src/assets/img/hero-bg.webp" srcset="/src/assets/img/hero-bg.webp 1329w, /src/assets/img/hero-bg-2x.webp 2658w" sizes="(max-width: 1023px) 1390px, min(93vw, 1329px)" width="1329" height="784" alt="" fetchpriority="high">
-            <img class="hero__phoenix" src="/src/assets/img/hero-phoenix.webp" srcset="/src/assets/img/hero-phoenix.webp 534w, /src/assets/img/hero-phoenix-2x.webp 1068w" sizes="(max-width: 1023px) min(52vw, 380px), min(37.2vw, 534px)" width="534" height="763" alt="" fetchpriority="high" data-hero-art>
-            <img class="hero__jett" src="/src/assets/img/hero-jett.webp" srcset="/src/assets/img/hero-jett.webp 704w, /src/assets/img/hero-jett-2x.webp 1408w" sizes="(max-width: 1023px) min(72vw, 520px), min(49.1vw, 704px)" width="704" height="669" alt="" fetchpriority="high" data-hero-art>
+            <img class="hero__bg" src="/src/assets/img/hero-bg.webp" srcset="/src/assets/img/hero-bg.webp 1329w, /src/assets/img/hero-bg-2x.webp 2658w" sizes="(max-width: 767px) 1390px, (max-width: 1023px) 93vw, min(93vw, (100vh - 128px) * 1.699)" width="1329" height="784" alt="" fetchpriority="high">
+            <img class="hero__phoenix" src="/src/assets/img/hero-phoenix.webp" srcset="/src/assets/img/hero-phoenix.webp 534w, /src/assets/img/hero-phoenix-2x.webp 1068w" sizes="(max-width: 767px) min(52vw, 380px), (max-width: 1023px) 37.4vw, min(37.4vw, (100vh - 128px) * 0.683)" width="534" height="763" alt="" fetchpriority="high" data-hero-art>
+            <img class="hero__jett" src="/src/assets/img/hero-jett.webp" srcset="/src/assets/img/hero-jett.webp 704w, /src/assets/img/hero-jett-2x.webp 1408w" sizes="(max-width: 767px) min(72vw, 520px), (max-width: 1023px) 49.3vw, min(49.3vw, (100vh - 128px) * 0.9)" width="704" height="669" alt="" fetchpriority="high" data-hero-art>
 
             <ul class="brand-pill brand-pill--stage" aria-label="Layanan Valforum">
               <li><a class="brand-pill__item brand-pill__item--sewa" href="%link:valsewa%" aria-label="Sewa Akun di Valsewa"><img src="/src/assets/brands/valsewa.svg" width="133" height="32" alt=""><span class="brand-pill__label" aria-hidden="true">Sewa Akun</span></a></li>
@@ -132,7 +132,8 @@
             </ul>
 
             <h1 class="hero__badge" id="hero-title" data-hero-badge>
-              <img src="/src/assets/img/hero-badge.webp" srcset="/src/assets/img/hero-badge.webp 523w, /src/assets/img/hero-badge-2x.webp 1046w" sizes="(max-width: 1023px) min(82vw, 440px), min(36.5vw, 523px)" width="523" height="328" alt="World's #1 Store Valorant Terlengkap" fetchpriority="high">
+              <img class="hero__badge-glow" src="/src/assets/img/hero-badge-glow.webp" srcset="/src/assets/img/hero-badge-glow.webp 1x, /src/assets/img/hero-badge-glow-2x.webp 2x" width="607" height="412" alt="">
+              <img src="/src/assets/img/hero-badge.webp" srcset="/src/assets/img/hero-badge.webp 523w, /src/assets/img/hero-badge-2x.webp 1046w" sizes="(max-width: 767px) min(82vw, 440px), (max-width: 1023px) 36.6vw, min(36.6vw, (100vh - 128px) * 0.669)" width="523" height="328" alt="World's #1 Store Valorant Terlengkap" fetchpriority="high">
             </h1>
             <ul class="hero__actions" aria-label="Pilih layanan">
               <li><a class="hero-btn hero-btn--topup" href="#topup" data-hero-btn>Top Up</a></li>
@@ -166,9 +167,11 @@
                 <img class="ql-art ql-art--vp-2050" src="/src/assets/img/ql-vp-2050.webp" srcset="/src/assets/img/ql-vp-2050.webp 188w, /src/assets/img/ql-vp-2050-2x.webp 376w, /src/assets/img/ql-vp-2050-hd.webp 750w" sizes="(min-width: 768px) and (min-height: 521px) calc((100vh - 260px) * 0.550), (min-width: 768px) calc((50vw - 50px) * 0.294), calc((100vw - 32px) * 0.294)" width="188" height="180" alt="" loading="lazy">
                 <img class="ql-art ql-art--vp-475" src="/src/assets/img/ql-vp-475.webp" srcset="/src/assets/img/ql-vp-475.webp 360w, /src/assets/img/ql-vp-475-2x.webp 720w, /src/assets/img/ql-vp-475-hd.webp 1440w" sizes="(min-width: 768px) and (min-height: 521px) calc((100vh - 260px) * 0.802), (min-width: 768px) calc((50vw - 50px) * 0.563), calc((100vw - 32px) * 0.563)" width="360" height="201" alt="" loading="lazy">
               </span>
+              <span class="ql-card__brand" aria-hidden="true"><img src="/src/assets/brands/valforum.svg" width="3945" height="935" alt="" loading="lazy"></span>
               <span class="ql-card__body">
                 <h3 class="ql-card__title">Top Up Games</h3>
                 <span class="ql-card__text">Top up games favoritmu, tercepat dan teraman! Valorant, Mobile Legends, Genshin Impact, Point Blank dan banyak lainnya.</span>
+                <span class="ql-card__go" aria-hidden="true"><span class="ql-go"><span class="ql-go__ke">Ke</span><span class="ql-go__name">Valforum</span><span class="ql-go__arrow"><svg viewBox="0 0 10 10"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg></span><span class="ql-go__corner ql-go__corner--tl"></span><span class="ql-go__corner ql-go__corner--br"></span></span></span>
               </span>
             </a>
           </li>
@@ -180,10 +183,12 @@
                 <img class="ql-art ql-art--odin" src="/src/assets/img/ql-gun-odin.webp" srcset="/src/assets/img/ql-gun-odin.webp 199w, /src/assets/img/ql-gun-odin-2x.webp 398w, /src/assets/img/ql-gun-odin-hd.webp 796w" sizes="(min-width: 768px) and (min-height: 521px) calc((100vh - 260px) * 0.388), (min-width: 768px) calc((50vw - 50px) * 0.311), calc((100vw - 32px) * 0.311)" width="199" height="85" alt="" loading="lazy">
                 <img class="ql-art ql-art--vandal" src="/src/assets/img/ql-gun-vandal.webp" srcset="/src/assets/img/ql-gun-vandal.webp 330w, /src/assets/img/ql-gun-vandal-2x.webp 660w, /src/assets/img/ql-gun-vandal-hd.webp 1320w" sizes="(min-width: 768px) and (min-height: 521px) calc((100vh - 260px) * 0.688), (min-width: 768px) calc((50vw - 50px) * 0.516), calc((100vw - 32px) * 0.516)" width="330" height="189" alt="" loading="lazy">
               </span>
+              <span class="ql-card__brand" aria-hidden="true"><img src="/src/assets/brands/valjubel.svg" width="3945" height="935" alt="" loading="lazy"></span>
               <span class="ql-card__body">
                 <h3 class="ql-card__title">Jual Akun Valorant</h3>
                 <span class="ql-card__text">Jual akun menggunakan cashout pertama di Indonesia</span>
                 <span class="ql-card__text">Jual gampang</span>
+                <span class="ql-card__go" aria-hidden="true"><span class="ql-go"><span class="ql-go__ke">Ke</span><span class="ql-go__name">Valjubel</span><span class="ql-go__arrow"><svg viewBox="0 0 10 10"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg></span><span class="ql-go__corner ql-go__corner--tl"></span><span class="ql-go__corner ql-go__corner--br"></span></span></span>
               </span>
             </a>
           </li>
@@ -194,10 +199,12 @@
                 <img class="ql-art ql-art--beli-3" src="/src/assets/img/beli-acc-2.webp" srcset="/src/assets/img/beli-acc-2.webp 230w, /src/assets/img/beli-acc-2-2x.webp 460w, /src/assets/img/beli-acc-2-hd.webp 747w" sizes="(min-width: 768px) and (min-height: 521px) calc((100vh - 260px) * 0.287), (min-width: 768px) calc((50vw - 50px) * 0.194), calc((100vw - 32px) * 0.194)" width="230" height="317" alt="" loading="lazy">
                 <img class="ql-art ql-art--beli-2" src="/src/assets/img/beli-acc-3.webp" srcset="/src/assets/img/beli-acc-3.webp 230w, /src/assets/img/beli-acc-3-2x.webp 460w, /src/assets/img/beli-acc-3-hd.webp 747w" sizes="(min-width: 768px) and (min-height: 521px) calc((100vh - 260px) * 0.287), (min-width: 768px) calc((50vw - 50px) * 0.194), calc((100vw - 32px) * 0.194)" width="230" height="317" alt="" loading="lazy">
               </span>
+              <span class="ql-card__brand" aria-hidden="true"><img src="/src/assets/brands/valjubel.svg" width="3945" height="935" alt="" loading="lazy"></span>
               <span class="ql-card__body">
                 <h3 class="ql-card__title">Beli Akun Valorant</h3>
                 <span class="ql-card__text">Beli akun Valorant dengan aman</span>
                 <span class="ql-card__text">Beli aman, jual gampang</span>
+                <span class="ql-card__go" aria-hidden="true"><span class="ql-go"><span class="ql-go__ke">Ke</span><span class="ql-go__name">Valjubel</span><span class="ql-go__arrow"><svg viewBox="0 0 10 10"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg></span><span class="ql-go__corner ql-go__corner--tl"></span><span class="ql-go__corner ql-go__corner--br"></span></span></span>
               </span>
             </a>
           </li>
@@ -208,10 +215,12 @@
                 <img class="ql-art ql-art--acc-platinum" src="/src/assets/img/ql-acc-platinum.webp" srcset="/src/assets/img/ql-acc-platinum.webp 181w, /src/assets/img/ql-acc-platinum-2x.webp 362w, /src/assets/img/ql-acc-platinum-hd.webp 724w" sizes="(min-width: 768px) and (min-height: 521px) calc((100vh - 260px) * 0.407), (min-width: 768px) calc((50vw - 50px) * 0.283), calc((100vw - 32px) * 0.283)" width="181" height="149" alt="" loading="lazy">
                 <img class="ql-art ql-art--acc-gold" src="/src/assets/img/ql-acc-gold.webp" srcset="/src/assets/img/ql-acc-gold.webp 181w, /src/assets/img/ql-acc-gold-2x.webp 362w, /src/assets/img/ql-acc-gold-hd.webp 724w" sizes="(min-width: 768px) and (min-height: 521px) calc((100vh - 260px) * 0.420), (min-width: 768px) calc((50vw - 50px) * 0.283), calc((100vw - 32px) * 0.283)" width="181" height="132" alt="" loading="lazy">
               </span>
+              <span class="ql-card__brand" aria-hidden="true"><img src="/src/assets/brands/valsewa.svg" width="3945" height="935" alt="" loading="lazy"></span>
               <span class="ql-card__body">
                 <h3 class="ql-card__title">Sewa Akun Valorant</h3>
                 <span class="ql-card__text">Sewa akun Valorant pertama &amp; terlengkap di indonesia</span>
                 <span class="ql-card__text">100+ Skins, 25rb? Ada dong!</span>
+                <span class="ql-card__go" aria-hidden="true"><span class="ql-go"><span class="ql-go__ke">Ke</span><span class="ql-go__name">Valsewa</span><span class="ql-go__arrow"><svg viewBox="0 0 10 10"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg></span><span class="ql-go__corner ql-go__corner--tl"></span><span class="ql-go__corner ql-go__corner--br"></span></span></span>
               </span>
             </a>
           </li>
@@ -282,13 +291,6 @@
 
       <section class="panel panel--jual" aria-labelledby="jualbeli-title" data-panel>
         <div class="panel__card">
-          <div class="panel__bg" aria-hidden="true">
-            <span class="bg-layer bg-jual__dots" data-parallax="40"></span>
-            <span class="bg-layer bg-jual__sweep"></span>
-            <span class="bg-jual__ring bg-jual__ring--1" data-parallax="70"></span>
-            <span class="bg-jual__ring bg-jual__ring--2" data-parallax="110"></span>
-            <span class="bg-layer bg-noise"></span>
-          </div>
           <img class="jual__cypher" src="/src/assets/img/jual-cypher.webp" width="560" height="766" alt="" loading="lazy" data-reveal="art">
           <div class="panel__content panel__content--end">
             <h2 class="panel__title" id="jualbeli-title" data-reveal>Jual Beli Account Valorant</h2>
@@ -311,27 +313,21 @@
               </a>
             </div>
           </div>
-          <ul class="panel__accounts" aria-label="Contoh akun yang bisa dibeli">
-            <li data-reveal="card"><img src="/src/assets/img/beli-row-1.webp" srcset="/src/assets/img/beli-row-1.webp 1x, /src/assets/img/beli-row-1-2x.webp 2x" width="285" height="233" alt="Akun Immortal 1 VAL-5697, level 204" loading="lazy"></li>
-            <li data-reveal="card"><img src="/src/assets/img/beli-row-2.webp" srcset="/src/assets/img/beli-row-2.webp 1x, /src/assets/img/beli-row-2-2x.webp 2x" width="285" height="233" alt="Akun Platinum 2 VAL-5775, level 166" loading="lazy"></li>
-            <li data-reveal="card"><img src="/src/assets/img/beli-row-3.webp" srcset="/src/assets/img/beli-row-3.webp 1x, /src/assets/img/beli-row-3-2x.webp 2x" width="285" height="233" alt="Akun Ascendant 2 VAL-1968, level 266" loading="lazy"></li>
-            <li data-reveal="card"><img src="/src/assets/img/beli-row-4.webp" srcset="/src/assets/img/beli-row-4.webp 1x, /src/assets/img/beli-row-4-2x.webp 2x" width="285" height="233" alt="Akun Ascendant 1 VAL-5747, level 824" loading="lazy"></li>
+          <ul class="panel__accounts panel__accounts--full" aria-label="Contoh akun yang bisa dibeli">
+            <li data-reveal="card"><img src="/src/assets/img/beli-card-1.webp" srcset="/src/assets/img/beli-card-1.webp 1x, /src/assets/img/beli-card-1-2x.webp 2x" width="230" height="349" alt="Akun Platinum 1 VAL-6477, level 131, Rp 460.000, 3 skin" loading="lazy"></li>
+            <li data-reveal="card"><img src="/src/assets/img/beli-card-2.webp" srcset="/src/assets/img/beli-card-2.webp 1x, /src/assets/img/beli-card-2-2x.webp 2x" width="230" height="349" alt="Akun Unrated VAL-6457, level 20, Rp 530.000, 4 skin" loading="lazy"></li>
+            <li data-reveal="card"><img src="/src/assets/img/beli-card-3.webp" srcset="/src/assets/img/beli-card-3.webp 1x, /src/assets/img/beli-card-3-2x.webp 2x" width="230" height="349" alt="Akun Silver 1 VAL-6481, level 556, Rp 570.000, 5 skin" loading="lazy"></li>
+            <li data-reveal="card"><img src="/src/assets/img/beli-card-4.webp" srcset="/src/assets/img/beli-card-4.webp 1x, /src/assets/img/beli-card-4-2x.webp 2x" width="230" height="349" alt="Akun Immortal 1 VAL-5697, level 204, Rp 925.000, 8 skin" loading="lazy"></li>
+            <li data-reveal="card"><img src="/src/assets/img/beli-card-5.webp" srcset="/src/assets/img/beli-card-5.webp 1x, /src/assets/img/beli-card-5-2x.webp 2x" width="230" height="349" alt="Akun Platinum 2 VAL-5775, level 166, Rp 970.000, 10 skin" loading="lazy"></li>
+            <li class="panel__acc-extra" data-reveal="card"><img src="/src/assets/img/beli-card-6.webp" srcset="/src/assets/img/beli-card-6.webp 1x, /src/assets/img/beli-card-6-2x.webp 2x" width="230" height="349" alt="Akun Ascendant 2 VAL-1968, level 266" loading="lazy"></li>
+            <li class="panel__acc-extra" data-reveal="card"><img src="/src/assets/img/beli-card-7.webp" srcset="/src/assets/img/beli-card-7.webp 1x, /src/assets/img/beli-card-7-2x.webp 2x" width="230" height="349" alt="Akun Ascendant 1 VAL-5747, level 824" loading="lazy"></li>
           </ul>
+          </div>
         </div>
       </section>
 
       <section class="panel panel--sewa" aria-labelledby="sewa-title" data-panel>
         <div class="panel__card">
-          <div class="panel__bg" aria-hidden="true">
-            <span class="bg-layer bg-sewa__stripes" data-parallax="40"></span>
-            <span class="bg-layer bg-sewa__glow"></span>
-            <span class="bg-sewa__shard bg-sewa__shard--1" data-parallax="90"></span>
-            <span class="bg-sewa__shard bg-sewa__shard--2" data-parallax="60"></span>
-            <span class="bg-sewa__shard bg-sewa__shard--3" data-parallax="120"></span>
-            <span class="bg-sewa__streak"></span>
-            <span class="bg-sewa__streak bg-sewa__streak--2"></span>
-            <span class="bg-layer bg-noise"></span>
-          </div>
           <img class="sewa__neon" src="/src/assets/img/sewa-neon.webp" srcset="/src/assets/img/sewa-neon.webp 1x, /src/assets/img/sewa-neon-2x.webp 2x" width="901" height="815" alt="" loading="lazy" data-reveal="art">
           <div class="panel__content">
             <h2 class="panel__title" id="sewa-title" data-reveal>Sewa Account Valorant</h2>
@@ -341,12 +337,19 @@
               <svg width="8" height="8" viewBox="0 0 10 10" aria-hidden="true"><path d="M1 5h8M5.5 1.5 9 5 5.5 8.5"/></svg>
             </a>
           </div>
-          <ul class="panel__accounts" aria-label="Contoh akun yang bisa disewa">
-            <li data-reveal="card"><img src="/src/assets/img/sewa-acc-1.webp" srcset="/src/assets/img/sewa-acc-1.webp 1x, /src/assets/img/sewa-acc-1-2x.webp 2x" width="285" height="233" alt="Akun Radiant I, Compe Mode, 27 skins" loading="lazy"></li>
-            <li data-reveal="card"><img src="/src/assets/img/sewa-acc-2.webp" srcset="/src/assets/img/sewa-acc-2.webp 1x, /src/assets/img/sewa-acc-2-2x.webp 2x" width="285" height="233" alt="Akun Radiant I, Unrated, 27 skins" loading="lazy"></li>
-            <li data-reveal="card"><img src="/src/assets/img/sewa-acc-3.webp" srcset="/src/assets/img/sewa-acc-3.webp 1x, /src/assets/img/sewa-acc-3-2x.webp 2x" width="285" height="233" alt="Akun Radiant I, Compe Mode, 27 skins" loading="lazy"></li>
-            <li data-reveal="card"><img src="/src/assets/img/sewa-acc-4.webp" srcset="/src/assets/img/sewa-acc-4.webp 1x, /src/assets/img/sewa-acc-4-2x.webp 2x" width="285" height="233" alt="Akun Ascendant 1, Compe Mode, 82 skins" loading="lazy"></li>
+          <ul class="panel__accounts panel__accounts--full" aria-label="Contoh akun yang bisa disewa">
+            <li data-reveal="card"><img src="/src/assets/img/sewa-card-1.webp" srcset="/src/assets/img/sewa-card-1.webp 1x, /src/assets/img/sewa-card-1-2x.webp 2x" width="230" height="309" alt="Akun Diamond 1 LIMITED-2, Compe Mode, 142 skin" loading="lazy"></li>
+            <li data-reveal="card"><img src="/src/assets/img/sewa-card-2.webp" srcset="/src/assets/img/sewa-card-2.webp 1x, /src/assets/img/sewa-card-2-2x.webp 2x" width="230" height="309" alt="Akun Platinum 1 LIMITED-1, Compe Mode, 212 skin" loading="lazy"></li>
+            <li data-reveal="card"><img src="/src/assets/img/sewa-card-3.webp" srcset="/src/assets/img/sewa-card-3.webp 1x, /src/assets/img/sewa-card-3-2x.webp 2x" width="230" height="309" alt="Akun Diamond 1 SSS-8, Compe Mode, 78 skin" loading="lazy"></li>
+            <li data-reveal="card"><img src="/src/assets/img/sewa-card-4.webp" srcset="/src/assets/img/sewa-card-4.webp 1x, /src/assets/img/sewa-card-4-2x.webp 2x" width="230" height="309" alt="Akun Diamond 2 SSS-6, Compe Mode, 82 skin" loading="lazy"></li>
+            <li data-reveal="card"><img src="/src/assets/img/sewa-card-5.webp" srcset="/src/assets/img/sewa-card-5.webp 1x, /src/assets/img/sewa-card-5-2x.webp 2x" width="230" height="309" alt="Akun Platinum 3 SSS-4, Compe Mode, 107 skin" loading="lazy"></li>
+            <li class="panel__acc-extra" data-reveal="card"><img src="/src/assets/img/sewa-card-6.webp" srcset="/src/assets/img/sewa-card-6.webp 1x, /src/assets/img/sewa-card-6-2x.webp 2x" width="230" height="309" alt="Akun Platinum 3 SSS-2, Compe Mode, 96 skin" loading="lazy"></li>
+            <li class="panel__acc-extra" data-reveal="card"><img src="/src/assets/img/sewa-card-7.webp" srcset="/src/assets/img/sewa-card-7.webp 1x, /src/assets/img/sewa-card-7-2x.webp 2x" width="230" height="309" alt="Akun Diamond 1 SSS-P, Compe Mode, 103 skin" loading="lazy"></li>
+            <li class="panel__acc-more" data-reveal="card"><img src="/src/assets/img/sewa-card-8.webp" srcset="/src/assets/img/sewa-card-8.webp 1x, /src/assets/img/sewa-card-8-2x.webp 2x" width="230" height="309" alt="Akun Diamond 1 SSS-3, Compe Mode, 90 skin" loading="lazy"></li>
+            <li class="panel__acc-more" data-reveal="card"><img src="/src/assets/img/sewa-card-9.webp" srcset="/src/assets/img/sewa-card-9.webp 1x, /src/assets/img/sewa-card-9-2x.webp 2x" width="230" height="309" alt="Akun Diamond 1 SSS-1, Compe Mode, 92 skin" loading="lazy"></li>
+            <li class="panel__acc-more" data-reveal="card"><img src="/src/assets/img/sewa-card-10.webp" srcset="/src/assets/img/sewa-card-10.webp 1x, /src/assets/img/sewa-card-10-2x.webp 2x" width="230" height="309" alt="Akun Diamond 2 S-13, Compe Mode, 67 skin" loading="lazy"></li>
           </ul>
+          </div>
         </div>
       </section>
     </div>

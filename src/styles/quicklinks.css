@@ -27,8 +27,8 @@
  * the artwork and the copy are sized in artboard pixels (--q), so the card
  * scales as one picture and the copy never runs into the art. Below ~360px wide
  * the card stops shrinking in height (min-height) and --q follows that height.
- * Hover: the card fills with its section colour and a `color` blend layer
- * re-tints the artwork, as in the design's hover state.
+ * Hover: the card fills with its section colour; the artwork keeps its own
+ * colours (it only moves). --tint colours the hover border and glow.
  */
 .ql-card {
   --q: max(calc(100cqw / 639), 0.56px);
@@ -55,25 +55,45 @@
   transition: opacity 0.45s var(--ease-out);
 }
 
+/*
+ * Sewa hovers into valsewa.com's closing section: black with red light rising
+ * from the bottom and red "liquid ether" smoke folding over it. A still image
+ * (a frame of a domain-warped noise shader over that glow), so nothing animates.
+ */
 .ql-card--sewa {
   --tint: #e0202f;
-  --hover-bg: linear-gradient(120deg, #c01f27, #7d1016);
+  --hover-bg: url('../assets/img/ql-sewa-ether.webp') center / cover, #000;
 }
 
+/*
+ * Jual and Beli hover into Valjubel's shattered-glass look (valforum.com/jual-beli-akun):
+ * deep purple with glass splinters and light bands, calm on the left behind the copy.
+ * Still images; each card has its own shard layout.
+ */
 .ql-card--jual {
   --tint: #9b4dff;
-  --hover-bg: linear-gradient(120deg, #8e30ff, #5a12c4);
+  --hover-bg: url('../assets/img/ql-jual-shards.webp') center / cover, #1b0833;
 }
 
-/* Beli shares the Jual Beli section, so it shares Jual's purple. */
 .ql-card--beli {
   --tint: #9b4dff;
-  --hover-bg: linear-gradient(120deg, #8e30ff, #5a12c4);
+  --hover-bg: url('../assets/img/ql-beli-shards.webp') center / cover, #1b0833;
 }
 
+/*
+ * Top Up hovers into the Top Up section's own background (topup.css): the dark
+ * gradient, the gold diamond lattice fading out from the middle (a dark vignette
+ * stands in for the section's mask), and the gold glow at the top and bottom.
+ */
 .ql-card--topup {
   --tint: #d6b25a;
-  --hover-bg: linear-gradient(120deg, var(--topup-hover-1), var(--topup-hover-2));
+  --hover-bg:
+    radial-gradient(55% 70% at 50% 18%, rgba(235, 192, 74, 0.26), transparent 70%),
+    radial-gradient(75% 55% at 50% 105%, rgba(235, 192, 74, 0.18), transparent 72%),
+    radial-gradient(75% 90% at 50% 30%, transparent 25%, var(--topup-2) 80%),
+    repeating-linear-gradient(45deg, rgba(235, 192, 74, 0.16) 0 1px, transparent 1px 30px),
+    repeating-linear-gradient(-45deg, rgba(235, 192, 74, 0.16) 0 1px, transparent 1px 30px),
+    linear-gradient(118deg, var(--topup-1), var(--topup-2));
 }
 
 .ql-card__art {
@@ -82,21 +102,24 @@
   pointer-events: none;
 }
 
-/* Re-tint layer; must stay in the card's stacking context to blend with the art. */
-.ql-card__art::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--tint);
-  mix-blend-mode: color;
-  opacity: 0;
-  transition: opacity 0.45s var(--ease-out);
-}
-
 .ql-art {
+  --sh: var(--qa, var(--q)); /* shadow unit: one artboard px, like the art */
   position: absolute;
   max-width: none;
-  transition: transform 0.6s var(--ease-out), opacity 0.45s;
+  transition: transform 0.6s var(--ease-out), opacity 0.45s, filter 0.45s var(--ease-out);
+}
+
+/*
+ * On hover the art lifts off the section colour with a soft shadow, like the
+ * shadow baked into the Top Up card's VP images (those get none added).
+ */
+.ql-card:hover .ql-art,
+.ql-card:focus-visible .ql-art {
+  filter: drop-shadow(calc(-6 * var(--sh)) calc(14 * var(--sh)) calc(18 * var(--sh)) rgba(0, 0, 0, 0.7));
+}
+
+.ql-card--topup:is(:hover, :focus-visible) .ql-art {
+  filter: none;
 }
 
 .ql-card__body {
@@ -125,6 +148,210 @@
   letter-spacing: -0.03em;
 }
 
+/*
+ * Brand hand-off on hover: the card clears (copy and artwork fade out) and the
+ * brand the service lives on takes over: a game-UI "KE <BRAND> →" message on the
+ * left (KE in a cut-corner brand tag, the name glowing, the arrow in a cut-corner
+ * brand block, corner brackets snapping in) and the brand's logo where the art was.
+ * People learn Sewa Akun = Valsewa, Jual / Beli = Valjubel, Top Up = Valforum.
+ * Mouse devices only; touch screens keep the copy and art. Still on hover:
+ * nothing loops or follows the cursor, and only transform / opacity / clip-path move.
+ */
+.ql-card--topup { --go: #ebc04a; --go-ink: #120c00; }
+.ql-card--jual,
+.ql-card--beli { --go: #a865ff; --go-ink: #fff; }
+.ql-card--sewa { --go: #ff2e3e; --go-ink: #fff; }
+
+.ql-card__go,
+.ql-card__brand {
+  display: none;
+}
+
+@media (hover: hover) {
+  .ql-card__go {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    padding: inherit; /* the body's padding: sits in the copy column */
+    font-family: var(--font-condensed);
+    font-size: clamp(24px, calc(48 * var(--q)), 48px);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(calc(10 * var(--q)));
+    transition: opacity 0.3s var(--ease-standard), transform 0.45s var(--ease-out);
+    pointer-events: none;
+  }
+
+  .ql-go {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-content: start;
+    column-gap: 0.22em;
+    white-space: nowrap;
+  }
+
+  /* Parts reset instantly on leave; the delays below only apply while hovered. */
+  .ql-go * {
+    transition-delay: 0s;
+  }
+
+  .ql-go__ke {
+    grid-column: 1 / -1;
+    justify-self: start;
+    margin-bottom: 0.32em;
+    padding: 0.38em 0.9em 0.34em 0.7em;
+    background: var(--go);
+    color: var(--go-ink);
+    font-size: 0.34em;
+    letter-spacing: 0.28em;
+    line-height: 1;
+    clip-path: polygon(0 0, 100% 0, 100% 55%, calc(100% - 0.7em) 100%, 0 100%);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .ql-go__name {
+    line-height: 0.95;
+    color: #fff;
+    text-shadow:
+      0 0 calc(22 * var(--q)) color-mix(in srgb, var(--go) 60%, transparent),
+      0 2px 12px rgba(0, 0, 0, 0.6);
+  }
+
+  .ql-go__arrow {
+    display: grid;
+    place-items: center;
+    width: 0.8em;
+    height: 0.8em;
+    margin-left: 0.14em;
+    background: var(--go);
+    color: var(--go-ink);
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%);
+    opacity: 0;
+    transform: translateX(-0.4em);
+    transition: opacity 0.25s, transform 0.5s var(--ease-out);
+  }
+
+  .ql-go__arrow svg {
+    width: 0.42em;
+    height: 0.42em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .ql-go__corner {
+    position: absolute;
+    width: 0.32em;
+    height: 0.32em;
+    border: 0 solid var(--go);
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.45s var(--ease-out);
+  }
+
+  .ql-go__corner--tl {
+    top: -0.12em;
+    left: -0.2em;
+    border-width: max(2px, calc(2.5 * var(--q))) 0 0 max(2px, calc(2.5 * var(--q)));
+    transform: translate(-0.3em, -0.3em);
+  }
+
+  .ql-go__corner--br {
+    right: -0.2em;
+    bottom: -0.12em;
+    border-width: 0 max(2px, calc(2.5 * var(--q))) max(2px, calc(2.5 * var(--q))) 0;
+    transform: translate(0.3em, 0.3em);
+  }
+
+  /* The brand's logo, centred in the art's half of the card. */
+  .ql-card__brand {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: calc(44 * var(--q));
+    display: block;
+    width: calc(250 * var(--q));
+    opacity: 0;
+    transform: translate(calc(18 * var(--q)), -50%) scale(0.94);
+    transition: opacity 0.3s var(--ease-standard), transform 0.55s var(--ease-out);
+    pointer-events: none;
+  }
+
+  .ql-card__brand img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.55)); /* static: only opacity animates */
+  }
+
+  .ql-card__title,
+  .ql-card__text {
+    transition: opacity 0.25s var(--ease-standard), transform 0.4s var(--ease-out);
+  }
+
+  /* ---------- hovered ---------- */
+  .ql-card:is(:hover, :focus-visible) .ql-card__go {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.08s;
+  }
+
+  .ql-card:is(:hover, :focus-visible) .ql-card__title,
+  .ql-card:is(:hover, :focus-visible) .ql-card__text {
+    opacity: 0;
+    transform: translateY(calc(-8 * var(--q)));
+  }
+
+  /* The artwork clears out (it drifts with its own hover nudge as it fades). */
+  .ql-card:is(:hover, :focus-visible) .ql-art {
+    opacity: 0;
+    filter: none;
+    transition: transform 0.6s var(--ease-out), opacity 0.3s var(--ease-standard);
+  }
+
+  .ql-card:is(:hover, :focus-visible) .ql-card__brand {
+    opacity: 1;
+    transform: translate(0, -50%);
+    transition-delay: 0.14s;
+  }
+
+  .ql-card:is(:hover, :focus-visible) .ql-go__ke {
+    transform: none;
+    transition-delay: 0.05s;
+  }
+
+  .ql-card:is(:hover, :focus-visible) .ql-go__arrow {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.25s;
+  }
+
+  .ql-card:is(:hover, :focus-visible) .ql-go__corner {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.18s;
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: reduce) {
+  .ql-card__go,
+  .ql-card__brand,
+  .ql-go * {
+    transition-duration: 0.01s !important;
+    transition-delay: 0s !important;
+  }
+}
+
 .ql-card__title + .ql-card__text {
   margin-top: auto;
 }
@@ -146,9 +373,7 @@
 }
 
 .ql-card:hover::before,
-.ql-card:focus-visible::before,
-.ql-card:hover .ql-card__art::after,
-.ql-card:focus-visible .ql-card__art::after {
+.ql-card:focus-visible::before {
   opacity: 1;
 }
 
@@ -305,6 +530,11 @@
     padding: calc(30 * var(--qt));
   }
 
+  /* The hover message scales with the full-screen card, like the title (a size up). */
+  .ql-card__go {
+    font-size: calc(46 * var(--qt));
+  }
+
   .ql-card__title {
     max-width: calc(var(--copy) * var(--qt));
     font-size: calc(30 * var(--qt));
@@ -340,6 +570,12 @@
     --qa: min(calc(var(--band) / 200), calc(100cqw / 250));
     --oy: calc(92 * var(--qt) + (var(--band) - 200 * var(--qa)) / 2);
     --push: 0px;
+  }
+
+  /* The art fills the middle band here, so the hover message takes the title's place and size. */
+  .ql-card__go {
+    align-items: flex-start;
+    font-size: calc(30 * var(--qt));
   }
 
   .ql-card--jual .ql-art--spectre {

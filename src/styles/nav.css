@@ -414,13 +414,52 @@
   }
 }
 
-@media (max-width: 1023px) {
+/* Phones: the brand pill moves into the menu overlay, opened by the menu button. */
+@media (max-width: 767px) {
   .site-nav .brand-pill {
     display: none;
   }
 
   .site-nav__menu {
     display: grid;
+  }
+}
+
+/*
+ * Tablets (768–1023px): the desktop bar, brand pill included, no menu button.
+ * The pill is a size smaller so it fits beside the logo's 204px folder tab.
+ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .site-nav .brand-pill {
+    margin-inline: 10px 12px;
+    padding-inline: 6px;
+  }
+
+  .site-nav .brand-pill__item {
+    --logo-h: 19px;
+    padding: 0 7px;
+  }
+}
+
+/* 768–959px: Top Up and Login as icon buttons; from 960px their labels fit. */
+@media (min-width: 768px) and (max-width: 959px) {
+  .site-nav__actions {
+    gap: 8px;
+    margin-left: 8px;
+  }
+
+  .site-nav__actions .nav-btn {
+    width: 40px;
+    padding: 0;
+  }
+
+  .site-nav__actions .nav-btn span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
   }
 }
 
@@ -465,7 +504,8 @@
   }
 }
 
-@media (max-width: 559px) {
+/* Icon-only buttons until the labelled ones (243px) clear the centred logo: below 740px they ran into it. */
+@media (max-width: 739px) {
   .site-nav__actions .nav-btn {
     width: 40px;
     padding: 0;
@@ -485,5 +525,11 @@
 @media (max-width: 359px) {
   .logo-anim {
     height: 26px;
+  }
+}
+
+@media (max-width: 329px) {
+  .logo-anim {
+    height: 22px;
   }
 }

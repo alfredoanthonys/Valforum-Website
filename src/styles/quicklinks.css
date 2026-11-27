@@ -35,6 +35,8 @@
   --tint: var(--gold);
   position: relative;
   display: flex;
+  width: 100%; /* else aspect-ratio turns min-height into a 358px width and phones under 375px overflow */
+  min-width: 0;
   min-height: 112px;
   aspect-ratio: 639 / 200;
   border: 1px solid var(--line-card);
@@ -430,16 +432,21 @@
   .quicklinks {
     --ql-pad: clamp(20px, 3.4svh, 44px);
     container-type: inline-size;
-    display: flex;
-    flex-direction: column;
-    min-height: calc(100svh - var(--nav-h) - var(--ticker-h, 72px));
-    margin-bottom: 0;
-    padding-bottom: var(--ql-pad);
+    padding-bottom: 0; /* the base rule's pull-up keeps the gap under the cards at --ql-pad */
   }
 
+  /*
+   * The two rows fill the screen under the ticker, like a laptop, but a card is never
+   * taller than 0.6 of its width (a laptop card is ~0.5): on upright tablets the
+   * cards keep the desktop's landscape shape instead of turning square.
+   */
   .ql-grid {
-    flex: 1;
-    grid-template-rows: repeat(2, minmax(calc((100cqw - 20px) / 2 * 200 / 639), 1fr));
+    --ql-card-w: calc((100cqw - 20px) / 2);
+    grid-template-rows: repeat(2, clamp(
+      calc(var(--ql-card-w) * 200 / 639),
+      calc((100svh - var(--nav-h) - var(--ticker-h, 72px) - 2 * var(--ql-pad) - 21px) / 2),
+      calc(var(--ql-card-w) * 0.6)
+    ));
   }
 
   .ql-grid > li {
@@ -451,7 +458,7 @@
     --r-max: 205;
     --qa: calc(100cqh / 200);
     --qt: min(calc(100cqh / 200), calc(100cqw / 639 * 1.35));
-    --copy-end: calc((30 + var(--copy)) * var(--qt) + 12px);
+    --copy-end: calc(30 * var(--qt) + max(150px, var(--copy) * var(--qt)) + 12px);
     --push: max(0px, calc(var(--copy-end) - 100cqw + var(--r-max) * var(--qa)));
     flex: 1;
     aspect-ratio: auto;
@@ -477,22 +484,14 @@
   .ql-card .ql-art--acc-platinum { --r: 165; --t: 40; --w: 163; }
   .ql-card .ql-art--acc-gold { --r: 190; --t: 86; --w: 168; }
 
-  /* Jual: Spectre in the top corner, the Vandal across the middle, Operator and Odin along the bottom. */
   /*
-   * The Odin sits on the right edge, so instead of sliding off it on tall
-   * screens the guns shrink to fit beside the copy, standing on the bottom edge.
-   * The Spectre's cut top then fades out.
+   * Jual: Spectre in the top corner, the Vandal across the middle, Operator and Odin
+   * along the bottom. The pile always spans the card's full height (the Spectre is cut
+   * at its top and stays on the top edge, the guns stand on the bottom edge); when the
+   * card is narrow, --push slides it right instead of shrinking it.
    */
   .ql-card--jual {
     --r-max: 222;
-    --qa: min(calc(100cqh / 200), calc((100cqw - var(--copy-end)) / var(--r-max)));
-    --oy: calc(100cqh - 200 * var(--qa));
-    --push: 0px;
-  }
-
-  .ql-card--jual .ql-art--spectre {
-    -webkit-mask-image: linear-gradient(transparent, #000 min(35%, var(--oy)));
-    mask-image: linear-gradient(transparent, #000 min(35%, var(--oy)));
   }
 
   .ql-card .ql-art--spectre { --r: 132; --t: -1; --w: 132; }
@@ -536,70 +535,22 @@
   }
 
   .ql-card__title {
-    max-width: calc(var(--copy) * var(--qt));
-    font-size: calc(30 * var(--qt));
+    max-width: max(150px, calc(var(--copy) * var(--qt)));
+    font-size: max(24px, calc(30 * var(--qt)));
     line-height: 1.02;
   }
 
+  /* Floors keep the copy readable on 768–1023px screens, where the desktop card is half size. */
   .ql-card__text,
   .ql-card--topup .ql-card__text {
-    max-width: calc(var(--copy) * var(--qt));
-    font-size: calc(10.5 * var(--qt));
+    max-width: max(150px, calc(var(--copy) * var(--qt)));
+    font-size: max(10.5px, calc(10.5 * var(--qt)));
     line-height: 1.3;
     text-wrap: balance;
   }
 
   .ql-card__text + .ql-card__text {
     margin-top: calc(6 * var(--qt));
-  }
-}
-
-/*
- * Upright tablets: the cards come out taller than wide, so the art is sized to
- * the band between the title and the copy (never wider than the card allows)
- * and centred in it; the copy is sized by the card's width. Capped at tablet
- * widths: a squarish desktop window (e.g. 1166 × 1082) still gets landscape
- * cards and keeps the laptop layout above.
- */
-@media (min-width: 768px) and (max-width: 1024px) and (min-height: 521px) and (max-aspect-ratio: 5/4) {
-  .ql-card,
-  .ql-card--jual {
-    --qt: min(calc(100cqh / 200), calc(100cqw / 639 * 2));
-    /* the band between the title (~92 copy units from the top) and the copy (~98 from the bottom) */
-    --band: calc(100cqh - 190 * var(--qt));
-    --qa: min(calc(var(--band) / 200), calc(100cqw / 250));
-    --oy: calc(92 * var(--qt) + (var(--band) - 200 * var(--qa)) / 2);
-    --push: 0px;
-  }
-
-  /* The art fills the middle band here, so the hover message takes the title's place and size. */
-  .ql-card__go {
-    align-items: flex-start;
-    font-size: calc(30 * var(--qt));
-  }
-
-  .ql-card--jual .ql-art--spectre {
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
-
-  /* The 1000 VP card and the Spectre are cut flat at their tops, and the VP
-     shadows end in a straight left edge: fade those edges into the card. */
-  .ql-card--jual .ql-card__art,
-  .ql-card--topup .ql-card__art {
-    -webkit-mask-image: linear-gradient(transparent var(--oy), #000 calc(var(--oy) + 44 * var(--qa)));
-    mask-image: linear-gradient(transparent var(--oy), #000 calc(var(--oy) + 44 * var(--qa)));
-  }
-
-  .ql-card--topup .ql-card__art {
-    -webkit-mask-image:
-      linear-gradient(transparent var(--oy), #000 calc(var(--oy) + 44 * var(--qa))),
-      linear-gradient(90deg, transparent calc(100cqw - 236 * var(--qa)), #000 calc(100cqw - 190 * var(--qa)));
-    -webkit-mask-composite: source-in;
-    mask-image:
-      linear-gradient(transparent var(--oy), #000 calc(var(--oy) + 44 * var(--qa))),
-      linear-gradient(90deg, transparent calc(100cqw - 236 * var(--qa)), #000 calc(100cqw - 190 * var(--qa)));
-    mask-composite: intersect;
   }
 }
 

@@ -339,13 +339,13 @@
  * height the old straight row had (seven across the row, capped so the copy is
  * never crowded), so the copy sits exactly where it did; the fanned cards are a
  * little taller and rise into the gap above. The middle card is in front.
- * Jual Beli's fan sits under its right-aligned copy, Sewa's under its left-aligned
- * copy. Hovering the fan spreads it; hovering a card lifts it to the front.
+ * Used from 768px up (phones get a swipe strip). Jual Beli's fan sits under its right-aligned copy, Sewa's under its left-aligned
+ * copy. The fan holds its shape on hover; hovering a card lifts it to the front.
  * Only transform / translate animate. Cards past the fifth are phone-only here.
  * .panel__acc-extra: hidden on upright tablets (five cards fill the row there).
  * .panel__acc-more: phone strip only.
  */
-@container panel (min-aspect-ratio: 1 / 1) {
+@media (min-width: 768px) {
   .panel__accounts--full {
     --row-h: min(
       calc((100cqw - 208 * var(--s)) / 7 / (var(--card-ratio))),
@@ -356,11 +356,6 @@
     --tilt: 5deg;
     display: block;
     height: var(--row-h);
-  }
-
-  .panel__accounts--full:hover {
-    --step: calc(var(--cw) * 0.86);
-    --tilt: 3deg;
   }
 
   .panel__accounts--full li {
@@ -420,12 +415,6 @@
 @media (min-width: 768px) {
   .panel__acc-more {
     display: none;
-  }
-
-  @container panel (max-aspect-ratio: 1 / 1) {
-    .panel__acc-extra {
-      display: none;
-    }
   }
 }
 
@@ -518,7 +507,7 @@
   position: fixed;
   z-index: 40;
   top: calc(50% + 40px);
-  left: calc(var(--hero-gutter) / 2);
+  left: calc((var(--hero-gutter) - 11px) / 2); /* centred in the gutter, so it never crowds the panel edge on tablets */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -743,6 +732,22 @@
     --badge: 54px;
   }
 
+  /* Small phones (iPhone SE, 320px Androids): badge + both buttons need 288px, so trim them to stay on one row. */
+  @media (max-width: 374px) {
+    .panel__btns {
+      gap: 6px;
+    }
+
+    .panel__btns .outline-btn {
+      --btn-px: 11px;
+      --btn-fs: 14px;
+    }
+
+    .guarantee {
+      --badge: 46px;
+    }
+  }
+
   /* Cypher's coat is white, so the copy gets a heavier shadow here. */
   .panel--jual .panel__content {
     text-shadow: 0 1px 3px rgba(30, 2, 70, 0.7), 0 2px 18px rgba(30, 2, 70, 0.8);
@@ -759,9 +764,13 @@
   }
 
 
-  /* Raised so her face clears the copy; the flat-cut bottom fades out behind the card strip. */
+  /*
+   * Raised so her face clears the copy; the flat-cut bottom fades out behind the card strip.
+   * The offset follows her own size (72cqh tall = 79.6cqh wide, ~28% of it off the edge), not
+   * the screen width: -40cqw pushed her almost fully off wide, short screens (761 x 800).
+   */
   .sewa__neon {
-    right: -40cqw;
+    right: -22cqh;
     bottom: calc(var(--row-h) * 0.6);
     height: 72cqh;
     -webkit-mask: linear-gradient(#000 82%, transparent);
@@ -778,13 +787,13 @@
    */
   /* Tall whole-listing cards in both strips, so each is narrower. */
   .panel--sewa .panel__card {
-    --row-w: min(33cqw, 160px);
+    --row-w: min(33cqw, 160px, 34cqh * 230 / 309);
     --row-h: calc(var(--row-w) * 309 / 230);
   }
 
   .panel--jual .panel__card {
     --cy-left: min(-6cqw, calc(100cqw + 5cqh - 52.64cqh));
-    --row-w: min(33cqw, 160px);
+    --row-w: min(33cqw, 160px, 34cqh * 230 / 349);
     --row-h: calc(var(--row-w) * 349 / 230);
   }
 
@@ -821,62 +830,6 @@
     width: var(--row-w);
     max-width: none;
     scroll-snap-align: start;
-  }
-
-  /*
-   * Sewa and Jual Beli on phones: the same fan as on desktop, centred along the
-   * bottom instead of a swipe strip. Five cards, the middle one in front; a tap
-   * (or hover) lifts a card to the front.
-   */
-  .panel__accounts--full {
-    --cw: var(--row-w);
-    --step: calc(var(--cw) * 0.36);
-    --tilt: 5deg;
-    display: block;
-    height: calc(var(--row-h) + 34px);
-    padding: 0;
-    overflow: visible;
-    scroll-snap-type: none;
-  }
-
-  .panel__accounts--full li {
-    --a: max(var(--p), -1 * var(--p));
-    position: absolute;
-    bottom: 26px; /* the tilted outer cards' corners stay on screen */
-    left: 50%;
-    z-index: calc(10 - var(--a));
-    width: var(--cw);
-    margin-left: calc(var(--cw) / -2);
-    transform:
-      translateX(calc(var(--p) * var(--step)))
-      translateY(calc(var(--a) * var(--a) * 0.02 * var(--cw)))
-      rotate(calc(var(--p) * var(--tilt)));
-    transform-origin: 50% 130%;
-    transition: transform 0.6s var(--ease-out), translate 0.4s var(--ease-out);
-    scroll-snap-align: none;
-  }
-
-  .panel__accounts--full li:nth-child(1) { --p: -2; }
-  .panel__accounts--full li:nth-child(2) { --p: -1; }
-  .panel__accounts--full li:nth-child(3) { --p: 0; }
-  .panel__accounts--full li:nth-child(4) { --p: 1; }
-  .panel__accounts--full li:nth-child(5) { --p: 2; }
-
-  .panel__accounts--full li:nth-child(n + 6) {
-    display: none;
-  }
-
-  .panel__accounts--full li:is(:hover, :active) {
-    z-index: 20;
-    translate: 0 calc(-0.1 * var(--cw));
-  }
-
-  .panel__accounts--full img {
-    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.5));
-  }
-
-  .panel__accounts--full li:hover img {
-    transform: none;
   }
 }
 

@@ -101,7 +101,7 @@
 .footer__title {
   margin-top: calc(1 * var(--f));
   font-family: var(--font-condensed);
-  font-size: max(27px, calc(54 * var(--f)));
+  font-size: max(min(27px, 7.2vw), calc(54 * var(--f))); /* shrinks under ~375px so it stays inside the two light lines */
   font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 1.2;
